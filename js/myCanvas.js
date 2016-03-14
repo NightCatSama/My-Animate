@@ -187,7 +187,7 @@
     },
 
     //  写个喵
-    writeName: function(cxt) {
+    writeName : function(cxt) {
       /* 指定渐变区域 */
       var grad = cxt.createLinearGradient(WINDOW_WIDTH / 2 - 600, WINDOW_HEIGHT / 2 - 200, WINDOW_WIDTH / 2 + 600, WINDOW_HEIGHT / 2 + 200);
       /* 指定几个颜色 */
@@ -206,11 +206,11 @@
       cxt.fillStyle = grad;
       cxt.fillText(txt, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
       cxt.globalCompositeOperation = "destination-over";
-    }
-  };
+    },
+
 
   //  Canvas动画入口
-  MyCanvas.prototype.start = function() {
+  start : function() {
     var that = this;
     for (var i = 0; i < 30; i++) {
       that.addBalls();
@@ -221,10 +221,10 @@
       that.render(context);
       setTimeout(arguments.callee, interval);
     }, interval);
-  };
+  },
 
   //  运动模式选择
-  MyCanvas.prototype.modelSelect = function(num) {
+  modelSelect : function(num) {
     model = num;
     switch (num) {
       case 1:
@@ -252,7 +252,8 @@
         context.shadowBlur = 20;
         break;
     }
-  };
+  }
+};
 
   window.onmousemove = function(evt) {
     if (model !== 1 && addFlag) {
