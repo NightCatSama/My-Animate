@@ -9,7 +9,7 @@
     yPy = 0;
   var xPos, yPos;
   var Gradient = 0;
-  var interval = 16.66;
+  var interval = 100;
   var balls = [];
   var start = null,
     timer = null;
@@ -23,11 +23,6 @@
 
 
   var context = canvas.getContext('2d');
-
-  context.shadowColor = "rgba(255,255,255,1)";
-  context.shadowOffsetX = 0;
-  context.shadowOffsetY = 0;
-  context.shadowBlur = 3;
 
   var Star = function() {};
 
@@ -44,17 +39,15 @@
     //  画个球
     drawBalls: function(cxt) {
       for (var i = 0; i < balls.length; i++) {
+        var radius = balls[i].r + balls[i].big
+        cxt.fillStyle = "rgb(255,255,"+Math.ceil(Math.random()*155+100)+")";
 
-        cxt.fillStyle = "rgb(255,255,255)";
-        if(balls[i].light){
-          context.shadowBlur = 15;
-        }
-        else {
-          context.shadowBlur = 3;
+        if(Math.ceil(Math.random()*2000)===1){
+          radius = balls[i].r + balls[i].big + 1;
         }
 
         cxt.beginPath();
-        cxt.arc(balls[i].x, balls[i].y, balls[i].r, 0, 2 * Math.PI, true);
+        cxt.arc(balls[i].x, balls[i].y, radius, 0, 2 * Math.PI, true);
         cxt.closePath();
 
         cxt.fill();
@@ -67,10 +60,10 @@
             x: Math.floor(Math.random() * WINDOW_WIDTH),
             y: Math.floor(Math.random() * WINDOW_HEIGHT),
             g: 0,
-            r: Math.floor(Math.random()*35)/10,
+            r: Math.floor(Math.random()*10+5)/10,
             vx: Math.pow(-1, Math.ceil(Math.random() * 2)) * (Math.ceil(Math.random() * 3)),
             vy: Math.pow(-1, Math.ceil(Math.random() * 2)) * (Math.ceil(Math.random() * 3)),
-            light: false
+            big: 0
           };
         balls.push(aBall);
     },
@@ -78,14 +71,14 @@
     //  更新球的运动
     updateBalls: function(cxt) {
           for (var i = 0; i < balls.length; i++) {
-            balls[i].x = balls[i].x - xPy * (balls[i].r * 0.03);
-            balls[i].y = balls[i].y - yPy * (balls[i].r * 0.03);
+            balls[i].x = balls[i].x - xPy * (balls[i].r * 0.08);
+            balls[i].y = balls[i].y - yPy * (balls[i].r * 0.08);
 
-            if(Math.abs(balls[i].x - xPos) < 300 && Math.abs(balls[i].y - yPos) < 300){
-              balls[i].light = true;
+            if( ( Math.pow((balls[i].x - xPos),2) + Math.pow((balls[i].y - yPos),2) ) < Math.pow(100,2)){
+              balls[i].big = 0;
             }
             else {
-              balls[i].light = false;
+              balls[i].big = 0;
             }
           }
           xPy = 0;
@@ -96,7 +89,7 @@
   //  Canvas动画入口
   Star.prototype.start = function() {
     var that = this;
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 1000; i++) {
       that.addBalls();
     }
 
