@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cat</title>
+	<style>
+		*{margin: 0;padding: 0;}
+		html {
+			font-family: "Microsoft Yahei";
+		}
+		html,body {
+			width: 100%;
+			height: 100%;
+		}
+		.fade {
+			width: 100%;
+			height: 100%;
+		}
+		.fade ul {
+			width: 100%;
+			height: 100%;
+			list-style: none;
+		}
+		.fade ul li {
+			position: relative;
+			color:#FFF;
+			width:100%;
+			height:20%;
+			line-height: 50px;
+			background-color: #000;
+			text-align: left;
+			font-size: 30px;
+			box-shadow: 2px 2px 2px rgba(0,0,0,.4);
+			-webkit-transform-origin: top;
+			        transform-origin: top;
+			-webkit-transform: rotateX(90deg);
+			        transform: rotateX(90deg);
+			transition: -webkit-transform 1s;
+			transition: transform 1s;
+			transition: transform 1s, -webkit-transform 1s;
+		}
+		.fade.on ul li {
+			-webkit-transform: rotateX(0);
+			        transform: rotateX(0);
+		}
+		.switch {
+			position: absolute;
+			left: 50%;
+			top: 200px;
+			width: 25px;
+			height: 25px;
+			margin-left: -12px;
+			border-radius: 50%;
+			cursor: pointer;
+			background-color: #BD2D30;
+			box-shadow: inset -4px -4px 4px rgba(0,0,0,.26);
+			-webkit-transform: translateY(0);
+			        transform: translateY(0);
+			transition: -webkit-transform 1s;
+			transition: transform 1s;
+			transition: transform 1s, -webkit-transform 1s;
+			z-index: 2;
+		}
+		.switch.on {
+			-webkit-transform: translateY(50px);
+			        transform: translateY(50px);
+		}
+		.switch::after {
+			content: '';
+			position: absolute;
+			width: 2px;
+			height: 300px;
+			left: 12px;
+			top: -300px;
+			background-color: #BD2D30;
+		}
+		.cat {
+			position: absolute;
+			left:50%;
+			top:50%;
+			-webkit-transform: translate(-50%,-50%);
+			        transform: translate(-50%,-50%);
+			width: 300px;
+			height: 220px;
+			z-index: 1;
+		}
+		.ear {
+			position: absolute;
+			width: 0;
+			height: 0;
+			top: -60px;
+			border-bottom: 100px solid #000;
+			border-left: 60px solid transparent;
+			border-right:60px solid transparent;
+		}
+		.ear:nth-of-type(1) {
+			left: 0;
+			-webkit-transform: rotateZ(-18deg);
+			        transform: rotateZ(-18deg);
+		}
+		.ear:nth-of-type(2) {
+			left: 183px;
+			-webkit-transform: rotateZ(20deg);
+			        transform: rotateZ(20deg);
+		}
+		.face {
+			height: 220px;
+			width: 300px;
+			border-radius: 100%;
+		}
+		.eye {
+			width: 120px;
+			border-radius: 100%;
+			position: absolute;
+			top: 58px;
+			height: 75px;
+			background-color: #FFF;
+			border: 1px solid #000;
+			overflow: hidden;
+		}
+		@-webkit-keyframes blink {
+			0% {
+				-webkit-transform: rotateX(0);
+				        transform: rotateX(0);
+			}
+			50% {
+				-webkit-transform: rotateX(90deg);
+				        transform: rotateX(90deg);
+			}
+			100% {
+				-webkit-transform: rotateX(0);
+				        transform: rotateX(0);
+			}
+		}
+		@keyframes blink {
+			0% {
+				-webkit-transform: rotateX(0);
+				        transform: rotateX(0);
+			}
+			50% {
+				-webkit-transform: rotateX(90deg);
+				        transform: rotateX(90deg);
+			}
+			100% {
+				-webkit-transform: rotateX(0);
+				        transform: rotateX(0);
+			}
+		}
+		.blink {
+			-webkit-animation: blink .2s;
+			        animation: blink .2s;
+		}
+		.eye .pupil {
+			min-width:12px;
+			height:100%;
+			border-radius: 100%;
+			background-color: #000;
+			left: 50%;
+			margin-left: -12px;
+			position: absolute;
+			transition: width;.5s
+		}
+		.eye .pupil .light {
+			width: 6px;
+			height: 6px;
+			position: absolute;
+			top:10px;
+			background-color: #FFF;
+			border-radius: 100%;
+		}
+		.eye:nth-of-type(1) {
+			left: 10px;
+		}
+		.eye:nth-of-type(2) {
+			left: 170px;
+		}
+	</style>
+</head>
+<body>
+<div class="switch"></div>
+<div class="fade">
+	<ul>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+</div>
+<script src="js/jquery-1.12.0.min.js"></script>
+<script>
+var Cat = function(color,left,top){
+	this.color = color;
+	this.size = 12;
+	this.init();
+	this.$elem.css({
+		left: left ? left : "50%" ,
+		top : top ? top : "50%" 
+ 	})
+	this.$eyes = this.$elem.find('.eye');
+	this.$pupils = this.$elem.find('.pupil');
+	this.$lights = this.$elem.find('.light');
+}
+Cat.prototype = {
+	init : function(){
+		var that = this;
+		that.$elem = $(
+			"<div class='cat'>"+
+				"<div class='ear'></div>"+
+				"<div class='ear'></div>"+
+				"<div class='face'>"+
+					"<div class='eye'>"+
+						"<div class='pupil'>"+
+							"<div class='light'></div>"+
+						"</div>"+
+					"</div>"+
+					"<div class='eye'>"+
+						"<div class='pupil'>"+
+							"<div class='light'></div>"+
+						"</div>"+
+					"</div>"+
+				"</div>"+
+			"</div>"
+		);
+		that.$elem.prependTo($('body'));
+		that.$elem.find('.face').css('background-color',that.color);
+		that.$elem.find('.ear').css('border-bottom-color',that.color);
+
+		that.blink();
+		$(document).mousemove(function(e){
+			that.follow(e.pageX,e.pageY);
+		});
+		$('.switch').click(function(){
+			that.change();
+		});
+	},
+	change: function(){
+		this.size = this.size === 12 ? 60 : 12;
+		this.$pupils.animate({
+			'width' : this.size+'px',
+			"margin-left": "-" + (this.size/2) +"px"
+		},1000);
+		this.$lights.animate({
+			'width' :  this.size === 12 ? "6px" : 0,
+			'height' :  this.size === 12 ? "6px" : 0
+		},1000);
+	},
+	blink : function(){
+		var that = this;
+		setInterval(function(){
+			that.$eyes.toggleClass('blink');
+		},2000);		
+	},
+	follow: function(x,y){
+		var that = this;
+		var WINDOW_WIDTH = $(document).width();
+		var WINDOW_HEIGHT = $(document).height();
+		var w = WINDOW_WIDTH/(100-that.size);
+		var l_w = WINDOW_WIDTH/((that.size-7));
+		var h = WINDOW_HEIGHT/55;
+		that.$pupils.css({
+			"left" : ((10+(that.size/2)) + x/w) + 'px'
+		});
+		this.$lights.css({
+			"left": (1 + x/l_w) + 'px',
+			"top" : (10 + y/h) + 'px'
+		});
+	},
+	flee: function(){
+		that.$elem.remove();
+	}
+}
+
+$(function(){
+	var cat = new Cat("black");
+
+	$('.switch').click(function(){
+		$('.switch').toggleClass('on');
+		$('.fade').toggleClass('on');
+	});
+})
+</script>
+</body>
+</html>
