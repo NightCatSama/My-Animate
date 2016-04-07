@@ -1,5 +1,5 @@
-# My_Canvas
-###HTML5 / Canvas / 使用各种Canvas动画效果，持续更新。。。。
+# My-Animat
+###使用 HTML5 / CSS3 制作的动画效果~ 持续更新。。。。
 
 #####2016/2/20
 视觉差[parallax](http://nightcatsama.com/project/project_page/MyCanvas/index.html)
@@ -11,7 +11,11 @@
 星空[star](http://nightcatsama.com/project/project_page/MyCanvas/star.html)
 
 #####2016/3/12
-3D害怕(CSS3)[3d-fear](http://nightcatsama.com/project/project_page/MyCanvas/3d-fear.html)
+3D害怕[3d-fear](http://nightcatsama.com/project/project_page/MyCanvas/3d-fear.html)
 
 #####2016/3/22
 旋转[endless-rotate](http://nightcatsama.com/project/project_page/MyCanvas/endless-rotate.html)
+
+#####2016/4/6
+猫[Cat](http://nightcatsama.com/project/project_page/MyCanvas/cat.html)
+
