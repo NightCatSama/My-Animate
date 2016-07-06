@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+	<style>
+html,body {
+  height:100%;
+  width:100%;
+  overflow: hidden;
+}
+#tridiv {
+  perspective: 800px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  font-size: 100%;
+}
+.face {
+}
+.scene, .shape, .face, .face-wrapper, .cr {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+.scene {
+  width: 80em;
+  height: 80em;
+  top: 50%;
+  left: 50%;
+  margin: -40em 0 0 -40em;
+}
+.shape {
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-origin: 50%;
+}
+.face, .face-wrapper {
+  transform-origin: 0 0;
+}
+.face {
+  background-size: 100% 100%!important;
+  background-position: center;
+}
+.face-wrapper .face {
+  left: 100%;
+  width: 100%;
+  height: 100%
+}
+.photon-shader {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%
+}
+.side {
+  left: 50%;
+}
+.cr, .cr .side {
+  height: 100%;
+}
+[class*="cuboid"] .ft, [class*="cuboid"] .bk {
+  width: 100%;
+  height: 100%;
+}
+[class*="cuboid"] .bk {
+  left: 100%;
+}
+[class*="cuboid"] .rt {
+  transform: rotateY(-90deg) translateX(-50%);
+}
+[class*="cuboid"] .lt {
+  transform: rotateY(90deg) translateX(-50%);
+}
+[class*="cuboid"] .tp {
+  transform: rotateX(90deg) translateY(-50%);
+}
+[class*="cuboid"] .bm {
+  transform: rotateX(-90deg) translateY(-50%);
+}
+[class*="cuboid"] .lt {
+  left: 100%;
+}
+[class*="cuboid"] .bm {
+  top: 100%;
+}
+/* .cub-1 styles */
+.cub-1 {
+  transform:translate3D(0em, -2.625em, -0.125em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  opacity:1;
+  width:10em;
+  height:10em;
+  margin:-5em 0 0 -5em;
+}
+.cub-1 .ft {
+  transform:translateZ(5em);
+}
+.cub-1 .bk {
+  transform:translateZ(-5em) rotateY(180deg);
+}
+.cub-1 .rt, .cub-1 .lt {
+  width:10em;
+  height:10em;
+}
+.cub-1 .tp, .cub-1 .bm {
+  width:10em;
+  height:10em;
+}
+.cub-1 .face {
+}
+#top {
+  transform: rotateY(0);
+  transform-origin: right;
+}
+#after {
+  transform: rotateX(-1deg);
+  transform-origin: bottom;
+}
+#left {
+  transform: rotateX(-1deg);
+  transform-origin: bottom;
+}
+.haipa {
+  color:#FFF;
+  display: block;
+  font-size: 60px;
+  text-align: left;
+}
+.chongzhi {
+  color:#FFF;
+  font-size: 22px;
+  text-align: left
+}
+
+img {
+  position: absolute;
+  display: inline-block;
+  right:0;
+  bottom: 0;
+  transform:translateZ(3.5em) rotateY(40deg);
+}
+	</style>
+</head>
+<body>
+<div id="tridiv">
+  <div class="scene" id="scene" style="transform:rotateX(-45deg) rotateY(0) scale3d(1,1,1);">
+    <div class="shape cuboid-1 cub-1">
+      <div class="face ft" >
+        <div class="photon-shader"id="front"style="background-color: rgba(33, 33, 33, .95); outline:5px blue solid"><span class="haipa">害怕</span><span class="chongzhi">3D重置<br>By NightCat</span></div>
+      </div>
+      <div class="face bk" >
+        <div class="photon-shader" id="after" style="background-color: rgba(33, 33, 33, .95); outline:5px blue solid"><span class="haipa">害怕</span><span class="chongzhi">3D重置<br>By NightCat</span></div>
+      </div>
+      <div class="face rt" >
+        <div class="photon-shader" id="left" style="background-color: rgba(33, 33, 33, .95); outline:5px blue solid"><span class="haipa">害怕</span><span class="chongzhi">3D重置<br>By NightCat</span></div>
+      </div>
+      <div class="face lt" >
+        <div class="photon-shader" id="right" style="background-color: rgba(33, 33, 33, .95); outline:5px blue solid"><span class="haipa">害怕</span><span class="chongzhi">3D重置<br>By NightCat</span></div>
+      </div>
+      <div class="face bm">
+        <div class="photon-shader" id="bottom" style="background-color: rgba(33, 33, 33, .95); outline:5px blue solid"><span class="haipa">害怕</span><span class="chongzhi">3D重置<br>By NightCat</span></div>
+      </div>
+      <div class="face tp">
+        <div class="photon-shader" id="top" style="background-color: rgba(33, 33, 33, .95); outline:5px blue solid"><span class="haipa">害怕</span><span class="chongzhi">3D重置<br>By NightCat</span></div>
+      </div>
+      <img src="image/haipa.png" alt="" width="50"/>
+    </div>
+  </div>
+</div>
+<script>
+var timer = null;
+
+var cub = document.getElementById('scene');
+var f = document.getElementById('front');
+var a = document.getElementById('after');
+var l = document.getElementById('left');
+var r = document.getElementById('right');
+var t = document.getElementById('top');
+var b = document.getElementById('bottom');
+
+
+window.onload = function(){
+  timer = setTimeout(function(){
+    reader();
+    setTimeout(arguments.callee,16.7);
+  },16.7);
+};
+
+(function(){
+    var scale=0,rotateX=0,speed=2,n=0,m=0;
+    var flag = true;
+    function reader(){
+    var patten =  /-?\d+\.?\d*/g;  
+    var rotate = cub.style.transform.match(patten);
+    // 形态1
+    if(flag){
+      if(+rotate[4]>0.6){
+        scale = (+rotate[4]-0.002)
+      }
+      else {flag = false;}
+      if(+rotate[0]>-15){
+        rotateX = +rotate[0]-0.05;
+      }
+      if(speed > 0){
+        speed = speed - 0.0008;
+      }
+    }
+    //切换形态2
+    else {
+      if(+rotate[4]<5){
+        scale = (+rotate[4]+0.008)
+      }
+      if(+rotate[0]>-15){
+        rotateX = +rotate[0]-0.05;
+      }
+      if(speed > 0){
+        speed = speed - 0.0085;
+      }
+      if(n<120){
+        n++;
+      }
+      if(m<90){
+        m = m + 0.5;
+      }
+      else {
+        speed = 0;
+        clearTimeout(timer);
+      }
+      t.style.transform = 'rotateY('+n+'deg)';
+      a.style.transform = 'rotateX('+-m+'deg)';
+      l.style.transform = 'rotateX('+-m+'deg)';
+    }
+    cub.style.transform = "rotateX("+(rotateX)+"deg) rotateY("+(+rotate[1] - speed)+"deg) scale3d("+scale+","+scale+","+scale+")";
+  }
+  return window['reader'] = reader;
+})()
+</script>
+</body>
+</html>

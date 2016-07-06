@@ -1,0 +1,234 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0; }
+
+.cursor-none {
+  cursor: none !important; }
+
+.cat {
+  margin: 100px;
+  position: relative; }
+  .cat .head .ear {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-bottom: 150px solid #000;
+    border-left: 75px solid transparent;
+    border-right: 75px solid transparent;
+    transform: skew(-15deg);
+    border-radius: 35px 35px 125px 125px;
+    z-index: 2; }
+    .cat .head .ear::before {
+      content: '';
+      position: absolute;
+      left: 119px;
+      top: 60px;
+      width: 0;
+      height: 0;
+      border-bottom: 142px solid #000;
+      border-left: 100px solid transparent;
+      border-right: 100px solid transparent;
+      transform: rotate(30deg);
+      border-radius: 35px 35px 125px 125px;
+      z-index: 2; }
+    .cat .head .ear::after {
+      content: '';
+      position: absolute;
+      left: 117px;
+      top: 60px;
+      width: 0;
+      height: 0;
+      border-bottom: 144px solid white;
+      border-left: 102px solid transparent;
+      border-right: 102px solid transparent;
+      transform: rotate(30deg);
+      border-radius: 35px 35px 125px 125px;
+      z-index: 1; }
+  .cat .head .face {
+    position: absolute;
+    width: 358px;
+    height: 263px;
+    background-color: #000;
+    border-radius: 300px 300px 300px 300px / 300px 300px 166px 163px;
+    top: 73px;
+    left: -34px;
+    transform: rotate(14deg) skew(2deg);
+    border-right: 1px solid #FFF;
+    border-bottom: 1px solid #FFF;
+    z-index: 2; }
+    .cat .head .face .eye {
+      position: absolute;
+      background-color: white;
+      overflow: hidden; }
+    .cat .head .face .left-eye {
+      width: 120px;
+      height: 100px;
+      border-radius: 300px 300px 300px 300px / 300px 300px 160px 193px;
+      top: 73px;
+      left: 15px;
+      transform: rotate(12deg) skew(12deg); }
+      .cat .head .face .left-eye .pupil {
+        width: 14px;
+        position: absolute;
+        left: 75%;
+        height: 90%;
+        background-color: #000;
+        border-radius: 100%;
+        transform: rotate(10deg);
+        overflow: hidden; }
+        .cat .head .face .left-eye .pupil .light {
+          width: 6px;
+          height: 6px;
+          position: absolute;
+          top: 10px;
+          background-color: #FFF;
+          border-radius: 100%;
+          z-index: -1; }
+    .cat .head .face .right-eye {
+      width: 134px;
+      height: 104px;
+      border-radius: 193px 119px 150px 175px/178px 144px 108px 73px;
+      top: 99px;
+      left: 210px;
+      transform: rotate(7deg) skew(0); }
+      .cat .head .face .right-eye .pupil {
+        width: 16px;
+        position: absolute;
+        top: 0px;
+        left: 75%;
+        height: 92%;
+        background-color: #000;
+        border-radius: 100%;
+        transform: rotate(2deg); }
+        .cat .head .face .right-eye .pupil .light {
+          width: 6px;
+          height: 6px;
+          position: absolute;
+          top: 10px;
+          background-color: #FFF;
+          border-radius: 100%;
+          z-index: -1; }
+  .cat .body::before {
+    content: '';
+    position: absolute;
+    width: 652px;
+    height: 322px;
+    left: 157px;
+    top: 20px;
+    border-radius: 345px 348px 251px 0 / 218px 250px 124px 37px;
+    background-color: #000;
+    z-index: 1;
+    transform: rotate(15deg) skew(-27deg); }
+  .cat .body .leg {
+    position: absolute;
+    width: 442px;
+    height: 262px;
+    left: 352px;
+    top: 108px;
+    border-radius: 100%;
+    border-left: 1px solid white;
+    background-color: #000;
+    transform: rotate(0deg);
+    z-index: 2; }
+  .cat .body .hand {
+    position: absolute;
+    background-color: #000;
+    overflow: hidden; }
+  .cat .body .left-hand {
+    width: 85px;
+    height: 219px;
+    border-radius: 100%;
+    top: 218px;
+    left: 50px;
+    transform: rotate(-54deg) skew(0deg); }
+  .cat .body .right-hand {
+    position: absolute;
+    width: 82px;
+    height: 250px;
+    border-radius: 100% / 170px 170px 140px 140px;
+    top: 250px;
+    left: 252px;
+    transform: rotate(-160deg) skew(0); }
+    .cat .body .right-hand.action {
+      animation: react .85s; }
+    .cat .body .right-hand .hand-react {
+      position: absolute;
+      width: 82px;
+      height: 100px;
+      border-radius: 100% / 300px 90px 170px 170px; }
+      .cat .body .right-hand .hand-react:active {
+        cursor: grab;
+        cursor: -webkit-grab; }
+  .cat .tail {
+    position: absolute;
+    left: 304px;
+    top: 174px;
+    width: 548px;
+    height: 312px;
+    border: 50px solid #000;
+    border-radius: 100% / 300px 300px 300px 300px;
+    border-top-color: transparent;
+    border-left-color: transparent; }
+    .cat .tail::after {
+      content: '';
+      width: 48px;
+      height: 48px;
+      border-radius: 100%;
+      background-color: #000;
+      position: absolute;
+      bottom: 0;
+      left: 2px; }
+
+@-webkit-keyframes left {
+  0% {
+    -webkit-transform: rotate(12deg) skew(12deg);
+    transform: rotate(12deg) skew(12deg); }
+  1% {
+    -webkit-transform: rotateX(102deg) rotateY(12deg) skew(12deg);
+    transform: rotateX(102deg) rotateY(12deg) skew(12deg); }
+  2% {
+    -webkit-transform: rotate(12deg) skew(12deg);
+    transform: rotate(12deg) skew(12deg); } }
+@keyframes left {
+  0% {
+    -webkit-transform: rotate(12deg) skew(12deg);
+    transform: rotate(12deg) skew(12deg); }
+  1% {
+    -webkit-transform: rotateX(102deg) rotateY(12deg) skew(12deg);
+    transform: rotateX(102deg) rotateY(12deg) skew(12deg); }
+  2% {
+    -webkit-transform: rotate(12deg) skew(12deg);
+    transform: rotate(12deg) skew(12deg); } }
+@-webkit-keyframes right {
+  0% {
+    -webkit-transform: rotate(7deg) skew(0);
+    transform: rotate(7deg) skew(0); }
+  1% {
+    -webkit-transform: rotateX(90deg) rotateY(7deg) skew(0);
+    transform: rotateX(90deg) rotateY(7deg) skew(0); }
+  2% {
+    -webkit-transform: rotate(7deg) skew(0);
+    transform: rotate(7deg) skew(0); } }
+@keyframes right {
+  0% {
+    -webkit-transform: rotate(7deg) skew(0);
+    transform: rotate(7deg) skew(0); }
+  1% {
+    -webkit-transform: rotateX(90deg) rotateY(7deg) skew(0);
+    transform: rotateX(90deg) rotateY(7deg) skew(0); }
+  2% {
+    -webkit-transform: rotate(7deg) skew(0);
+    transform: rotate(7deg) skew(0); } }
+@keyframes react {
+  0% {
+    -webkit-transform: translateX(0) rotate(-160deg) skew(0);
+    transform: translateX(0) rotate(-160deg) skew(0); }
+  50% {
+    -webkit-transform: translateX(20px) rotate(-180deg) skew(5deg);
+    transform: translateX(20px) rotate(-180deg) skew(5deg); }
+  100% {
+    -webkit-transform: translateX(0) rotate(-160deg) skew(0);
+    transform: translateX(0) rotate(-160deg) skew(0); } }
+
+/*# sourceMappingURL=style.css.map */

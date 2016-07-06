@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Star</title>
+	<style>
+		body,
+		html {
+		  display: block;
+		  width: 100%;
+		  height: 100%;
+		  font-size: 0;
+		  overflow: hidden;
+		  background-color: #000;
+		  background-image: linear-gradient(25deg,#090909 0%,#050505 30%,#030303 100%); 
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas">
+	  你的浏览器不支持canvas
+	</canvas>
+<script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="js/star.js"></script>
+<script>
+    var star = new Star();
+
+    star.start();
+</script>
+</body>
+</html>
