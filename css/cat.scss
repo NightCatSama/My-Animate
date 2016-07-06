@@ -78,6 +78,7 @@ $tail-width: 50px;
 			transform: rotate(14deg) skew(2deg);
 			border-right:1px solid #FFF;
 			border-bottom: 1px solid #FFF;
+			box-shadow: 22px 9px 29px 0 rgba(0,0,0,.56);
 			z-index: 2;
 
 			.eye {
@@ -93,6 +94,7 @@ $tail-width: 50px;
 				top: 73px;
 				left: 15px;
 				transform: rotate(12deg) skew(12deg);
+				box-shadow: inset -13px 0px 41px 0px rgba(0, 0, 0, 0.56);
 				// animation: left 10s infinite;
 
 				.pupil {
@@ -124,6 +126,7 @@ $tail-width: 50px;
 				top: 99px;
 				left: 210px;
 				transform: rotate(7deg) skew(0);
+				box-shadow: inset -16px 9px 38px 0px rgba(0,0,0,.56);
 				// animation: right 10s infinite;
 
 			    .pupil {
@@ -163,6 +166,7 @@ $tail-width: 50px;
 			background-color: $color;
 			z-index: 1;
 			transform: rotate(15deg) skew(-27deg);
+			box-shadow: 14px 27px 39px 0 rgba(0,0,0,0.56);
 		}
 
 		.leg {
@@ -191,6 +195,7 @@ $tail-width: 50px;
 			top: 218px;
 			left: 50px;
 			transform: rotate(-54deg) skew(0deg);
+			box-shadow: 3px 9px 20px 0 rgba(0,0,0,.56);
 		}
 
 		.right-hand {
@@ -201,6 +206,7 @@ $tail-width: 50px;
 			top: 250px;
 			left: 252px;
 			transform: rotate(-160deg) skew(0);
+			box-shadow: -14px 27px 39px 0 rgba(0,0,0,0.56);
 
 			&.action {
 				animation: react .85s;
@@ -232,6 +238,7 @@ $tail-width: 50px;
 		border-radius: 100% / 300px 300px 300px 300px;
 		border-top-color: transparent;
 		border-left-color: transparent;
+		box-shadow: 72px 21px 60px -62px rgba(0, 0, 0, 0.56),inset -110px 9px 60px -90px rgba(0,0,0,0.56);
 
 		&::after {
 			content: '';
