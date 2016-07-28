@@ -22,3 +22,6 @@
 #####2016/07/06
 猫[Cat](http://nightcatsama.github.io/My-Animat/cat.html)
 
+#####2016/07/06
+箭头躲避[Cat](http://nightcatsama.github.io/My-Animat/arrow.html)
+
