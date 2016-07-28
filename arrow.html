@@ -1,31 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<title>Gulp-Cli</title>
-	<link rel="stylesheet" href="./dist/stylesheets/index.css">
+    <meta charset="utf-8">
+    <title>Gulp-Cli</title>
+    <link rel="stylesheet" href="./dist/stylesheets/index.css">
 </head>
+
 <body>
-	<span id="game" style="display: none">
+    <span id="game" style="display: none">
 		<canvas id="battleground">
 			施主你的浏览器不支持Canvas，请回吧！
 		</canvas>
 	</span>
-	<aside class="result-wrap show-search">
-		<div class="search">
-			<button data-num="1">单人游戏</button>
-			<button data-num="2">双人游戏</button>
-		</div>
-		<div class="solo">
-			<div class="result">你坚持了<span class="solo-time"></span>秒</div>
-			<button onclick="javascript: window.location.reload();">回到首页</button>
-		</div>
-		<div class="pvp">
-			<div class="winer">WINER: <span class="name"></span></div>
-			<div class="result">游戏时间：<span class="pvp-time"></span>秒</div>
-			<button onclick="javascript: window.location.reload();">回到首页</button>
-		</div>
-	</aside>
-	<script data-main="dist/javascripts/config.js" src="./require.js"></script>
+    <aside class="result-wrap show-search">
+        <div class="search">
+            <button data-num="1" title="WSAD or 方向键">单人游戏</button>
+            <button data-num="2" title="1P:WSAD and 2P:方向键">双人游戏</button>
+            <div class="option">
+                <label for="difficulty">难易度:</label>
+                <select id="difficulty">
+                    <option value="1">Easy</option>
+                    <option value="2">Normal</option>
+                    <option value="3">Hard</option>
+                    <option value="4">Crazy</option>
+                </select>
+            </div>
+        </div>
+        <div class="solo">
+            <div class="result">你坚持了<span class="solo-time"></span>秒</div>
+            <button onclick="javascript: window.location.reload();">回到首页</button>
+        </div>
+        <div class="pvp">
+            <div class="winer">WINER: <span class="name"></span></div>
+            <div class="result">游戏时间：<span class="pvp-time"></span>秒</div>
+            <button onclick="javascript: window.location.reload();">回到首页</button>
+        </div>
+    </aside>
+    <script data-main="dist/javascripts/config.js" src="./require.js"></script>
 </body>
+
 </html>
