@@ -20,10 +20,7 @@
 <hr>
 
 2016/02/20 --- 
-视觉差[parallax](http://nightcatsama.github.io/My-Animat/)
-无重力[agravic](http://nightcatsama.github.io/My-Animat/)
-有重力[gravity](http://nightcatsama.github.io/My-Animat/)
-跟随鼠标[follow](http://nightcatsama.github.io/My-Animat/)
+[视觉差 & 无重力 & 重力 & 跟随鼠标](http://nightcatsama.github.io/My-Animat/)
 <hr>
 
 2016/01/15 --- [flappy-ball](http://nightcatsama.github.io/My-Animat/flappy-ball.html)
