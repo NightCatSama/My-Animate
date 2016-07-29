@@ -19,7 +19,7 @@
 2016/03/05 --- [星空](http://nightcatsama.github.io/My-Animat/star.html)
 <hr>
 
-#####2016/02/20
+2016/02/20 --- 
 视觉差[parallax](http://nightcatsama.github.io/My-Animat/)
 无重力[agravic](http://nightcatsama.github.io/My-Animat/)
 有重力[gravity](http://nightcatsama.github.io/My-Animat/)
