@@ -3,10 +3,17 @@
   margin: 0;
   padding: 0; }
 
+html {
+  width: 100%;
+  height: 100%;
+  background-image: -webkit-radial-gradient(350px 400px, farthest-side, #999 0%, #e3e3e3 100%);
+  background-image: radial-gradient(farthest-side at 350px 400px, #999 0%, #e3e3e3 100%); }
+
 .cursor-none {
   cursor: none !important; }
 
 .cat {
+  background-color: #000;
   margin: 100px;
   position: relative; }
   .cat .head .ear {
@@ -16,7 +23,9 @@
     border-bottom: 150px solid #000;
     border-left: 75px solid transparent;
     border-right: 75px solid transparent;
-    transform: skew(-15deg);
+    -webkit-transform: skew(-15deg);
+        -ms-transform: skew(-15deg);
+            transform: skew(-15deg);
     border-radius: 35px 35px 125px 125px;
     z-index: 2; }
     .cat .head .ear::before {
@@ -29,7 +38,9 @@
       border-bottom: 142px solid #000;
       border-left: 100px solid transparent;
       border-right: 100px solid transparent;
-      transform: rotate(30deg);
+      -webkit-transform: rotate(30deg);
+          -ms-transform: rotate(30deg);
+              transform: rotate(30deg);
       border-radius: 35px 35px 125px 125px;
       z-index: 2; }
     .cat .head .ear::after {
@@ -42,7 +53,9 @@
       border-bottom: 144px solid white;
       border-left: 102px solid transparent;
       border-right: 102px solid transparent;
-      transform: rotate(30deg);
+      -webkit-transform: rotate(30deg);
+          -ms-transform: rotate(30deg);
+              transform: rotate(30deg);
       border-radius: 35px 35px 125px 125px;
       z-index: 1; }
   .cat .head .face {
@@ -53,7 +66,9 @@
     border-radius: 300px 300px 300px 300px / 300px 300px 166px 163px;
     top: 73px;
     left: -34px;
-    transform: rotate(14deg) skew(2deg);
+    -webkit-transform: rotate(14deg) skew(2deg);
+        -ms-transform: rotate(14deg) skew(2deg);
+            transform: rotate(14deg) skew(2deg);
     border-right: 1px solid #FFF;
     border-bottom: 1px solid #FFF;
     box-shadow: 22px 9px 29px 0 rgba(0, 0, 0, 0.56);
@@ -68,8 +83,12 @@
       border-radius: 300px 300px 300px 300px / 300px 300px 160px 193px;
       top: 73px;
       left: 15px;
-      transform: rotate(12deg) skew(12deg);
-      box-shadow: inset -13px 0px 41px 0px rgba(0, 0, 0, 0.56); }
+      -webkit-transform: rotate(12deg) skew(12deg);
+          -ms-transform: rotate(12deg) skew(12deg);
+              transform: rotate(12deg) skew(12deg);
+      box-shadow: inset -13px 0px 41px 0px rgba(0, 0, 0, 0.56);
+      -webkit-animation: left 10s infinite;
+              animation: left 10s infinite; }
       .cat .head .face .left-eye .pupil {
         width: 14px;
         position: absolute;
@@ -77,7 +96,9 @@
         height: 90%;
         background-color: #000;
         border-radius: 100%;
-        transform: rotate(10deg);
+        -webkit-transform: rotate(10deg);
+            -ms-transform: rotate(10deg);
+                transform: rotate(10deg);
         overflow: hidden; }
         .cat .head .face .left-eye .pupil .light {
           width: 6px;
@@ -93,8 +114,12 @@
       border-radius: 193px 119px 150px 175px/178px 144px 108px 73px;
       top: 99px;
       left: 210px;
-      transform: rotate(7deg) skew(0);
-      box-shadow: inset -16px 9px 38px 0px rgba(0, 0, 0, 0.56); }
+      -webkit-transform: rotate(7deg) skew(0);
+          -ms-transform: rotate(7deg) skew(0);
+              transform: rotate(7deg) skew(0);
+      box-shadow: inset -16px 9px 38px 0px rgba(0, 0, 0, 0.56);
+      -webkit-animation: right 10s infinite;
+              animation: right 10s infinite; }
       .cat .head .face .right-eye .pupil {
         width: 16px;
         position: absolute;
@@ -103,7 +128,9 @@
         height: 92%;
         background-color: #000;
         border-radius: 100%;
-        transform: rotate(2deg); }
+        -webkit-transform: rotate(2deg);
+            -ms-transform: rotate(2deg);
+                transform: rotate(2deg); }
         .cat .head .face .right-eye .pupil .light {
           width: 6px;
           height: 6px;
@@ -122,7 +149,9 @@
     border-radius: 345px 348px 251px 0 / 218px 250px 124px 37px;
     background-color: #000;
     z-index: 1;
-    transform: rotate(15deg) skew(-27deg);
+    -webkit-transform: rotate(15deg) skew(-27deg);
+        -ms-transform: rotate(15deg) skew(-27deg);
+            transform: rotate(15deg) skew(-27deg);
     box-shadow: 14px 27px 39px 0 rgba(0, 0, 0, 0.56); }
   .cat .body .leg {
     position: absolute;
@@ -133,7 +162,9 @@
     border-radius: 100%;
     border-left: 1px solid white;
     background-color: #000;
-    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+            transform: rotate(0deg);
     z-index: 2; }
   .cat .body .hand {
     position: absolute;
@@ -145,7 +176,9 @@
     border-radius: 100%;
     top: 218px;
     left: 50px;
-    transform: rotate(-54deg) skew(0deg);
+    -webkit-transform: rotate(-54deg) skew(0deg);
+        -ms-transform: rotate(-54deg) skew(0deg);
+            transform: rotate(-54deg) skew(0deg);
     box-shadow: 3px 9px 20px 0 rgba(0, 0, 0, 0.56); }
   .cat .body .right-hand {
     position: absolute;
@@ -154,10 +187,13 @@
     border-radius: 100% / 170px 170px 140px 140px;
     top: 250px;
     left: 252px;
-    transform: rotate(-160deg) skew(0);
+    -webkit-transform: rotate(-160deg) skew(0);
+        -ms-transform: rotate(-160deg) skew(0);
+            transform: rotate(-160deg) skew(0);
     box-shadow: -14px 27px 39px 0 rgba(0, 0, 0, 0.56); }
     .cat .body .right-hand.action {
-      animation: react .85s; }
+      -webkit-animation: react .85s;
+              animation: react .85s; }
     .cat .body .right-hand .hand-react {
       position: absolute;
       width: 82px;
@@ -227,6 +263,16 @@
   2% {
     -webkit-transform: rotate(7deg) skew(0);
     transform: rotate(7deg) skew(0); } }
+@-webkit-keyframes react {
+  0% {
+    -webkit-transform: translateX(0) rotate(-160deg) skew(0);
+    transform: translateX(0) rotate(-160deg) skew(0); }
+  50% {
+    -webkit-transform: translateX(20px) rotate(-180deg) skew(5deg);
+    transform: translateX(20px) rotate(-180deg) skew(5deg); }
+  100% {
+    -webkit-transform: translateX(0) rotate(-160deg) skew(0);
+    transform: translateX(0) rotate(-160deg) skew(0); } }
 @keyframes react {
   0% {
     -webkit-transform: translateX(0) rotate(-160deg) skew(0);

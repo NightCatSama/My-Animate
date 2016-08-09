@@ -13,17 +13,22 @@ $tail-width: 50px;
 	padding: 0;
 }
 
+html {
+	width: 100%;
+    height: 100%;
+    background-image: radial-gradient(farthest-side at 350px 400px, #999 0%, #e3e3e3 100%);
+}
+
 .cursor-none {
 	cursor: none!important;
 }
 
 .cat {
-	// background-color: $color;
+	background-color: $color;
 	margin: 100px;
 	position: relative;
 
 	.head {
-		// transform: rotate(-5deg);
 
 		.ear {
 			position: absolute;
@@ -95,7 +100,7 @@ $tail-width: 50px;
 				left: 15px;
 				transform: rotate(12deg) skew(12deg);
 				box-shadow: inset -13px 0px 41px 0px rgba(0, 0, 0, 0.56);
-				// animation: left 10s infinite;
+				animation: left 10s infinite;
 
 				.pupil {
 					width: 14px;
@@ -127,7 +132,7 @@ $tail-width: 50px;
 				left: 210px;
 				transform: rotate(7deg) skew(0);
 				box-shadow: inset -16px 9px 38px 0px rgba(0,0,0,.56);
-				// animation: right 10s infinite;
+				animation: right 10s infinite;
 
 			    .pupil {
 					width: 16px;
