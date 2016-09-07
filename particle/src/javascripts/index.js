@@ -3,7 +3,7 @@
 const _default = {
 	width: document.body.offsetWidth, //canvas的宽度，默认窗口宽度
 	height: document.body.offsetHeight, //canvas的高度，默认窗口高度
-	imgSize: [512, 512], //图片的大小 [width, height]，默认原始大小
+	imgSize: undefined, //图片的大小 [width, height]，默认原始大小
 	backgroundColor: '#fff',
 	filter: function(r, g, b, a) {  //过滤方法
 		return true
@@ -140,7 +140,7 @@ export default class Particle {
 			dy = this.my - p.y
 			d = dx * dx + dy * dy
 			f = -this.range / d
-			if (d < this.range) {
+			if (Math.sqrt(d) < this.range) {
 				t = Math.atan2(dy, dx)
 				p.vx += f * Math.cos(t)
 				p.vy += f * Math.sin(t)
