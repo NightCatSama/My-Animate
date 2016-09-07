@@ -11,8 +11,4 @@ let particle = new Particle('demo', {
 			return true
 		}
 	},
-<<<<<<< HEAD
 })
-=======
-})
->>>>>>> abbc8e7ca35e6f591a16bf0a4c1bd265b36c93ca
