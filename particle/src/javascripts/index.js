@@ -9,6 +9,7 @@ const _default = {
 	},
 	x: undefined, //图像在canvas中的x坐标，默认居中
 	y: undefined, //图像在canvas中的y坐标，默认居中
+	r: 0.5,  //粒子半径
 	cols: 128, //图像分为几列，横坐标细度
 	rows: 128, //图像分为几行，纵坐标细度
 	mouseRange: 60,  //影响范围
@@ -122,7 +123,7 @@ export default class Particle {
 			this.cxt.fillStyle = 'rgba(' + particle.color + ')'
 
 			this.cxt.beginPath()
-			this.cxt.arc(particle.x, particle.y, .5, 0, 2 * Math.PI, true)
+			this.cxt.arc(particle.x, particle.y, this.r, 0, 2 * Math.PI, true)
 			this.cxt.closePath()
 
 			this.cxt.fill()
@@ -137,7 +138,7 @@ export default class Particle {
 			dy = this.my - p.y
 			d = dx * dx + dy * dy
 			f = -this.range / d
-			if (Math.sqrt(d) < this.range) {
+			if (d < this.range) {
 				t = Math.atan2(dy, dx)
 				p.vx += f * Math.cos(t)
 				p.vy += f * Math.sin(t)
