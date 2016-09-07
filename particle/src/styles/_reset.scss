@@ -1,0 +1,21 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6, pre, code,
+form, fieldset, legend, input, button,
+textarea, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+
+a,a:hover,a:active,a:focus,input,input:hover,input:active,input:focus{
+	outline:none;
+}
+
+ul, ol {
+	list-style: none;
+}
