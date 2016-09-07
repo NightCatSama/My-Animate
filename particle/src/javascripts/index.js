@@ -4,6 +4,7 @@ const _default = {
 	width: document.body.offsetWidth, //canvas的宽度，默认窗口宽度
 	height: document.body.offsetHeight, //canvas的高度，默认窗口高度
 	imgSize: [512, 512], //图片的大小 [width, height]，默认原始大小
+	backgroundColor: '#fff',
 	filter: function(r, g, b, a) {  //过滤方法
 		return true
 	},
@@ -13,31 +14,30 @@ const _default = {
 	cols: 128, //图像分为几列，横坐标细度
 	rows: 128, //图像分为几行，纵坐标细度
 	mouseRange: 60,  //影响范围
-	recovery: 0.95  //恢复速度
+	recovery: 0.95  //恢复速度，越小越快，1时不恢复
 }
 
 export default class Particle {
 	constructor(id, option) {
 		Object.assign(this, _default, option)
 		this.canvas = document.getElementById(id)
+		this.canvas.style.backgroundColor = this.backgroundColor
 		this.cxt = this.canvas.getContext('2d')
 		this.particles = []
 		this.range = Math.pow(this.mouseRange, 2)
-		this.bounds = this.canvas.getBoundingClientRect()
 		this.isAnimate = true
 		this.init()
 	}
 	init() {
 		this.setSize()
-		this.bindEvent()
 		this.setImage(this.src)
 	}
 	bindEvent() {
 		this.canvas.addEventListener('mousemove', this.getMousePos.bind(this))
 	}
 	getMousePos(e) {
-	    this.mx = e.pageX
-	    this.my = e.pageY
+	    this.mx = e.clientX - this.bounds.left;
+		this.my = e.clientY - this.bounds.top;
 	}
 	setSize() {
 		this.canvas.width = this.width
@@ -60,17 +60,19 @@ export default class Particle {
 				this.cxt.drawImage(this.img, this.x, this.y, this.img_width, this.img_height)
 			}
 			this.getParticle()
+			this.bounds = this.canvas.getBoundingClientRect()
+			this.bindEvent()
 		}
 		this.img.src = src
 	}
 	getParticle() {
 		let imageData = this.getImageData()
-		let s_width = parseInt((this.img_width + 1) / this.cols)
+		let s_width = parseInt((this.img_width) / this.cols)
 		let s_height = parseInt(this.img_height / this.rows)
 		let pos = 0
 		for (let i = 1; i <= this.cols; i++) {
 			for (let j = 1; j <= this.rows; j++) {
-				pos = (j * s_height - 1) * (this.img_width) + (i * s_width)
+				pos = (j * s_height) * (this.img_width) + (i * s_width)
 				if (imageData[pos] && this.filter && this.filter.apply(this, imageData[pos])) {
 					let x = this.x + i * s_width + (Math.random() - 0.5) * 5
 					let y = this.y + j * s_height + (Math.random() - 0.5) * 5
