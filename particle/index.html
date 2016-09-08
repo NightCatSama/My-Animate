@@ -1,22 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="renderer" content="webkit">
-	<meta http-equiv="Cache-Control" content="no-siteapp"/>
-	<meta content="yes" name="apple-mobile-web-app-capable" />
-	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
-	<meta name="format-detection" content="telephone=no" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="full-screen" content="yes">
-	<meta name="x5-fullscreen" content="true">
-	<title>粒子效果</title>
-	<link rel="stylesheet" href="./dist/stylesheets/index.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <title>粒子效果</title>
+    <link rel="stylesheet" href="./dist/stylesheets/index.css">
 </head>
+
 <body>
-	<canvas id="demo">请使用支持canvas的浏览器，蟹蟹！</canvas>
-	<script data-main="dist/javascripts/config.js" src="./require.js"></script>
+    <canvas id="demo">请使用支持canvas的浏览器，蟹蟹！</canvas>
+    <div class="control">
+        <div class="img-group flex  flex-v-center">
+            <img src="dist/images/demo.png" alt="" id="img" />
+            <div class="flex-cloumn flex-v-center ml-sm">
+                <input type="file" id="file" />
+                <div class="mt-sm">
+                    <span class="fontSize-sm">过滤背景色：</span>
+                    <input type="color" id="color" value="#ffffff" />
+                </div>
+                <div class="mt-sm">
+                	粒子列数：<input class="width-xs" type="number" id="cols" value="100" />
+                	行数：<input class="width-xs" type="number" id="rows" value="100" />
+                </div>
+                <div class="mt-sm">
+                	图像宽度：<input class="width-xs" type="number" id="width" value="1024" />
+                	高度：<input class="width-xs" type="number" id="height" value="512" />
+                </div>
+		        <div class="flex flex-v-center mt-sm white">
+		            <h5 class="text-nowrap">粒子偏移范围：</h5>
+		            <input type="range" id="disperse" min="0" max="100" />
+		            <div id="disperse_value" class="ml-sm fontSize-lg"></div>
+		        </div>
+		        <div class="btn-group flex">
+            		<button class="btn btn-blue p-sm m-md width-half" id="checkBtn">确定</button>
+            		<button class="btn btn-masstone p-sm m-md width-half" id="resetBtn">重置</button>
+		        </div>
+            </div>
+        </div>
+        <hr>
+        <div class="flex flex-v-center mt-sm white">
+            <h5 class="text-nowrap">鼠标作用范围：</h5>
+            <input type="range" id="mouseRange" min="0" max="200" />
+            <div id="mouseRange_value" class="ml-sm fontSize-lg"></div>
+        </div>
+        <div class="flex flex-v-center mt-sm white">
+            <h5 class="text-nowrap">粒子恢复：</h5>
+            <input type="range" id="recovery" min="0" max="100" />
+            <div id="recovery_value" class="ml-sm fontSize-lg"></div>
+        </div>
+        <div class="flex flex-v-center mt-sm white">
+            <h5 class="text-nowrap">粒子半径：</h5>
+            <input type="range" id="r" min="0" max="10" />
+            <div id="r_value" class="ml-sm fontSize-lg"></div>
+        </div>
+        <div class="miao" id="hideBtn">喵喵喵</div>
+    </div>
+    <script data-main="dist/javascripts/config.js" src="./require.js"></script>
 </body>
+
 </html>

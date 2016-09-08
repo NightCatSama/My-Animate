@@ -1,13 +1,49 @@
 @import './util';
+@import './class';
 @import 'reset';
 
 body {
-	background-color: $blue;
+	background-color: $black;
 	width: 100vw;
 	height: 100vh;
 	@include flex-center;
+}
 
-	canvas {
-		transform: translate3d(0,0,0);
+.control {
+	position: fixed;
+	left: 0;
+	top: 0;
+	padding: 10px 20px;
+	background-color: rgba(255, 255, 255, .5);
+	transition: transform .5s;
+
+	&.hidden {
+		transform: translateY(-100%);
+	}
+
+	.img-group {
+		color: $white;
+
+		input[type="file"] {
+			width: 180px;
+		}
+
+		img {
+			max-height: 100px;
+			width: auto;
+			border: 1px solid $white;
+		}
+	}
+
+	.miao {
+		position: absolute;
+		left: 0;
+		bottom: -30px;
+		color: $blue;
+		height: 30px;
+		line-height: 30px;
+		width: 100%;
+		text-align: center;
+		background-color: rgba(255, 255, 255, 1);
 	}
 }
