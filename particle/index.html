@@ -19,7 +19,7 @@
 
 <body>
     <canvas id="demo">请使用支持canvas的浏览器，蟹蟹！</canvas>
-    <div class="control">
+    <div class="control hidden">
         <div class="img-group flex  flex-v-center">
             <img src="dist/images/demo.png" alt="" id="img" />
             <div class="flex-cloumn flex-v-center ml-sm">
@@ -27,6 +27,7 @@
                 <div class="mt-sm">
                     <span class="fontSize-sm">过滤背景色：</span>
                     <input type="color" id="color" value="#ffffff" />
+                    <small class="light-gray fontSize-xs">范围过滤请在JS配置</small>
                 </div>
                 <div class="mt-sm">
                 	粒子列数：<input class="width-xs" type="number" id="cols" value="100" />
