@@ -1,0 +1,25 @@
+@import './util';
+
+$range-height: 4px;
+$dot-size: 12px;
+
+.range-component {
+	width: 120px;
+	height: $range-height;
+	border-radius: 15px;
+	position: relative;
+	background-color: rgba(255, 255, 255, 0.86);
+	user-select: none;
+
+	.range-dot {
+		position: absolute;
+		left: 0;
+		top: -($dot-size - $range-height) / 2;
+		width: $dot-size;
+		height: $dot-size;
+		background-color: $yellow;
+		border-radius: 50%;
+		z-index: 9;
+		user-select: none;
+	}
+}

@@ -1,0 +1,1 @@
+.range-component{position:relative;width:120px;height:4px;-webkit-user-select:none;user-select:none;border-radius:15px;background-color:rgba(255,255,255,.86)}.range-component .range-dot{position:absolute;z-index:9;top:-4px;left:0;width:12px;height:12px;-webkit-user-select:none;user-select:none;border-radius:50%;background-color:#f1c40f}

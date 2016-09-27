@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp"/>
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="full-screen" content="yes">
+	<meta name="x5-fullscreen" content="true">
+	<title>Gulp-Cli</title>
+	<link rel="stylesheet" href="./dist/stylesheets/index.css">
+	<link rel="stylesheet" href="./canvas_icon/iconfont.css">
+</head>
+<body>
+	<div class="canvas-wrap">
+		<canvas id="app" class="full">您的浏览器不支持Canvas</canvas>
+	</div>
+	<div class="control">
+		<div class="control-item size">
+			<div class="range-component"></div>
+			<span id="size"></span>
+		</div>
+		<div class="control-item">
+			<label for="colors" class="palette">
+				<i class="iconfont icon-palette"></i>
+			</label>
+			<input id="colors" name="colors" type="color" class="hide" value="#666666" />
+		</div>
+		<i id="repeal" class="iconfont icon-goback"></i>
+		<i id="trash" class="iconfont icon-trash"></i>
+		<div class="footer">
+			<button id="loadImg">
+				<label for="img">
+					<i class="iconfont icon-upload"></i>
+					Load
+				</label>
+			</button>
+			<input type="file" class="hide" id="img" >
+			<button id="saveImg">
+				<i class="iconfont icon-download"></i>
+				Save
+			</button>
+		</div>
+	</div>
+	<script data-main="dist/javascripts/config.js" src="./require.js"></script>
+</body>
+</html>

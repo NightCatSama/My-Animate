@@ -1,0 +1,98 @@
+@import './util';
+@import './reset';
+@import './range-component';
+
+$control-height: 50px;
+$icon-size: 24px;
+
+html {
+    font-family: "Segoe UI", 'Microsoft Yahei', Helvetica, Arial;
+}
+
+body {
+	background-color: $blue;
+	overflow: hidden;
+}
+
+* {
+	user-select: none;
+}
+
+.hide {
+	opacity: 0;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}
+
+.canvas-wrap {
+	width: 100vw;
+	height: calc(100vh - #{$control-height});
+	position: relative;
+	background-color: $default;
+	border: 10px solid $masstone;
+	overflow: auto;
+	display: flex;
+
+	canvas {
+		position: absolute;
+		left: 0;
+		top: 0;
+
+		&.full {
+			width: 100%;
+			height: 100%;
+		}
+		// &.canvas-mask {
+		// 	position: absolute;
+		// 	left: 0;
+		// 	top: 0;
+		// }
+	}
+}
+
+.control {
+	height: $control-height;
+	@include flex-v-center;
+	color: $white;
+
+	.control-item {
+		float: left;
+		margin-left: 20px;
+
+		.iconfont {
+			font-size: $icon-size;
+			text-shadow: 1px 1px 2px rgba(255,255,255,.86), -1px -1px 2px rgba(255,255,255,.86);
+		}
+
+		&.size {
+			@include flex-center;
+
+			span {
+				margin-left: 10px;
+				font-size: 18px;
+			}
+		}
+	}
+
+	.footer{
+		flex: 1;
+		display: flex;
+		justify-content: flex-end;
+		margin-right: 20px;
+
+		button {
+			border: none;
+			color: $white;
+			font-size: 18px;
+			background-color: $tr;
+			margin-left: 50px;
+   			font-family: "Segoe UI", 'Microsoft Yahei', Helvetica, Arial;
+		}
+	}
+
+	>.iconfont {
+		font-size: $icon-size;
+		margin-left: 10px;
+	}
+}

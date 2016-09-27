@@ -1,0 +1,43 @@
+/*
+ * Beautiful Color
+ */
+$red: #E74C3C;
+$dark-red: #C0392B;
+$blue: #3498DB;
+$dark-blue: #2980B9;
+$yellow: #F1C40F;
+$dark-yellow: #F39C12;
+$green: #2ECC71;
+$dark-green: #27AE60;
+$orange: #E67E22;
+$dark-orange: #D35400;
+$purple: #9B59B6;
+$dark-purple: #8E44AD;
+$default: #34495E;
+$dark-default: #2C3E50;
+$masstone: #798f9a;
+$gray: #95A5A6;
+$dark-gray: #7F8C8D;
+$black: #000;
+$white: #FFF;
+$tr: transparent;
+$colors: ($red: #E74C3C, $blue: #3498DB, $yellow: #F1C40F, $green: #2ECC71, $orange: #E67E22, $purple: #9B59B6);
+
+$nav-height: 50px;
+
+//**************************************************************
+//         flex居中
+//**************************************************************
+@mixin flex-center($display: flex) {
+    display: $display;
+    justify-content: center;
+    align-items: center;
+}
+@mixin flex-v-center($display: flex) {
+    display: $display;
+    align-items: center;
+}
+@mixin flex-h-center($display: flex) {
+    display: $display;
+    justify-content: center;
+}
