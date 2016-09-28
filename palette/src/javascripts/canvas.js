@@ -101,7 +101,7 @@ export default class Particle {
 		this.img.onload = () => {
 			this.trashCanvas.width = this.mask.width = this.width = this.elem.width = this.img.width;
 			this.trashCanvas.height = this.mask.height = this.height = this.elem.height = this.img.height;
-			this.maskCtx.drawImage(this.img, 0, 0);
+			this.ctx.drawImage(this.img, 0, 0);
 			this.getBound();
 		}
 		this.img.src = src
