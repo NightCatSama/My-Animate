@@ -1,6 +1,8 @@
 # My-Animat
 ###使用 HTML5 / CSS3 制作的动画效果~ 持续更新。。。。
 <hr>
+2016/09/27 --- [画板](http://nightcatsama.github.io/My-Animat/palette)
+<hr>
 2016/09/07 --- [粒子效果](https://github.com/NightCatSama/My-Animat/tree/master/particle)
 <hr>
 2016/07/28 --- [箭头躲避](http://nightcatsama.github.io/My-Animat/arrow.html)
