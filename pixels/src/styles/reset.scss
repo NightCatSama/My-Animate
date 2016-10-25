@@ -1,0 +1,191 @@
+@import 'util';
+//
+// Reset.scss
+// ------------------------
+// 此处只修改浏览器默认样式
+// (=ˋωˊ=)
+//
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+p,
+blockquote,
+th,
+td {
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 500;
+    line-height: 1.426;
+}
+
+article {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 10px 0 15px 0;
+    }
+}
+article, section {
+    h1 {
+        font-size: 2em;
+    }
+}
+
+a,
+a:hover,
+a:active,
+a:focus,
+input,
+input:hover,
+input:active,
+input:focus,
+select,
+select:hover,
+select:active,
+select:focus,
+textarea,
+textarea:hover,
+textarea:active,
+textarea:focus {
+    outline: none;
+}
+
+button,
+button:active,
+button:focus,
+button:hover {
+    outline: none;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+body {
+    font-family: "Segoe UI", 'Microsoft Yahei', Helvetica, Arial;
+    color: $font-color;
+}
+
+a {
+    color: $blue;
+}
+
+blockquote {
+    padding-left: 20px;
+    margin: .5em 0;
+    position: relative;
+    border-left: 4px solid $blue;
+}
+
+code {
+    padding: 10px 20px;
+    display: inline-block;
+    background-color: $light-black;
+    color: $white;
+    font-family: Consolas, Monaco, Droid, Sans, Mono, Source, Code, Pro, Menlo, Lucida, Sans, Type, Writer, Ubuntu, Mono;
+    border-radius: 5px;
+}
+
+small {
+    color: $dark-default;
+}
+
+hr {
+    margin: 20px 0;
+}
+
+button,
+[role='button'] {
+    padding: 9px 15px;
+    display: inline-block;
+    border: none;
+    background-color: $dark-default;
+    font-size: 13px;
+    border-radius: 5px;
+    line-height: 1;
+    color: $white;
+    transition: background-color .2s;
+    &[disabled] {
+        opacity: .35;
+        cursor: not-allowed;
+    }
+    &:hover {
+        background-color: $default;
+    }
+    &:active {
+        box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, .56);
+    }
+}
+
+label {
+    font-weight: bold;
+    display: inline-block;
+    padding: 0 5px;
+}
+
+textarea {
+    width: 350px;
+    resize: none;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    width: 20px;
+}
+
+table {
+    background-color: $white;
+    border-collapse: collapse;
+    font-family: 'Microsoft Yahei';
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .26);
+    overflow: hidden;
+    tr {
+        text-align: left;
+    }
+    th {
+        color: $white;
+        background-color: $default;
+    }
+    th,
+    td {
+        padding: 12px;
+    }
+}

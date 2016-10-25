@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="Cache-Control" content="no-siteapp"/>
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="full-screen" content="yes">
+	<meta name="x5-fullscreen" content="true">
+	<title>单标签像素图</title>
+	<link rel="stylesheet" href="./dist/stylesheets/index.css">
+</head>
+<body>
+	<div class="demo">
+		<div class="option flex-column">
+			<label for="name">
+				名字：<input type="text" id="name">
+			</label>
+			<label for="cols">
+				列数：<input type="number" id="cols">
+			</label>
+			<label for="rows">
+				行数：<input type="number" id="rows">
+			</label>
+			<label for="size">
+				像素大小：<input type="number" id="size">
+			</label>
+			<button id="resetBtn" class="btn-roseate">重置</button>
+		</div>
+		<span class="canvas-group">
+			<div id="app"></div>
+			<div class="preview miao"></div>
+		</span>
+		<div class="preset">
+			<div class="fontSize-xs">预设颜色：</div>
+			<div class="preset-item active">
+				<div class="color-block bg-blue" data-color="#3498db"></div>
+				<label for="colors-1" class="palette">
+					更换
+				</label>
+				<input id="colors-1" name="colors" type="color" class="hidden" />
+			</div>
+			<div class="preset-item">
+				<div class="color-block bg-green" data-color="#2ecc71"></div>
+				<label for="colors-2" class="palette">
+					更换
+				</label>
+				<input id="colors-2" name="colors" type="color" class="hidden" />
+			</div>
+			<div class="preset-item">
+				<div class="color-block bg-red" data-color="#d71345"></div>
+				<label for="colors-3" class="palette">
+					更换
+				</label>
+				<input id="colors-3" name="colors" type="color" class="hidden" />
+			</div>
+			<div class="preset-item">
+				<div class="color-block bg-yellow" data-color="#ffd400"></div>
+				<label for="colors-4" class="palette">
+					更换
+				</label>
+				<input id="colors-4" name="colors" type="color" class="hidden" />
+			</div>
+			<div class="preset-item">
+				<div class="color-block bg-orange" data-color="#f47920"></div>
+				<label for="colors-5" class="palette">
+					更换
+				</label>
+				<input id="colors-5" name="colors" type="color" class="hidden" />
+			</div>
+			<div class="preset-item">
+				<div class="color-block bg-gray" data-color="#D3DCE6"></div>
+				<label for="colors-6" class="palette">
+					更换
+				</label>
+				<input id="colors-6" name="colors" type="color" class="hidden" />
+			</div>
+			<div class="preset-item">
+				<div class="color-block bg-black" data-color="#130c0e"></div>
+				<label for="colors-7" class="palette">
+					更换
+				</label>
+				<input id="colors-7" name="colors" type="color" class="hidden" />
+			</div>
+			<div class="preset-item eraser">
+				<div class="color-block"></div>
+				<label class="palette">
+					橡皮擦
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="control mv-lg text-center">
+		<button id="createBtn" class="btn-blue ph-xxlg pv-sm mh-sm">生成CSS</button>
+		<button id="previewBtn" class="btn-light-blue ph-xxlg pv-sm mh-sm">预览</button>
+		<label for="file" role="button" class="btn-light-green ph-xxlg pv-sm mh-sm text-normal vertical-bottom">载入图片</label>
+		<input id="file" type="file" class="hidden" />
+		<button id="emptyBtn" class="btn ph-xxlg pv-sm mh-sm">清空</button>
+	</div>
+	<textarea id="code"></textarea>
+	<script src="jquery-1.12.3.js"></script>
+	<script data-main="dist/javascripts/config.js" src="./require.js"></script>
+</body>
+</html>

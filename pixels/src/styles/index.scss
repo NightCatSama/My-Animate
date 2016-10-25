@@ -1,0 +1,105 @@
+@import './core';
+
+body {
+	background-color: $white;
+	padding: 20px;
+	@include flex-center(inline-flex);
+	min-width: 100vw;
+	flex-direction: column;
+}
+
+.canvas-group {
+	position: relative;
+}
+
+.demo {
+	@include flex-center;
+	position: relative;
+}
+
+.preview {
+	position: absolute!important;
+	left: 0;
+	top: 0;
+	display: none;
+	background-color: $white;
+	border: 1px solid #ccc;
+}
+
+.container {
+	border: 1px solid #ccc;
+	box-sizing: content-box;
+	font-size: 0;
+	user-select: none;
+
+	.block {
+		display: inline-block;
+		position: relative;
+		border: 1px solid #eee;
+		border-width: 0 1px 1px 0;
+	}
+}
+
+textarea {
+	width: 80%;
+	height: 250px;
+	background-color: #eeffee;
+}
+
+.option {
+	padding: 5px 8px;
+	margin-right: 20px;
+	width: 180px;
+
+	label {
+		font-weight: normal;
+		text-align: right;
+		margin-bottom: 5px;
+	}
+
+	input {
+		width: 50px;
+		font-size: 14px;
+		font-family: "Segoe UI", 'Microsoft Yahei', Helvetica, Arial;
+	}
+}
+
+.preset {
+	padding: 5px;
+	margin-left: 20px;
+	width: 180px;
+
+	.preset-item {
+		margin: 3px 0;
+		padding: 2px;
+		display: inline-flex;
+
+		&.active {
+			outline: 2px solid $blue;
+		}
+
+		&.eraser {
+			.color-block {
+				border: 2px dashed #ccc;
+			}
+		}
+
+		.color-block {
+			width: 30px;
+			height: 30px;
+		}
+
+		.palette {
+			@include flex-center;
+			font-size: 12px;
+			font-weight: normal;
+		}
+	}
+}
+
+.hidden {
+	visibility: hidden;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+}

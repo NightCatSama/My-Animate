@@ -1,0 +1,208 @@
+//
+// Util.scss
+// ------------------------
+// 此处只有公共变量 @Mixin @Function
+// 不生产直接样式
+// (=ˋωˊ=)
+//
+
+//**************************************************************
+//        漂亮的颜色
+//**************************************************************
+$pink: #f7acbc;
+$roseate: #f05b72;
+$light-red: #d93a49;
+$red: #d71345;
+$dark-red: #b22c46;
+$orange: #f47920;
+$yellow: #ffd400;
+$dark-yellow: #ffc20e;
+$purple: #9b59b6;
+$light-blue: #77d5d4;
+$blue: #3498db;
+$dark-blue: #2980b9;
+$green: #2ecc71;
+$light-green: #52be7f;
+$dark-green: #27ae60;
+$brown: #843900;
+$sliver: #8492A6;
+$light-sliver: #99A9BF;
+$light-black: #324057;
+$black: #130c0e;
+$white: #fffffb;
+$light-gray: #E5E9F2;
+$gray: #D3DCE6;
+$masstone: #798f9a;
+$tr: transparent;
+$light-default: #c1c1c1;
+$default: #95a5a6;
+$default2: #333742;
+$dark-default: #7f8c8d;
+$font-color: #334455;
+$font-color1: $default2;
+$bg-color: $light-gray;
+$bg-color1: #f2f5f9;
+$bg-color2: #f0f0f0;
+$light-shadow: 0 0 3px 1px rgba(0, 0, 0, .36);
+$shadow: 0 0 5px 3px rgba(0, 0, 0, .16);
+$dark-shadow: 0 0 5px 3px rgba(0, 0, 0, .16);
+$colors: (roseate $roseate 30%),
+(masstone $masstone 30%),
+(light-default $light-default 10%),
+(default $default 20%),
+(default2 $default2 60%),
+(light-red $light-red 40%),
+(red $red 40%),
+(dark-red $dark-red 40%),
+(light-blue $light-blue 20%),
+(blue $blue 25%),
+(dark-blue $dark-blue 20%),
+(yellow $yellow 25%),
+(light-green $light-green 20%),
+(green $green 20%),
+(dark-green $dark-green 20%),
+(light-sliver $light-sliver 40%),
+(sliver $sliver 50%),
+(light-black $light-black 40%),
+(black $black 50%),
+(white $white 0),
+(pink $pink 10%),
+(orange $orange 30%),
+(gray $gray 40%),
+(light-gray $light-gray 10%);
+$size: (xs 1),
+(sm 2),
+(md 3),
+(lg 4),
+(xlg 6),
+(xxlg 8),
+(xxxlg 10);
+$percents: (full 100%),
+(half, 50%),
+(third, 33%);
+$locations: left right top bottom;
+$multilocations: (l t), (l b), (r t), (r b), (t l), (t r), (b l), (b r);
+$directions: vertical horizontal;
+
+//**************************************************************
+//        生成主题类 Params[componentname, colors]
+//**************************************************************
+@mixin theme($themes) {
+    @each $name, $all in $themes {
+        @each $color in $all {
+            .#{$name}-#{$color} {
+                @extend %#{$name}-#{$color}
+            }
+        }
+    }
+}
+
+
+//**************************************************************
+//        垂直居中
+//**************************************************************
+@mixin vertical-center($pos: relative) {
+    position: $pos;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+//**************************************************************
+//        设置placeholder样式
+//**************************************************************
+@mixin placeholder($color: #CCC, $font-size: inherit) {
+    &::-moz-placeholder {
+        color: $color;
+        font-size: $font-size;
+    }
+    &:-ms-input-placeholder {
+        color: $color;
+        font-size: $font-size;
+    }
+    &::-webkit-input-placeholder {
+        color: $color;
+        font-size: $font-size;
+    }
+}
+
+//**************************************************************
+//         flex居中
+//**************************************************************
+@mixin flex-center($display: flex) {
+    display: $display;
+    justify-content: center;
+    align-items: center;
+}
+
+//**************************************************************
+//          三角形 Params[大小，颜色，方向]
+//**************************************************************
+@mixin triangle ($size, $color, $direction) {
+    height: 0;
+    width: 0;
+    //三角向上、向下、向右和向左时，设置边框样式
+    @if ($direction==top) or ($direction==bottom) or ($direction==right) or ($direction==left) {
+        border-color: transparent;
+        border-style: solid;
+        border-width: $size / 2;
+        //三角向上时，底部边框颜色为$color
+        @if $direction==top {
+            border-bottom-color: $color;
+            //三角向右时，左边边框颜色为$color
+        }
+        @else if $direction==right {
+            border-left-color: $color;
+            //三你向下时，顶部边框颜色为$color
+        }
+        @else if $direction==bottom {
+            border-top-color: $color;
+            //三角向左时，右边框颜色为$color
+        }
+        @else if $direction==left {
+            border-right-color: $color;
+        }
+    }
+    //当三角为左上、右上直角三角形时
+    @else if ($direction==top-right) or ($direction==top-left) {
+        border-top: $size solid $color; //顶边边框样式
+        //当三角为右上直角三角形时，设置左边边框为透明
+        @if $direction==top-right {
+            border-left: $size solid transparent;
+            //当三角为左上直角三角形时，设置右边边框为透明
+        }
+        @else if $direction==top-left {
+            border-right: $size solid transparent;
+        }
+    }
+    //当三角为右下、左下直角三角形时
+    @else if ($direction==bottom-right) or ($direction==bottom-left) {
+        border-bottom: $size solid $color; //底边边框样式
+        //当三角为右下直角三角形时，设置左边边框为透明
+        @if $direction==bottom-right {
+            border-left: $size solid transparent;
+            //当三你为左下直角三角形时，设置右边边框为透明
+        }
+        @else if $direction==bottom-left {
+            border-right: $size solid transparent;
+        }
+    }
+}
+
+//**************************************************************
+//        响应式max-width
+//**************************************************************
+@mixin max-screen($res) {
+    @media ( max-width: $res) {
+        @content;
+    }
+}
+
+//**************************************************************
+//        响应式min-width
+//**************************************************************
+@mixin min-screen($res) {
+    @media ( min-width: $res) {
+        @content;
+    }
+}
+
