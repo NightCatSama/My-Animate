@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+	<div class="content">
+		<h1>坦克大战(what?)</h1>
+		<a href="#" onclick="openSetting('solo')">闯关模式</a>
+		<a href="build">自定义地图</a>
+		<a href="#" onclick="openSetting('pvp')">多人联机</a>
+	</div>
+	<div class="setting-group">
+		<div class="pvp-group">
+			<label for="create-room">
+				房间名：
+				<input type="text" id="create-room" />
+			</label>
+			<label for="map">
+				地图名
+				<input type="text" id="map" placeholder="为空则默认地图" />
+			</label>
+			<span class="tips">相同的房间和地图名才可联机</span>
+			<button onclick="createRoom();">加入房间</button>
+		</div>
+		<div class="solo-group">
+			<label for="diy_map">
+				自定义地图：
+				<input type="text" id="diy_map"/>
+			</label>
+			<span class="tips">不输入地图名则进入官方地图，总8关</span>
+			<button onclick="intoMap();">进行游戏</button>
+		</div>
+	</div>
+<script>
+	function createRoom(){
+		var name = document.getElementById('map');
+		var room = document.getElementById('create-room');
+		window.location.href = '/pvp?map=' + name.value + '&room=' + room.value;
+	}
+
+	function intoMap(){
+		var map = document.getElementById('diy_map');
+		if(map.value){
+			window.location.href = '/?map=' + map.value;
+		}
+		else {
+			window.location.href = '/';
+		}
+	}
+
+	function openSetting(type){
+		var setting = document.querySelector('.setting-group');
+		var pvp = document.querySelector('.pvp-group');
+		var solo = document.querySelector('.solo-group');
+		setting.classList.add('on');
+		if(type === 'pvp'){
+			solo.style.display = 'none';
+			pvp.style.display = 'block';
+		}
+		else {
+			solo.style.display = 'block';
+			pvp.style.display = 'none';
+		}
+	}
+</script>
+</body>
+</html>

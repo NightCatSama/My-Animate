@@ -1,0 +1,283 @@
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		.setting_group {
+			display: block;
+			position: fixed;
+			padding: 10px;
+			font-size: 14px;
+			color: #666;
+			left: 0;
+			top: 0;
+			z-index: 9999;
+			width: 100%;
+			background-color: #FFF;
+			border: 1px solid #333;
+    		box-sizing: border-box;
+			transform: translateY(0);
+			transition: transform .5s;
+		}
+		.setting_group.off {
+		  	transform: translateY(-100%);
+		}
+		.switch-btn {
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			margin-left: -120px;
+			border-top: 30px solid #34495E;
+			border-left: 120px solid transparent;
+			border-right: 120px solid transparent;
+		}
+		.setting_group input {
+			padding: 5px 8px;
+			border: 1px solid #999;
+			border-radius: 8px;
+			width: 60px;
+			outline: none;
+		}
+		.setting_group button {
+			color: #fff;
+			padding: 6px 10px;
+			border-radius: 8px;
+			outline: none;
+			background-color: #3498DB;
+			border: 1px solid #ECF0F1;
+			outline: none;
+			cursor: pointer;
+		}
+		.setting_group button:hover {
+			background-color: #2980B9;
+		}
+		.setting_group select {
+			color: #333;
+			padding: 5px 8px;
+			border-radius: 8px;
+			outline: none;
+			background-color: #FFF;
+			border: 1px solid #ccc;
+			outline: none;
+		}
+		.map-group {
+			position: relative;
+			margin: 30px;
+		}
+		#map {
+			background-color: #DFDFDF;
+			border: 1px solid #000;
+		}
+		#map_masking {
+			position: absolute;
+			top: 0;
+			left: 0;
+			border: 1px solid #F00;
+			z-index: 999;
+		}
+		.terr_group {
+			margin: 10px 0;
+			font-size: 0;
+			background-color: #000;
+			border: 1px solid #CCC;
+		}
+		.terr_group span {
+			vertical-align: middle;
+			display: inline-block;
+			margin: 0 5px;
+			box-sizing: border-box;
+		}
+		.terr_group span.select {
+			background-color: #FCFCFC;
+			outline:2px solid #E74C3C;
+		}
+		.prot1{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: 0px 0px;
+		}
+		.prot2{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -32px 0px;
+		}
+		.prot3{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -64px 0px;
+		}
+		.prot4{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -96px 0px;
+		}
+		.enemy1{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -128px 0;
+		}
+		.enemy1-red{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -160px 0;
+		}
+		.enemy2{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -192px 0;
+		}
+		.enemy2-red{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -224px 0;
+		}
+		.enemy3{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -256px 0;
+		}
+		.enemy3-red{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -288px 0;
+		}
+		.enemy4{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -320px 0;
+		}
+		.enemy4-red{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -352px 0;
+		}
+		.iron{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Terr.png);
+			background-position: -624px 0;
+		}
+		.grass{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Terr.png);
+			background-position: 0 0;
+		}
+		.wood{
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Terr.png);
+			background-position: -1120px 0;
+		}
+		.incrATK {
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -3904px 0;
+		}
+		.incrHp {
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -3936px 0;
+		}
+		.incrROF {
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -3872px 0;
+		}
+		.incrSpeed {
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -3968px 0;
+		}
+		.reduceInter {
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -4000px 0;
+		}
+		.suspendEnemys {
+			width: 32px;
+			height: 32px;
+			background-image: url(../img/Tank.png);
+			background-position: -4032px 0;
+		}
+		.boss {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss.png);
+			background-position: 0 0;
+		}
+		.boss2 {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss2.png);
+			background-position: 0 0;
+		}
+		.boss3 {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss3.png);
+			background-position: 0 0;
+		}
+		.boss4 {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss4.png);
+			background-position: 0 0;
+		}
+		.boss5 {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss5.png);
+			background-position: 0 0;
+		}
+		.boss6 {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss6.png);
+			background-position: 0 0;
+		}
+		.boss7 {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss7.png);
+			background-position: 0 0;
+		}
+		.boss8 {
+			width: 48px;
+			height: 48px;
+			background-image: url(../img/boss8.png);
+			background-position: 0 0;
+		}
+		#mouse {
+			display: none;
+			position: absolute;
+			z-index: 999;
+		}
+
+		#mouse::after {
+			content: attr(data-coord);
+			display: block;
+			position: absolute;
+			left: 0px;
+			top: -20px;
+			white-space: nowrap;
+			background-color: rgba(0,0,0,.26);
+			color: #FFF;
+			font-size: 12px;
+		}

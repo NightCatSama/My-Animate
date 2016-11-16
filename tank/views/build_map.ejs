@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>地图编辑</title>
+	<link rel="stylesheet" href="css/build_map.css">
+</head>
+<body>
+	<div class="setting_group">
+		<label for="level">地图名：<input type="text" id="level" /></label>
+		<label for="width">宽度：<input type="text" id="width" placeholder="1000" /></label>
+		<label for="height">高度：<input type="text" id="height" placeholder="600" /></label>
+		<label for="bg">场景：<select type="text" id="bg">
+			<option value="grass">草地</option>
+			<option value="grass2">草地2</option>
+			<option value="water">水地</option>
+			<option value="brick">砖地</option>
+			<option value="brick2">砖地2</option>
+			<option value="brick3">砖地3</option>
+			<option value="sand">沙地</option>
+		</select></label>
+		<button onclick="resetMap();">重置地图</button><br><br>
+		<label for="camera_width">镜头宽度：<input type="text" id="camera_width" placeholder="默认全屏" /></label>
+		<label for="camera_height">镜头高度：<input type="text" id="camera_height" placeholder="默认全屏" /></label>
+		<label for="camera_x">镜头x坐标：<input type="text" id="camera_x" placeholder="0" /></label>
+		<label for="camera_y">镜头y坐标：<input type="text" id="camera_y" placeholder="0" /></label>
+		<button onclick="cteateMap();">生成地图</button>
+		<button onclick="repeal();">撤销上一步操作</button><br><br><span>请确保单人地图只有一个角色(黄色坦克), 对战地图只有障碍物和BUFF(不允许加入任何坦克)</span>
+		<div class="terr_group">
+			<span class="prot1" role="prots"></span>
+			<span class="prot2" role="prots"></span>
+			<span class="prot3" role="prots"></span>
+			<span class="prot4" role="prots"></span>
+			<span class="enemy1" role="enemys"></span>
+			<span class="enemy1-red" role="enemys"></span>
+			<span class="enemy2" role="enemys"></span>
+			<span class="enemy2-red" role="enemys"></span>
+			<span class="enemy3" role="enemys"></span>
+			<span class="enemy3-red" role="enemys"></span>
+			<span class="enemy4" role="enemys"></span>
+			<span class="enemy4-red" role="enemys"></span>
+			<span class="iron" role="barriers"></span>
+			<span class="grass" role="barriers"></span>
+			<span class="wood" role="barriers"></span>
+			<span class="incrATK" role="buffs"></span>
+			<span class="incrHp" role="buffs"></span>
+			<span class="incrROF" role="buffs"></span>
+			<span class="incrSpeed" role="buffs"></span>
+			<span class="reduceInter" role="buffs"></span>
+			<span class="suspendEnemys" role="buffs"></span><br>
+			<span class="boss" role="enemys"></span>
+			<span class="boss2" role="enemys"></span>
+			<span class="boss3" role="enemys"></span>
+			<span class="boss4" role="enemys"></span>
+			<span class="boss5" role="enemys"></span>
+			<span class="boss6" role="enemys"></span>
+			<span class="boss7" role="enemys"></span>
+			<span class="boss8" role="enemys"></span>
+		</div>
+		<div class="switch-btn"></div>
+	</div>
+	<span id="mouse" data-coord="0, 0"></span>
+	<div class="map-group">
+		<canvas id="map" width="1000" height="600">
+			请升级你的浏览器，谢谢
+		</canvas>
+		<!-- 蒙版用于撤销上一步操作 -->
+		<canvas id="map_masking" width="1000" height="600">
+			请升级你的浏览器，谢谢
+		</canvas>
+	</div>
+	<script src="https://cdn.bootcss.com/jquery/1.12.1/jquery.min.js"></script>
+	<script src="js/build_map.js"></script>
+</body>
+</html>

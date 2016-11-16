@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body data-map='<%= map %>' data-room='<%= room %>'>
+<h1 class="wait"> 请等待第二位玩家加入... </h1>
+<div class="init-group">
+	<div class="terr_group">
+		<span class="prot1 select"></span>
+		<span class="enemy1"></span>
+		<span class="enemy1-red"></span>
+		<span class="enemy2"></span>
+		<span class="enemy2-red"></span>
+		<span class="enemy3"></span>
+		<span class="enemy3-red"></span>
+		<span class="enemy4"></span>
+		<span class="enemy4-red"></span>
+		<span class="boss"></span>
+		<span class="boss2"></span>
+		<span class="boss3"></span>
+		<span class="boss4"></span>
+		<span class="boss5"></span>
+		<span class="boss6"></span>
+		<span class="boss7"></span>
+		<span class="boss8"></span>
+	</div>
+	<button class="confirm-btn">确认</button>
+	<div class="switch-btn"></div>
+</div>
+<div id="Game">
+	<canvas id="background">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<canvas id="battleground">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<canvas id="protagonist">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<canvas id="enemy">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<canvas id="map_masking">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<span id="mouse" class="prot1" data-coord="0, 0"></span>
+</div>
+<div class="loading">请等待对方完成设置。。。</div>
+<script src="js/socket.io.js"></script>
+<script src="js/common.pvp.js"></script>  <!-- 公共变量 -->
+<script src="js/background.js"></script> <!-- 背景canvas [静态] -->
+<script src="js/battleground.js"></script> <!-- 战场canvas [FPS: 60] -->
+<script src="js/protagonist.js"></script> <!-- 主角canvas [FPS: 60] -->
+<script src="js/state.js"></script> <!-- 状态栏canvas [静态] -->
+<script src="js/enemy.js"></script> <!-- 敌人canvas [FPS: 60] -->
+<script src="js/game.config.pvp.js"></script> <!-- PVP游戏配置 -->
+<script src="js/pvp.js"></script>
+</body>
+</html>

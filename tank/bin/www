@@ -1,0 +1,175 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('game:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+var io = require('socket.io').listen(server)
+
+var rooms = {};
+io.sockets.on('connection', function (socket) {
+  var name = '';
+  socket.on('join room', function(obj){
+    if(rooms[obj.room] && rooms[obj.room].count === 0){
+        rooms[obj.room].count++;
+        rooms[obj.room].status[rooms[obj.room].count] = {};
+        rooms[obj.room].tank[rooms[obj.room].count] = {};
+        ready(obj.room);
+    }
+    else if(rooms[obj.room] && rooms[obj.room].count > 0){
+      socket.emit('at full strength');
+    }
+    else {
+      name = obj.room;
+      rooms[obj.room] = {};
+      rooms[obj.room].count = 0;
+      rooms[obj.room].ready = 0;
+      rooms[obj.room].status = [];
+      rooms[obj.room].tank = [];
+      rooms[obj.room].status[rooms[obj.room].count] = {};
+      rooms[obj.room].tank[rooms[obj.room].count] = {};
+    }
+    socket.emit('id', rooms[obj.room].count);
+  })
+
+  socket.on('ready', function(obj){
+    if(rooms[obj.room] && rooms[obj.room].ready >= 1){
+        rooms[obj.room].ready++;
+        cloneObj(rooms[obj.room].status[obj.id], obj.status);
+        start(obj.room, rooms[obj.room].status);
+    }
+    else {
+      cloneObj(rooms[obj.room].status[obj.id], obj.status);
+      rooms[obj.room].ready = 1;
+    }
+  })
+
+  socket.on('upload', function(obj){
+    cloneObj(rooms[obj.room].tank[obj.id], obj.tank);
+    update(obj.room, obj.id, rooms[obj.room].tank[obj.id]);
+  })
+
+  // 用户退出
+  socket.on('disconnect', function() {
+    if(!rooms[name]) return false;
+    rooms[name].count--;
+    if(rooms[name].count < 0 ){
+      rooms[name].status.length = 0;
+      rooms[name].tank.length = 0;
+      delete rooms[name];
+      rooms[name] = null;
+    }
+    else {
+      exit(name);
+    }
+  })
+})
+
+function ready(room){
+  io.sockets.emit('ready' + room, room);
+}
+
+function start(room, obj){
+  io.sockets.emit('start' + room, obj);
+}
+
+function update(room, id, obj){
+  io.sockets.emit('update' + room, {
+    id: id,
+    obj: obj
+  });
+}
+
+function exit(room){
+  io.sockets.emit('exit' + room, room);
+}
+
+function cloneObj(obj1, obj2){
+  for(var i in obj2){
+    obj1[i] = obj2[i];
+  }
+}
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

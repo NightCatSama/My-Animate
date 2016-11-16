@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body data-level='<%= level %>' data-range='<%= range %>' data-map='<%= map %>' onunload="javascript: alert('The onunload event was triggered')">
+<div id="Game">
+	<canvas id="background">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<canvas id="battleground">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<canvas id="protagonist">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<canvas id="enemy">
+		您的辣鸡浏览器不支持Canvas!
+	</canvas>
+	<button  class="range_btn" onclick="javascript: range = !range;">攻击范围</button>
+</div>
+<script src="js/common.js"></script>  <!-- 公共变量 -->
+<script src="js/background.js"></script> <!-- 背景canvas [静态] -->
+<script src="js/battleground.js"></script> <!-- 战场canvas [FPS: 60] -->
+<script src="js/protagonist.js"></script> <!-- 主角canvas [FPS: 60] -->
+<script src="js/state.js"></script> <!-- 主角状态栏canvas [静态] -->
+<script src="js/enemy.js"></script> <!-- 敌人canvas [FPS: 60] -->
+<script src="js/game.config.js"></script> <!-- 游戏配置 -->
+</body>
+</html>
