@@ -1,6 +1,4 @@
-# hospital-management
-
-> Tank Game
+# Tank Game
 
 ## Feature
 
