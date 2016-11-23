@@ -25,6 +25,7 @@ export default class Wave {
 	createCanvas() {
 		this.canvas = document.createElement('canvas')
 		this.canvas.style.cssText = 'position: absolute; left: 0; top: 0; z-index: 2;'
+		this.bounds = this.canvas.getBoundingClientRect()
 		this.cxt = this.canvas.getContext('2d')
 	}
 	setSize() {
@@ -39,7 +40,7 @@ export default class Wave {
 		this.canvas.addEventListener('click', this.getMousePos.bind(this))
 	}
 	getMousePos(e) {
-		this.bounds = this.canvas.getBoundingClientRect()
+		e.stopPropagation()
 	    let mx = e.clientX - this.bounds.left
 		let my = e.clientY - this.bounds.top
 		this.addWave(mx, my)
@@ -48,42 +49,42 @@ export default class Wave {
 		var canvasOffscreen = document.createElement('canvas')
 		canvasOffscreen.width = this.width
 		canvasOffscreen.height = this.height
-		let val = Math.max(this.width, this.height)
+		// let val = Math.max(this.width, this.height)
 
 		let wave = {
 			x: x,
 			y: y,
 			initialTr: 1,
-			lastTr: .5,
+			lastTr: 0,
 			timeStamp: Date.now(),
-			// live: parseInt(Math.random() * 2) * 1000 + 10000,
-			live: val / 180 * 1000,
+			live: parseInt(Math.random() * 2) * 1000 + 1500,
+			// live: val / 180 * 1000,
 			canvas: canvasOffscreen,
 			cxt: canvasOffscreen.getContext('2d'),
 			arc: [{
 				r: 0,
-				vr: 3,
+				vr: 5,
 				width: 0.5,
 				transprent: 0.36,
 				color: 'rgba(255, 255, 255,'
 			}, {
-				r: -5,
-				vr: 3,
+				r: -20,
+				vr: 5,
 				width: 3,
 				transprent: 0.2,
 				color: 'rgba(211, 211, 211,'
 			}, {
-				r: 0,
-				vr: 2.8,
+				r: -50,
+				vr: 3,
 				width: 1,
 				transprent: 0.2,
 				color: 'rgba(255, 255, 255,'
 			}, {
-				r: -20,
-				vr: 2,
-				width: 1,
-				transprent: 0.3,
-				color: 'rgba(255, 255, 255,'
+				r: -50,
+				vr: 2.8,
+				width: 0.8,
+				transprent: 0.1,
+				color: 'rgba(156, 156, 156,'
 			}, {
 				r: -50,
 				vr: 3,
@@ -151,7 +152,7 @@ export default class Wave {
 				return true
 			})
 			if (obj.arc.length === 0) {
-				this.cb && this.cb(obj.canvas)
+				// this.cb && this.cb(obj.canvas)
 				return false
 			}
 			return true

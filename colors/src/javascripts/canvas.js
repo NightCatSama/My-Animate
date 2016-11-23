@@ -103,8 +103,9 @@ export default class Canvas {
 			let cxt = obj.cxt
 			cxt.beginPath()
 			let v = obj.arc[0]
-			let tr = (1 - (now - obj.timeStamp) / obj.live) * (obj.initialTr - obj.lastTr) + obj.lastTr
-			cxt.globalAlpha = tr < 0 ? 0 : tr
+			// let tr = (1 - (now - obj.timeStamp) / obj.live) * (obj.initialTr - obj.lastTr) + obj.lastTr
+			// cxt.globalAlpha = tr < 0 ? 0 : tr
+			cxt.globalAlpha = v.opacity
 			cxt.arc(obj.x, obj.y, v.r, 0, 2 * Math.PI, true)
 			cxt.closePath()
 			cxt.clip()
@@ -125,8 +126,11 @@ export default class Canvas {
 				this.img_width = this.img.width = this.width
 				this.img_height = this.img.height = this.height
 				this.cxt.drawImage(this.img, this.x, this.y, this.img_width, this.img_height)
-				this.getParticle()
-				this.render()
+				this.setGrayImage()
+				
+				/* 图片粒子化, 目前未用到 */
+				// this.getParticle()
+				// this.render()
 			}
 		}
 		img.src = src
@@ -174,5 +178,20 @@ export default class Canvas {
 			arr,
 			grayArr
 		}
+	}
+	setGrayImage() {
+		let imageData = this.cxt.getImageData(this.x, this.y, this.img_width, this.img_height)
+		let data = imageData.data
+		let len = imageData.data.length
+		let arr = []
+		let grayArr = []
+		//迷之不相等？
+		if (imageData.width !== this.img_width) this.img_width = imageData.width
+		if (imageData.height !== this.img_height) this.img_height = imageData.height
+		for (let i = 0; i < len / 4; i++) {
+			let gray = parseInt((data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2]) / 3)
+			data[i * 4] = data[i * 4 + 1] = data[i * 4 + 2] = gray
+		}
+		this.cxt.putImageData(imageData, 0, 0);
 	}
 }
