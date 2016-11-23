@@ -1,0 +1,20 @@
+@import './util';
+@import 'reset';
+
+body {
+	// background-color: $blue;
+	width: 100vw;
+	height: 100vh;
+	@include flex-center;
+	overflow: hidden;
+}
+
+h1 {
+	color: $white;
+	@extend .size;
+	font-family: "Segoe UI";
+}
+
+.size {
+	font-size: 50px;
+}
