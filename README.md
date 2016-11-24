@@ -1,7 +1,7 @@
 # My-Animat
 ###使用 HTML5 / CSS3 制作的动画效果~ 持续更新。。。。
 <hr>
-2016/10/25 --- [四月是你的谎言](http://nightcatsama.github.io/My-Animat/colors) & [四月は君の嘘](http://nightcatsama.github.io/My-Animat/colors/四月は君の嘘)
+2016/11/24 --- [四月是你的谎言](http://nightcatsama.github.io/My-Animat/colors) & [四月は君の嘘](http://nightcatsama.github.io/My-Animat/colors/四月は君の嘘)
 <hr>
 2016/10/25 --- [制作单标签像素图](http://nightcatsama.github.io/My-Animat/pixels)
 <hr>
