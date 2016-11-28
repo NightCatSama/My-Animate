@@ -55,9 +55,10 @@ export default class Wave {
 			x: x,
 			y: y,
 			initialTr: 1,
+			main: x < this.width / 2,
 			lastTr: 0,
 			timeStamp: Date.now(),
-			live: parseInt(Math.random() * 2) * 1000 + 1500,
+			live: 2000,
 			// live: val / 180 * 1000,
 			canvas: canvasOffscreen,
 			cxt: canvasOffscreen.getContext('2d'),
@@ -125,8 +126,8 @@ export default class Wave {
 
 				let arr = [{ x: obj.x, y: obj.y, isReflect: false }, { x: -obj.x, y: obj.y, isReflect: true }, { x: obj.x, y: -obj.y, isReflect: true }, { x: this.width * 2 - obj.x, y: obj.y, isReflect: true }, { x: obj.x, y: this.height * 2 - obj.y, isReflect: true }]
 				arr.map(({ x, y, isReflect }) => {
-					this.cxt.strokeStyle = v.color + (v.opacity * (isReflect ? 0.6 : 1)) + ')'
-					this.cxt.lineWidth = v.width * (isReflect ? 0.6 : 1)
+					this.cxt.strokeStyle = v.color + (v.opacity * (isReflect ? 0.8 : 1)) + ')'
+					this.cxt.lineWidth = v.width * (isReflect ? 0.8 : 1)
 					this.cxt.beginPath()
 					this.cxt.arc(x, y, v.r, 0, 2 * Math.PI, true)
 					this.cxt.closePath()

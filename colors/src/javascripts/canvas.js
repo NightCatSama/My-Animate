@@ -34,7 +34,7 @@ export default class Canvas {
 		})
 
 		this.mask.fn = this.updateColors.bind(this)
-		this.mask.cb = this.renderColors.bind(this)
+		// this.mask.cb = this.renderColors.bind(this)
 
 		let parentNode = this.canvas.parentNode
 		this.wrap.appendChild(this.canvas)
@@ -103,13 +103,20 @@ export default class Canvas {
 			let cxt = obj.cxt
 			cxt.beginPath()
 			let v = obj.arc[0]
-			// let tr = (1 - (now - obj.timeStamp) / obj.live) * (obj.initialTr - obj.lastTr) + obj.lastTr
-			// cxt.globalAlpha = tr < 0 ? 0 : tr
-			cxt.globalAlpha = v.opacity
+			let tr = (1 - (now - obj.timeStamp) / obj.live) * (obj.initialTr - obj.lastTr) + obj.lastTr
+			cxt.globalAlpha = tr < 0 ? 0 : tr
+			// cxt.globalAlpha = v.opacity
 			cxt.arc(obj.x, obj.y, v.r, 0, 2 * Math.PI, true)
 			cxt.closePath()
 			cxt.clip()
-			cxt.drawImage(this.color_img || this.img , this.x, this.y, this.img_width, this.img_height)
+			if (obj.main) {
+				this.color_img && cxt.drawImage(this.color_img, this.x, this.y, this.img_width, this.img_height)
+				cxt.drawImage(this.img , this.x, this.y, this.img_width, this.img_height)
+			}
+			else {
+				cxt.drawImage(this.img , this.x, this.y, this.img_width, this.img_height)
+				this.color_img && cxt.drawImage(this.color_img, this.x, this.y, this.img_width, this.img_height)
+			}
 			this.colorCanvasCxt.drawImage(obj.canvas, this.x, this.y)
 		})
 	}
@@ -127,7 +134,6 @@ export default class Canvas {
 				this.img_height = this.img.height = this.height
 				this.cxt.drawImage(this.img, this.x, this.y, this.img_width, this.img_height)
 				this.setGrayImage()
-				
 				/* 图片粒子化, 目前未用到 */
 				// this.getParticle()
 				// this.render()
