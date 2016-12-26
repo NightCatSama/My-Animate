@@ -1,0 +1,1 @@
+!function(e,n){if("function"==typeof define&&define.amd)define(["./index.js"],n);else if("undefined"!=typeof exports)n(require("./index.js"));else{var i={exports:{}};n(e.index),e.main=i.exports}}(this,function(e){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}var i=n(e);new i["default"]("canvas")});

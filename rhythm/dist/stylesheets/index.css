@@ -1,0 +1,93 @@
+@charset 'UTF-8';
+/*
+ * Beautiful Color
+ */
+/*
+ * 垂直居中
+ */
+/*
+ * 设置placeholder样式
+ */
+/*
+ * flex 居中
+ */
+*
+{
+    box-sizing: border-box;
+}
+
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+p,
+blockquote,
+th,
+td
+{
+    margin: 0;
+    padding: 0;
+}
+
+a,
+a:hover,
+a:active,
+a:focus,
+input,
+input:hover,
+input:active,
+input:focus
+{
+    outline: none;
+}
+
+ul,
+ol
+{
+    list-style: none;
+}
+
+body
+{
+    display: -webkit-box;
+    display: flex;
+    flex-direction: column; 
+
+    width: 100vw;
+    height: 100vh;
+
+    background: url('../images/bg2.jpg') no-repeat;
+    background-color: #000;
+    background-size: cover;
+
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+}
+
+#canvas
+{
+    width: 100%;
+    height: 100%;
+}
