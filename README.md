@@ -1,7 +1,7 @@
 # My-Animat
 ###使用 HTML5 / CSS3 制作的动画效果~ 持续更新。。。。
 <hr>
-2016/11/24 --- [音频可视化](http://nightcatsama.github.io/My-Animat/rhythm/)
+2016/12/26 --- [音频可视化](http://nightcatsama.github.io/My-Animat/rhythm/)
 <hr>
 2016/11/24 --- [四月は君の嘘](http://nightcatsama.github.io/My-Animat/colors)
 <hr>
