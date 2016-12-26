@@ -54,7 +54,7 @@ export default class Wave {
 		let wave = {
 			x: x,
 			y: y,
-			initialTr: 1,
+			initialTr: 0.6,
 			main: x < this.width / 2,
 			lastTr: 0,
 			timeStamp: Date.now(),
