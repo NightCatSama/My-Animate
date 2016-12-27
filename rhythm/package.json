@@ -1,12 +1,12 @@
 {
-  "name": "video",
+  "name": "rhythm",
   "version": "1.0.0",
-  "description": "video",
+  "description": "rhythm",
   "main": "index.js",
   "scripts": {
     "start": "gulp"
   },
-  "author": "miao",
+  "author": "nightcat",
   "license": "ISC",
   "dependencies": {
     "browser-sync": "^2.18.2",

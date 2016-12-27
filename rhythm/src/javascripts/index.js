@@ -3,8 +3,11 @@
 import Rhythm from './rhythm'
 
 const _default = {
-	text: 'TheFatRat - Jackpot',
+	text: 'NightCat',
 	musics: [{
+		name: 'Maroon 5 - Sugar',
+		src: './src/music/Maroon 5 - Sugar.mp3'
+	}, {
 		name: 'TheFatRat - Jackpot',
 		src: './src/music/TheFatRat - Jackpot.mp3'
 	}, {
@@ -13,9 +16,6 @@ const _default = {
 	}, {
 		name: 'IMLAY MYLK - Flower Flower',
 		src: './src/music/IMLAY MYLK - Flower Flower.mp3'
-	}, {
-		name: 'Sugar - Maroon 5',
-		src: './src/music/Sugar - Maroon 5.mp3'
 	}],
 	size: 30,
 	color: '#fff',
@@ -62,7 +62,7 @@ export default class MyCanvas {
 		this.init()
 	}
 	changeSong(index) {
-		this.index = index || (this.index + 1)
+		this.index = typeof index === 'number' ? index : (this.index + 1)
 		if (this.index > this.musics.length - 1)
 			this.index = 0
 
@@ -75,7 +75,7 @@ export default class MyCanvas {
 	}
 	init() {
 		this.getSize()
-		this.changeSong()
+		this.changeSong(0)
 		this.setText()
 		this.start()
 	}
@@ -200,7 +200,7 @@ export default class MyCanvas {
 		let r_y = this.height - y - 30
 
 		for (var i = 0; i < meterNum; i++) {
-			var value = (this.array[i * step] / 255) * this.array[i * step] * Math.sin(Math.PI / 90 * (90 / meterNum * i)) / 5 + 2
+			var value = (this.array[i * step] / 255) * this.array[i * step] * Math.sin(Math.PI / 90 * (90 / meterNum * i)) / 4 + 2
 
 			this.cxt.fillRect(
 				i * (gap + width) + x,
@@ -217,29 +217,59 @@ export default class MyCanvas {
 			)
 
 			//  环形
-			this.cxt.save()
-			this.cxt.translate(r_x, (r_y) + radius)
-			this.cxt.rotate(Math.PI / 180 * (360 / meterNum * i - 180))
-			this.cxt.translate(-r_x, -(r_y) + radius)
-			this.cxt.fillRect(
-				r_x,
-				r_y - value,
-				width,
-				value
-			)
-			this.cxt.restore()
+			if (i % 2) {
+				this.cxt.save()
+				this.cxt.translate(r_x, (r_y) + radius)
+				this.cxt.rotate(Math.PI / 180 * (180 / meterNum * i - 180))
+				this.cxt.translate(-r_x, -(r_y) + radius)
+				this.cxt.fillRect(
+					r_x,
+					r_y - value,
+					width,
+					value
+				)
+				this.cxt.restore()
+			}
+			else {
+				this.cxt.save()
+				this.cxt.translate(r_x, (r_y) + radius)
+				this.cxt.rotate(Math.PI / 180 * (180 / meterNum * i))
+				this.cxt.translate(-r_x, -(r_y) + radius)
+				this.cxt.fillRect(
+					r_x,
+					r_y - value,
+					width,
+					value
+				)
+				this.cxt.restore()
+			}
 
-			this.cxt.save()
-			this.cxt.translate(r_x2, (r_y) + radius)
-			this.cxt.rotate(Math.PI / 180 * (360 / meterNum * i - 180))
-			this.cxt.translate(-r_x2, -(r_y) + radius)
-			this.cxt.fillRect(
-				r_x2,
-				r_y - value,
-				width,
-				value
-			)
-			this.cxt.restore()
+			if (i % 2) {
+				this.cxt.save()
+				this.cxt.translate(r_x2, (r_y) + radius)
+				this.cxt.rotate(Math.PI / 180 * (180 / meterNum * i - 180))
+				this.cxt.translate(-r_x2, -(r_y) + radius)
+				this.cxt.fillRect(
+					r_x2,
+					r_y - value,
+					width,
+					value
+				)
+				this.cxt.restore()
+			}
+			else {
+				this.cxt.save()
+				this.cxt.translate(r_x2, (r_y) + radius)
+				this.cxt.rotate(Math.PI / 180 * (180 / meterNum * i))
+				this.cxt.translate(-r_x2, -(r_y) + radius)
+				this.cxt.fillRect(
+					r_x2,
+					r_y - value,
+					width,
+					value
+				)
+				this.cxt.restore()
+			}
 		}
 	}
 	update() {
