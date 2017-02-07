@@ -5,6 +5,17 @@ const _default = {
 	backgroundColor: '#fff'
 }
 
+const isPC = !/(iPhone|iPad|iPod|iOS|Android|SymbianOS|Windows Phone)/i.test(navigator.userAgent)
+
+const eventType = {
+	down: isPC ? 'mousedown' : 'touchstart',
+	up: isPC ? 'mouseup' : 'touchend',
+	move: isPC ? 'mousemove' : 'touchmove',
+	cancel: isPC ? 'mouseleave' : 'touchcancel',
+}
+
+console.log(eventType)
+
 export default class Particle {
 	constructor(id, option) {
 		Object.assign(this, _default, option);
@@ -32,24 +43,40 @@ export default class Particle {
 		this.ctx.fillRect(0, 0, this.width, this.height);
 	}
 	bindEvent() {
-		this.mask.addEventListener('mousedown', (e) => {
+		this.mask.addEventListener(eventType['down'], (e) => {
+			if (!isPC) {
+				e = e.targetTouches[0]
+			}
+
 			this.flag = true;
-			this.lastX = e.offsetX - this.left * 0;
-			this.lastY = e.offsetY - this.top * 0;
+			this.lastX = e.clientX;
+			this.lastY = e.clientY;
 			this.ctx.drawImage(this.mask, 0, 0);
 			this.maskCtx.clearRect(0, 0, this.width, this.height);
 		})
-		this.mask.addEventListener('mousemove', (e) => {
+		this.mask.addEventListener(eventType['move'], (e) => {
+			if (!isPC) {
+				e = e.targetTouches[0]
+			}
+
 			if (!this.flag) return false;
-			let x = e.offsetX - this.left * 0;
-			let y = e.offsetY - this.top * 0;
+			let x = e.clientX;
+			let y = e.clientY;
 			this.draw(x, y);
 		})
-		this.mask.addEventListener('mouseup', (e) => {
+		this.mask.addEventListener(eventType['up'], (e) => {
+			if (!isPC) {
+				e = e.targetTouches[0]
+			}
+
 			this.flag = false;
 			this.clearFlag = false;
 		})
-		this.wrap.addEventListener('mouseleave', (e) => {
+		this.wrap.addEventListener(eventType['cancel'], (e) => {
+			if (!isPC) {
+				e = e.targetTouches[0]
+			}
+
 			this.flag = false;
 			this.clearFlag = false;
 		})

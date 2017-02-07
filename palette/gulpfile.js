@@ -25,7 +25,7 @@ gulp.task('browser-sync', ['sass', 'scripts', 'images'], function() {
         server: {
             baseDir: './'
         },
-        port: 9000
+        port: 9001
     });
 
     gulp.watch('src/styles/**/*.scss', ['sass']);
