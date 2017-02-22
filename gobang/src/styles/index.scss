@@ -1,0 +1,22 @@
+@import './util';
+@import 'reset';
+
+body {
+	width: 100vw;
+	height: 100vh;
+	@include flex-center;
+}
+
+.main {
+	user-select: none;
+	position: relative;
+}
+
+#control {
+	position: absolute;
+	left: 50%;
+	top: -50px;
+	transform: translateX(-50%);
+	font-size: 20px;
+	font-weight: bold;
+}
