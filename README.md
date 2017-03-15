@@ -1,7 +1,7 @@
 # My-Animat
 ###使用 HTML5 / CSS3 制作的动画效果~ 持续更新。。。。
 <hr>
-2016/02/25 --- [五子棋（离线）](http://nightcatsama.github.io/My-Animat/gobang/) [（在线）](http://nightcat.win/online-games/gobang)<br>
+2017/02/25 --- [五子棋（离线）](http://nightcatsama.github.io/My-Animat/gobang/) [（在线）](http://nightcat.win/online-games/gobang)<br>
 推荐：★★★
 <hr>
 2016/12/26 --- [音频可视化](http://nightcatsama.github.io/My-Animat/rhythm/)<br>
