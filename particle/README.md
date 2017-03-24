@@ -22,25 +22,9 @@ mouseRange: 60,  //影响范围
 ```
 
 ###javascript
-#####es6
 ```js
     import Particle from './src/javascript/index.js'
     var demo = new Particle({
       src: './demo.png'
     })
-```
-#####AMD
-```js
-    requirejs.config({
-      baseUrl: 'dist/javascript',
-      paths: {
-          Particle: './index'
-      }
-    })
-    requirejs(['Particle'],function (Particle) {
-        var demo = new Particle({
-          src: './demo.png'
-        })
-    })
-});
 ```
