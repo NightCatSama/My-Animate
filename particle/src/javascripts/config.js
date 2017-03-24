@@ -11,7 +11,7 @@ let particle = new Particle('demo', {
 	cols: 166,
 	rows: 120,
 	disperse: 10,
-	mouseRange: 50,
+	mouseRange: 100,
 	recovery: .95,
 	filter: (r, g, b, a) => {
 		if (r > 100 && b > 250) {

@@ -154,22 +154,26 @@ export default class Particle {
 		})
 	}
 	update() {
-		let range = Math.pow(this.mouseRange, 2)
+		let range = Math.pow(this.mouseRange, 2)  //  作用范围的平方
 		let p = null,
-			dx, dy, d, t, f
+			dx, dy, d, t, f, distance
 		Array.from(this.particles, (particle) => {
 			p = particle
 			dx = this.mx - p.x
 			dy = this.my - p.y
 			d = dx * dx + dy * dy
-			f = -range / d
-			if (Math.sqrt(d) < range) {
-				t = Math.atan2(dy, dx)
-				p.vx += f * Math.cos(t)
-				p.vy += f * Math.sin(t)
+			distance = Math.sqrt(d) //  鼠标到粒子的距离
+			f = -range / d // 作用范围与距离比
+			if (distance < range) {
+				t = Math.atan2(dy, dx)  //  获得角度
+				p.vx += f * Math.cos(t) // 根据作用范围与距离比计算水平加速度
+				p.vy += f * Math.sin(t) // 根据作用范围与距离比计算垂直加速度
 			}
+			//  加速度衰减
 			p.vx *= this.recovery
 			p.vy *= this.recovery
+
+			//  恢复至原始位置
 			p.x += p.vx + (p.ox - p.x) * 0.25
 			p.y += p.vy + (p.oy - p.y) * 0.25
 		})
