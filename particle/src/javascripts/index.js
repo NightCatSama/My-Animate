@@ -166,8 +166,8 @@ export default class Particle {
 			f = -range / d // 作用范围与距离比
 			if (distance < range) {
 				t = Math.atan2(dy, dx)  //  获得角度
-				p.vx += f * Math.cos(t) // 根据作用范围与距离比计算水平加速度
-				p.vy += f * Math.sin(t) // 根据作用范围与距离比计算垂直加速度
+				p.vx += f * Math.cos(t) // 根据水平加速度
+				p.vy += f * Math.sin(t) // 根据垂直加速度
 			}
 			//  加速度衰减
 			p.vx *= this.recovery

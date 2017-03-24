@@ -1,6 +1,6 @@
-##[DEMO](http://nightcatsama.github.io/My-Animat/particle/)
+## [DEMO](http://nightcatsama.github.io/My-Animat/particle/)
 
-###option
+### option
 ```js
 {
        src: '', //图片路径
@@ -21,7 +21,7 @@ mouseRange: 60,  //影响范围
 }
 ```
 
-###javascript
+### javascript
 ```js
     import Particle from './src/javascript/index.js'
     var demo = new Particle({
