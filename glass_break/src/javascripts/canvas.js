@@ -6,11 +6,13 @@ export default class Canvas {
     this.height = this.canvas.height = this.canvas.offsetHeight
     this.bounds = this.canvas.getBoundingClientRect()
 
-    this.T = 10000
-    this.works = []
+    this.ball_count = 50
+    this.line_range = 200
+    this.balls = []
 
     this.clickHandle = this.clickHandle.bind(this)
-    this.bindEvent()
+    // this.bindEvent()
+    this.start()
 	}
   bindEvent() {
     this.canvas.addEventListener('click', this.clickHandle, false)
@@ -24,152 +26,95 @@ export default class Canvas {
     this.addWork({ x: mx, y: my })
   }
   start() {
-    return this.render()
     if (this.isAnimate) {
       return false
     }
 
     this.isAnimate = true
 
-    let start = null
-    const step = (timeStamp) => {
+    const step = () => {
       if (!this.isAnimate) return false
-      if (start === null) start = timeStamp
 
-      let progress = timeStamp - start
-
-      this.render(progress % this.T)
+      if (this.balls.length < this.ball_count) {
+        for(var i = 0; i < this.ball_count - this.balls.length; i++) {
+          this.addBall()
+        }
+      }
+      this.render()
+      this.update()
       requestAnimationFrame(step)
     }
     requestAnimationFrame(step)
   }
-  addWork(origin_coord) {
-    let range = [100, 400]
-    let count = 200
-    this.createWork(origin_coord, range, count)
+  addBall() {
+    let ball = {
+      x: this.getRandomNumber([0, this.width]),
+      y: this.getRandomNumber([0, this.height]) * -1,
+      g: this.getRandomNumber([2, 15]) * 0.1,
+      gray: this.getRandomNumber([4, 10]) * 0.1,
+      type: ~~this.getRandomNumber([0, 3])
+    }
+    ball.r = ball.gray * 20 + 20
+    let color = ~~(188 * ball.gray)
+    ball.color = `rgba(${color}, ${color}, ${color}, 1)`
 
-    range = [500, 1000]
-    count = 100
-    this.createWork(origin_coord, range, count)
-
-    range = [1000, 3000]
-    count = 50
-    this.createWork(origin_coord, range, count)
-
-    this.start()
-  }
-  createWork(origin_coord, range, count) {
-    let cur_deg = 0
-    let deg_gap = 360 / count
-    let prevDot
-    let firstDot
-    let work = {
-      origin_coord,
-      dots: []
+    switch(ball.type) {
+      case 0: break;
+      case 1: ball.empty = {
+          r: this.getRandomNumber([10, ball.r - 10])
+        }
+        break;
+      case 2: ball.empty = {
+          r: this.getRandomNumber([ball.r / 2 - 3, ball.r / 2 + 3])
+        }
+        ball.son = {
+          r: this.getRandomNumber([7, ball.empty.r - 3]),
+          color: ball.color
+        }
+        break;
     }
 
-    for(let i = 0; i < count; i++) {
-      let deg_range = [cur_deg, cur_deg + deg_gap]
-      cur_deg += deg_gap
-
-      let coord1 = this.getRandomDot(range, deg_range, origin_coord)
-      let coord2 = this.getRandomDot(range, deg_range, origin_coord)
-
-      if (coord1.deg > coord2.deg) {
-        let obj = coord1
-        coord1 = coord2
-        coord2 = obj
-      }
-
-      work.dots.push({
-        coord1,
-        coord2
-      })
-
-      if (i === 0) {
-        work.firstDot = coord1
-      }
-    }
-
-    this.works.push(work)
+    this.balls.push(ball)
   }
+  //  渲染
   render(progress) {
     this.cxt.clearRect(0, 0, this.width, this.height)
 
-    // this.cxt.fillStyle = '#fff'
-    this.cxt.strokeStyle = `#fff`
-    this.cxt.lineWidth = 0.5
-
-    Array.from(this.works, (work) => {
-      let { origin_coord, firstDot } = work
-      let prevDot
-
-      Array.from(work.dots, (obj, i) => {
-        let { coord1, coord2 } = obj
-
-        let c1 = this.getPos(coord1, progress)
-        let c2 = this.getPos(coord2, progress)
-
-        this.renderTri(origin_coord, { x: c1.x1, y: c1.y1 }, { x: c2.x1, y: c2.y1 })
-        this.renderTri(origin_coord, { x: c1.x2, y: c1.y2 }, { x: c2.x2, y: c2.y2 })
-
-        // this.renderLine(origin_coord.x, origin_coord.y, coord1.e_x, coord1.e_y)
-        // this.renderLine(origin_coord.x, origin_coord.y, coord2.e_x, coord2.e_y)
-
-        // this.renderLine(origin_coord.x, origin_coord.y, c1.x1, c1.y1)
-        // this.renderLine(origin_coord.x, origin_coord.y, c2.x1, c2.y1)
-        // this.renderLine(origin_coord.x, origin_coord.y, c1.x2, c1.y2)
-        // this.renderLine(origin_coord.x, origin_coord.y, c2.x2, c2.y2)
-
-        // this.renderLine(c1.x1, c1.y1, c2.x1, c2.y1)
-        // if (prevDot) {
-        //   this.renderLine(c1.x2, c1.y2, prevDot.x2, prevDot.y2)
-        //   prevDot = null
-        // }
-        // if (i === work.dots.length) {
-        //   this.renderLine(c2.x2, c2.y2, firstDot.x2, firstDot.y2)
-        // }
-        // prevDot = c2
+    Array.from(this.balls, (ball) => {
+      Array.from(this.balls, (b) => {
+        let d = Math.sqrt(Math.pow(ball.x - b.x, 2) + Math.pow(ball.y - b.y, 2))
+        if (d < this.line_range) {
+          this.cxt.strokeStyle = `rgba(188, 188, 188, ${1 - d / this.line_range})`
+          this.renderLine(ball.x, ball.y, b.x, b.y)
+        }
       })
     })
-  }
-  getPos(coord, progress) {
-    let b = progress ? (progress / this.T) : 1
-    // b = b > 0.5 ? (1 - b) : b
 
-    return {
-      x1: (coord.x1 - coord.x) * b + coord.x,
-      y1: (coord.y1 - coord.y) * b + coord.y,
-      x2: (coord.x2 - coord.x) * b + coord.x,
-      y2: (coord.y2 - coord.y) * b + coord.y
-    }
+    Array.from(this.balls, (ball) => {
+      this.cxt.globalCompositeOperation = 'destination-over'
+      ball.type > 0 && this.renderArc(ball.x, ball.y, ball.empty.r, '#fff')
+      this.cxt.globalCompositeOperation = 'source-over'
+      ball.type === 2 && this.renderArc(ball.x, ball.y, ball.son.r, ball.son.color)
+      this.cxt.globalCompositeOperation = 'destination-over'
+      this.renderArc(ball.x, ball.y, ball.r, ball.color)
+    })
+  }
+  //  更新
+  update() {
+    Array.from(this.balls, (ball) => {
+      ball.y += ball.g
+    })
   }
   //  根据范围得到一个随机数
   getRandomNumber([min, max]) {
     return ~~(Math.random() * (max - min)) + min
   }
-  //  根据半径范围获得一个随机的点
-  getRandomDot(range, deg_range, {x, y}) {
-    const deg = this.getRandomNumber(deg_range)
-    const radian = Math.PI / 180 * deg
-    const d  = this.getRandomNumber(range)
-    const d2  = this.getRandomNumber(range)
-    return {
-      deg,
-      x,
-      y,
-      x1: x + d * Math.cos(radian),
-      y1: y + d * Math.sin(radian),
-      x2: x + d2 * Math.cos(radian),
-      y2: y + d2 * Math.sin(radian),
-      e_x: x + this.width * Math.cos(radian),
-      e_y: y + this.width * Math.sin(radian),
-    }
-  }
-  //  画一个点
-  renderDot(x, y) {
+  //  画一个圆
+  renderArc(x, y, r, color) {
+    this.cxt.fillStyle = color
+
     this.cxt.beginPath()
-    this.cxt.arc(x, y, 1, 0, Math.PI * 2, true)
+    this.cxt.arc(x, y, r, 0, Math.PI * 2, true)
     this.cxt.closePath()
 
     this.cxt.fill()
@@ -193,6 +138,5 @@ export default class Canvas {
     this.cxt.closePath()
 
     this.cxt.stroke()
-    // this.cxt.fill()
   }
 }
