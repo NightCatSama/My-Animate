@@ -1,0 +1,14 @@
+@import './util';
+@import 'reset';
+
+body {
+	width: 100vw;
+	height: 100vh;
+	@include flex-center;
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+}

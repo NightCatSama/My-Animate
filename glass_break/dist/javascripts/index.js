@@ -1,0 +1,1 @@
+!function(e,n){if("function"==typeof define&&define.amd)define(["./canvas.js"],n);else if("undefined"!=typeof exports)n(require("./canvas.js"));else{var t={exports:{}};n(e.canvas),e.index=t.exports}}(this,function(e){"use strict";new(function(e){return e&&e.__esModule?e:{default:e}}(e).default)});
