@@ -1,0 +1,35 @@
+@import './util';
+@import 'reset';
+
+body {
+	width: 100vw;
+	height: 100vh;
+	@include flex-center;
+}
+
+.grid {
+  width: 600px;
+  height: 600px;
+  border: 1px solid #ccc;
+  box-sizing: content-box;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+
+.grid-item {
+  @for $i from 1 through 16 {
+    &:nth-child(#{$i}) {
+      $row: ceil($i / 4);
+      $column: $i - (($row - 1) * 4);
+
+      @if (($row + $column) % 4 <= 2) {
+        background-color: $blue;
+      } 
+      @else {
+        background-color: darken(#ccc, $i * 5%)
+      }
+    }
+  }
+}
