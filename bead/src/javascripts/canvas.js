@@ -6,12 +6,13 @@ export default class Canvas {
     this.height = this.canvas.height = this.canvas.offsetHeight
     this.bounds = this.canvas.getBoundingClientRect()
 
-    this.ball_count = 50       //  总个数
-    this.line_range = 150     //  连线范围
-    this.r_range = [10, 20]   //  半径范围
-    this.color = [23, 64, 86] //  颜色[r, g, b]
-    this.opacity = [0.4, 1]   //  透明度范围
-    this.speed = [-2, 2]    //  速度范围
+    this.ball_count = 50       // 总个数
+    this.line_range = 150     // 连线范围
+    this.r_range = [5, 30]   // 半径范围
+    this.color = [[23, 64, 86], [130, 5, 5]] // 颜色[[r, g, b], ..]
+    this.period = [3, 8]  // 颜色呼吸周期
+    this.opacity = [0.2, 0.8]   // 透明度范围
+    this.speed = [-2, 2]    // 速度范围
     this.balls = []
 
     this.clickHandle = this.clickHandle.bind(this)
@@ -52,6 +53,25 @@ export default class Canvas {
     }
     requestAnimationFrame(step)
   }
+  //  得到颜色渐变数组
+  getColorList(freq) {
+    //  颜色差值[r, g, b]
+    let ColorDis = [this.color[1][0] - this.color[0][0], this.color[1][1] - this.color[0][1], this.color[1][2] - this.color[0][2]]
+
+    //  颜色差最大的绝对值
+    let ColorLength = Math.max(Math.abs(ColorDis[0]), Math.abs(ColorDis[1]), Math.abs(ColorDis[2])) * freq
+
+    //  颜色变化系数
+    let ColorChange = ColorDis.map((c) => c / ColorLength)
+
+    let ColorList = []
+
+    for (let i = 0; i < ColorLength; i++) {
+      ColorList.push(ColorChange.map((c, index) => (this.color[0][index] + c * i)))
+    }
+
+    return ColorList
+  }
   //  增加一个球
   addBall() {
     let ball = {
@@ -60,15 +80,20 @@ export default class Canvas {
       vx: this.getRandomNumber(this.speed),
       vy: this.getRandomNumber(this.speed),
       opacity: this.getRandomNumber(this.opacity),
-      type: ~~this.getRandomNumber([0, 3])
+      freq: this.getRandomNumber(this.period),
+      type: ~~this.getRandomNumber([0, 3]),
+      cur_i: 0,
+      reverse: false
     }
-    ball.r = ball.opacity * (this.r_range[1] - this.r_range[0]) + this.r_range[0]
+    ball.r = (1 - ball.opacity) * (this.r_range[1] - this.r_range[0]) + this.r_range[0]
+    ball.ColorList = this.getColorList(ball.freq)
 
     if (this.isOverlap(ball)) {
       return this.addBall()
     }
 
-    ball.color = `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]},`
+    let color = this.color[0]
+    ball.color = [...color]
 
     //  随机一种模式[0:实心球, 1:圆环, 2:双环]
     switch(ball.type) {
@@ -82,7 +107,7 @@ export default class Canvas {
         }
         ball.son = {
           r: this.getRandomNumber([ball.empty.r / 2, ball.empty.r / 4 * 3]),
-          color: ball.color
+          color: [...ball.color]
         }
         break;
     }
@@ -148,7 +173,7 @@ export default class Canvas {
         y = by || ball.y
 
     //  大球体
-    this.renderArc(x, y, ball.r, ball.color + ball.opacity + ')')
+    this.renderArc(x, y, ball.r, this.getRGBA(ball.color, ball.opacity))
 
     //  type:1|2 空心白色部分
     this.cxt.globalCompositeOperation = 'destination-out'
@@ -156,7 +181,7 @@ export default class Canvas {
 
     //  type:2 球心部分
     this.cxt.globalCompositeOperation = 'source-over'
-    ball.type === 2 && this.renderArc(x, y, ball.son.r, ball.son.color + ball.opacity + ')')
+    ball.type === 2 && this.renderArc(x, y, ball.son.r, this.getRGBA(ball.son.color, ball.opacity))
 
     //  连线
     Array.from(this.balls, (b) => {
@@ -168,23 +193,23 @@ export default class Canvas {
       if (d < this.line_range && d > (ball.r + b.r)) {
         var g = this.cxt.createLinearGradient(x, y, b.x, b.y)
         if (ball.type === 1) {
-          g.addColorStop(0, `${ball.color} ${1 - d / this.line_range})`)
-          g.addColorStop(ball.empty.r / d, `${ball.color} ${1 - d / this.line_range})`)
+          g.addColorStop(0, this.getRGBA(ball.color, 1 - d / this.line_range))
+          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
           g.addColorStop(ball.empty.r / d, 'transparent')
         }
         else if (ball.type === 2) {
           g.addColorStop(0, 'transparent')
           g.addColorStop(ball.son.r / d, 'transparent')
-          g.addColorStop(ball.son.r / d, `${ball.color} ${1 - d / this.line_range})`)
-          g.addColorStop(ball.empty.r / d, `${ball.color} ${1 - d / this.line_range})`)
+          g.addColorStop(ball.son.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
+          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
           g.addColorStop(ball.empty.r / d, 'transparent')
         }
         else {
           g.addColorStop(0, 'transparent')
         }
         g.addColorStop(ball.r / d, 'transparent')
-        g.addColorStop(ball.r / d, `${ball.color} ${1 - d / this.line_range})`)
-        g.addColorStop(1 - b.r / d, `${b.color} ${1 - d / this.line_range})`)
+        g.addColorStop(ball.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
+        g.addColorStop(1 - b.r / d, this.getRGBA(b.color, 1 - d / this.line_range))
         g.addColorStop(1 - b.r / d, 'transparent')
         g.addColorStop(1, 'transparent')
         this.cxt.strokeStyle = g
@@ -237,6 +262,17 @@ export default class Canvas {
 
       ball.x += ball.vx
       ball.y += ball.vy
+      ball.color = ball.color.map((n, i) => {
+        ball.cur_i++
+        if (ball.cur_i === ball.ColorList.length) {
+          ball.cur_i = 0
+          ball.reverse = !ball.reverse
+        }
+        return ball.ColorList[ball.reverse ? ball.ColorList.length - ball.cur_i - 1 : ball.cur_i][i]
+      })
+      if (ball.type === 2) {
+        ball.son.color = [...ball.color]
+      }
 
       if (ball.mirror) {
         ball.mirror.x += ball.mirror.vx
@@ -249,6 +285,9 @@ export default class Canvas {
 
       return ball
     })
+  }
+  getRGBA(color, opacity) {
+    return `rgba(${~~color[0]}, ${~~color[1]}, ${~~color[2]}, ${opacity})`
   }
   //  根据范围得到一个随机数[[范围], 小数位]
   getRandomNumber([min, max], decimal) {
