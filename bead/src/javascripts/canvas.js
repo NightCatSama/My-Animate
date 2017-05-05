@@ -6,17 +6,17 @@ export default class Canvas {
     this.height = this.canvas.height = this.canvas.offsetHeight
     this.bounds = this.canvas.getBoundingClientRect()
 
-    this.ball_count = 50       // 总个数
+    this.ball_count = 30       // 总个数
     this.line_range = 150     // 连线范围
     this.r_range = [5, 30]   // 半径范围
-    this.color = [[23, 64, 86], [130, 5, 5]] // 颜色[[r, g, b], ..]
+    this.color = [[188, 56, 23], [130, 5, 5]] // 颜色[[r, g, b], ..]
     this.period = [3, 8]  // 颜色呼吸周期
     this.opacity = [0.2, 0.8]   // 透明度范围
-    this.speed = [-2, 2]    // 速度范围
+    this.speed = [-1, 1]    // 速度范围
     this.balls = []
 
     this.clickHandle = this.clickHandle.bind(this)
-    // this.bindEvent()
+    this.bindEvent()
     this.start()
 	}
   //  绑定事件
@@ -29,9 +29,15 @@ export default class Canvas {
   }
   //  点击获取鼠标位置
   clickHandle(e) {
+    if (this.isAnimate) {
+      return this.isAnimate = false
+    }
+    else {
+      this.start()
+    }
     let mx = e.clientX - this.bounds.left
     let my = e.clientY - this.bounds.top
-    this.addWork({ x: mx, y: my })
+    // this.addWork({ x: mx, y: my })
   }
   //  动画开始
   start() {
@@ -147,30 +153,30 @@ export default class Canvas {
 
       //  左右上下镜像球
       if (ball.mirror) {
-        return this.renderBall(ball.mirror)
+        return this.renderBall(ball.mirror, ball)
       }
       else if (!ball.mirror && ball.x < ball.r) {
         ball.mirror = this.addMirrorBall(ball, { x: ball.x + this.width, mirror: null })
-        this.renderBall(ball.mirror)
+        this.renderBall(ball.mirror, ball)
       }
       else if (!ball.mirror && ball.x > this.width - ball.r) {
         ball.mirror = this.addMirrorBall(ball, { x: ball.x - this.width, mirror: null })
-        this.renderBall(ball.mirror)
+        this.renderBall(ball.mirror, ball)
       }
       else if (!ball.mirror && ball.y < ball.r) {
         ball.mirror = this.addMirrorBall(ball, { y: ball.y + this.height, mirror: null })
-        this.renderBall(ball.mirror)
+        this.renderBall(ball.mirror, ball)
       }
       else if (!ball.mirror && ball.y > this.height - ball.r) {
         ball.mirror = this.addMirrorBall(ball, { y: ball.y - this.height, mirror: null })
-        this.renderBall(ball.mirror)
+        this.renderBall(ball.mirror, ball)
       }
     })
   }
   //  渲染单个球
-  renderBall (ball, bx, by) {
-    let x = bx || ball.x,
-        y = by || ball.y
+  renderBall (ball, parent) {
+    let x = ball.x,
+        y = ball.y
 
     //  大球体
     this.renderArc(x, y, ball.r, this.getRGBA(ball.color, ball.opacity))
@@ -219,6 +225,18 @@ export default class Canvas {
         ball.isCrash = true
         b.isCrash = true
         this.crashHandle(ball, b)
+
+        if (parent) {
+          parent.isCrash = true
+          parent.vx = ball.vx
+          parent.vy = ball.vy
+        }
+
+        if (ball.mirror) {
+          ball.mirror.isCrash = true
+          ball.mirror.vx = ball.vx
+          ball.mirror.vy = ball.vy
+        }
       }
     })
   }
