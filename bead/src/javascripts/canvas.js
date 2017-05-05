@@ -6,12 +6,12 @@ export default class Canvas {
     this.height = this.canvas.height = this.canvas.offsetHeight
     this.bounds = this.canvas.getBoundingClientRect()
 
-    this.ball_count = 10       //  总个数
-    this.line_range = 200     //  连线范围
-    this.r_range = [20, 40]   //  半径范围
+    this.ball_count = 50       //  总个数
+    this.line_range = 150     //  连线范围
+    this.r_range = [10, 20]   //  半径范围
     this.color = [23, 64, 86] //  颜色[r, g, b]
     this.opacity = [0.4, 1]   //  透明度范围
-    this.speed = [-5, 5]    //  速度范围
+    this.speed = [-2, 2]    //  速度范围
     this.balls = []
 
     this.clickHandle = this.clickHandle.bind(this)
@@ -38,16 +38,14 @@ export default class Canvas {
       return false
     }
 
+    for(var i = 0; i < this.ball_count; i++) {
+      this.addBall()
+    }
+
     this.isAnimate = true
 
     const step = () => {
       if (!this.isAnimate) return false
-
-      if (this.balls.length < this.ball_count) {
-        for(var i = 0; i < this.ball_count - this.balls.length; i++) {
-          this.addBall()
-        }
-      }
       this.render()
       this.update()
       requestAnimationFrame(step)
@@ -65,26 +63,55 @@ export default class Canvas {
       type: ~~this.getRandomNumber([0, 3])
     }
     ball.r = ball.opacity * (this.r_range[1] - this.r_range[0]) + this.r_range[0]
+
+    if (this.isOverlap(ball)) {
+      return this.addBall()
+    }
+
     ball.color = `rgba(${this.color[0]}, ${this.color[1]}, ${this.color[2]},`
 
     //  随机一种模式[0:实心球, 1:圆环, 2:双环]
     switch(ball.type) {
       case 0: break;
       case 1: ball.empty = {
-          r: this.getRandomNumber([10, ball.r - 10])
+          r: this.getRandomNumber([ball.r / 2, ball.r / 4 * 3])
         }
         break;
       case 2: ball.empty = {
-          r: this.getRandomNumber([ball.r / 2 - 3, ball.r / 2 + 3])
+          r: this.getRandomNumber([ball.r / 2, ball.r / 4 * 3])
         }
         ball.son = {
-          r: this.getRandomNumber([7, ball.empty.r - 3]),
+          r: this.getRandomNumber([ball.empty.r / 2, ball.empty.r / 4 * 3]),
           color: ball.color
         }
         break;
     }
 
     this.balls.push(ball)
+  }
+  //  判断该位置是否重叠
+  isOverlap(ball) {
+    return !this.balls.every((b) => {
+      let d = Math.sqrt(Math.pow(ball.x - b.x, 2) + Math.pow(ball.y - b.y, 2))
+      if (d <= (ball.r + b.r)) {
+        return false
+      }
+      return true
+    })
+  }
+  //  添加一个镜像Ball
+  addMirrorBall(ball, obj) {
+    var newBall = {}
+    for (var key in ball) {
+      if (obj[key] !== undefined) {
+        newBall[key] = obj[key]
+      }
+      else {
+        newBall[key] = ball[key]
+      }
+    }
+
+    return newBall
   }
   //  渲染
   render(progress) {
@@ -94,17 +121,24 @@ export default class Canvas {
       this.renderBall(ball)
 
       //  左右上下镜像球
-      if (ball.x < ball.r) {
-        this.renderBall(ball, ball.x + this.width, ball.y)
+      if (ball.mirror) {
+        return this.renderBall(ball.mirror)
       }
-      if (ball.x > this.width - ball.r) {
-        this.renderBall(ball, ball.x - this.width, ball.y)
+      else if (!ball.mirror && ball.x < ball.r) {
+        ball.mirror = this.addMirrorBall(ball, { x: ball.x + this.width, mirror: null })
+        this.renderBall(ball.mirror)
       }
-      if (ball.y < ball.r) {
-        this.renderBall(ball, ball.x, ball.y + this.height)
+      else if (!ball.mirror && ball.x > this.width - ball.r) {
+        ball.mirror = this.addMirrorBall(ball, { x: ball.x - this.width, mirror: null })
+        this.renderBall(ball.mirror)
       }
-      if (ball.y > this.height - ball.r) {
-        this.renderBall(ball, ball.x, ball.y - this.height)
+      else if (!ball.mirror && ball.y < ball.r) {
+        ball.mirror = this.addMirrorBall(ball, { y: ball.y + this.height, mirror: null })
+        this.renderBall(ball.mirror)
+      }
+      else if (!ball.mirror && ball.y > this.height - ball.r) {
+        ball.mirror = this.addMirrorBall(ball, { y: ball.y - this.height, mirror: null })
+        this.renderBall(ball.mirror)
       }
     })
   }
@@ -155,8 +189,6 @@ export default class Canvas {
         g.addColorStop(1, 'transparent')
         this.cxt.strokeStyle = g
         this.renderLine(x, y, b.x, b.y)
-
-        ball.isCrash = false
       }
       else if (d < (ball.r + b.r) && !ball.isCrash) {
         ball.isCrash = true
@@ -182,33 +214,40 @@ export default class Canvas {
     let fx2 = vx1
     let fy2 = vy2
 
-    b1.fx = Math.cos(deg) * fx1 + Math.cos(deg + Math.PI / 2) * fy1
-    b1.fy = Math.sin(deg) * fx1 + Math.sin(deg + Math.PI / 2) * fy1
-    b2.fx = Math.cos(deg) * fx2 + Math.cos(deg + Math.PI / 2) * fy2
-    b2.fy = Math.sin(deg) * fx2 + Math.sin(deg + Math.PI / 2) * fy2
+    b1.vx = Math.cos(deg) * fx1 + Math.cos(deg + Math.PI / 2) * fy1
+    b1.vy = Math.sin(deg) * fx1 + Math.sin(deg + Math.PI / 2) * fy1
+    b2.vx = Math.cos(deg) * fx2 + Math.cos(deg + Math.PI / 2) * fy2
+    b2.vy = Math.sin(deg) * fx2 + Math.sin(deg + Math.PI / 2) * fy2
   }
   //  更新
   update() {
-    this.balls.forEach((ball) => {
+    this.balls = this.balls.map((ball) => {
       if (ball.x < -ball.r) {
-        ball.x = ball.x + this.width
+        return ball.mirror
       }
       if (ball.x > this.width + ball.r) {
-        ball.x = ball.x - this.width
+        return ball.mirror
       }
       if (ball.y < -ball.r) {
-        ball.y = ball.y + this.height
+        return ball.mirror
       }
       if (ball.y > this.height + ball.r) {
-        ball.y = ball.y - this.height
-      }
-      if (ball.isCrash) {
-        ball.vx = ball.fx
-        ball.vy = ball.fy
+        return ball.mirror
       }
 
       ball.x += ball.vx
       ball.y += ball.vy
+
+      if (ball.mirror) {
+        ball.mirror.x += ball.mirror.vx
+        ball.mirror.y += ball.mirror.vy
+      }
+
+      if (ball.isCrash) {
+        ball.isCrash = false
+      }
+
+      return ball
     })
   }
   //  根据范围得到一个随机数[[范围], 小数位]
