@@ -77,7 +77,6 @@ gulp.task('sass', function() {
 // Scripts任务 (ES6 打包模式)
 gulp.task('scripts', function() {
     return gulp.src('src/javascripts/**/*.js')
-        // .pipe(changed('dist/javascripts'))
         .pipe(plumber({
             errorHandler: function(error) {
                 this.emit('end');
@@ -89,15 +88,13 @@ gulp.task('scripts', function() {
                 message: `<%= error.message %>`
             })
         }))
-        .pipe(sourcemaps.init())
         .pipe(gulpif(!isDeploy, sourcemaps.init()))
         .pipe(babel())
-        .pipe(uglify())
         // .pipe(concat('all.js'))  //代码合并
-        .pipe(gulpif(!isDeploy, sourcemaps.write()))
         .pipe(debug({title: '编译:'}))
         .pipe(gulp.dest('dist/javascripts'))
         .pipe(webpack({
+            devtool: 'source-map',
             output:{
                 filename: 'bundle.js',
             },
@@ -105,7 +102,8 @@ gulp.task('scripts', function() {
                 colors:true
             }
         }))
-        .pipe(gulp.dest('dist/javascripts'));//包装好的js目录
+        .pipe(gulpif(!isDeploy, sourcemaps.write()))
+        .pipe(gulp.dest('dist/javascripts'));
         // .pipe(notify({ message: 'Javascript编译成功！' }))
         // .pipe(reload({stream: true}))
 });

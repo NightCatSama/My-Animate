@@ -1,2 +1,25 @@
-!function(e,n){if("function"==typeof define&&define.amd)define(["./canvas.js"],n);else if("undefined"!=typeof exports)n(require("./canvas.js"));else{var t={exports:{}};n(e.canvas),e.index=t.exports}}(this,function(e){"use strict";new(function(e){return e&&e.__esModule?e:{default:e}}(e).default)});
-//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm5hbWVzIjpbImRlZmF1bHQiXSwibWFwcGluZ3MiOiJxT0FFQSwwREFBQUEiLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgQ2FudmFzIGZyb20gJy4vY2FudmFzLmpzJ1xyXG5cclxubmV3IENhbnZhcygpXHJcbiJdfQ==
+(function (global, factory) {
+  if (typeof define === "function" && define.amd) {
+    define(['./canvas.js'], factory);
+  } else if (typeof exports !== "undefined") {
+    factory(require('./canvas.js'));
+  } else {
+    var mod = {
+      exports: {}
+    };
+    factory(global.canvas);
+    global.index = mod.exports;
+  }
+})(this, function (_canvas) {
+  'use strict';
+
+  var _canvas2 = _interopRequireDefault(_canvas);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  new _canvas2.default();
+});
