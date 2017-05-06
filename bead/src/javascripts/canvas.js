@@ -1,23 +1,27 @@
 export default class Canvas {
-	constructor() {
-    this.canvas = document.getElementById('canvas')
+	constructor(id) {
+    this.canvas = document.getElementById(id)
     this.cxt = canvas.getContext('2d')
     this.width = this.canvas.width = this.canvas.offsetWidth
     this.height = this.canvas.height = this.canvas.offsetHeight
     this.bounds = this.canvas.getBoundingClientRect()
 
-    this.ball_count = 20       // 总个数
+    this.ball_count = 30       // 总个数
     this.line_range = 200     // 连线范围
     this.r_range = [10, 20]   // 半径范围
     this.color = [[0, 64, 121], [80, 5, 121]] // 颜色[[r, g, b], ..]
     this.period = 10  // 颜色呼吸周期
     this.opacity = [0.3, 0.8]   // 透明度范围
-    this.speed = [-1, 1]    // 速度范围
+    this.speed = [-2, 2]    // 速度范围
+
     this.mouse = {
       x: 0,
       y: 0,
-      r: 10,
-      color: [0, 0, 0]
+      r: 0,
+      type: -1,
+      color: [255, 3, 80],
+      catchBall: false,
+      onLine: false
     }
 
     this.vballs = []
@@ -40,17 +44,16 @@ export default class Canvas {
   }
   //  点击控制动画
   clickHandle(e) {
-    if (this.isAnimate) {
-      return this.isAnimate = false
-    }
-    else {
-      this.start()
-    }
+    this.toggleAnimateStatus()
   }
   //  鼠标移动事件
   mouseHandle(e) {
+    let t = e.timeStamp - this.mouse.timeStamp
+    this.mouse.timeStamp = e.timeStamp
+
     let mx = e.clientX - this.bounds.left
     let my = e.clientY - this.bounds.top
+
     this.mouse.x = mx
     this.mouse.y = my
   }
@@ -74,10 +77,19 @@ export default class Canvas {
     }
     requestAnimationFrame(step)
   }
+  //  切换动画状态
+  toggleAnimateStatus() {
+    if (this.isAnimate) {
+      return this.isAnimate = false
+    }
+    else {
+      this.start()
+    }
+  }
   //  得到颜色渐变数组
-  getColorList(freq) {
+  getColorList(color, freq) {
     //  颜色差值[r, g, b]
-    let ColorDis = [this.color[1][0] - this.color[0][0], this.color[1][1] - this.color[0][1], this.color[1][2] - this.color[0][2]]
+    let ColorDis = [color[1][0] - color[0][0], color[1][1] - color[0][1], color[1][2] - color[0][2]]
 
     //  颜色差最大的绝对值
     let ColorLength = Math.max(Math.abs(ColorDis[0]), Math.abs(ColorDis[1]), Math.abs(ColorDis[2])) * freq
@@ -88,7 +100,7 @@ export default class Canvas {
     let ColorList = []
 
     for (let i = 0; i < ColorLength; i++) {
-      ColorList.push(ColorChange.map((c, index) => (this.color[0][index] + c * i)))
+      ColorList.push(ColorChange.map((c, index) => (color[0][index] + c * i)))
     }
 
     return ColorList
@@ -96,13 +108,14 @@ export default class Canvas {
   //  增加一个球
   addBall() {
     let ball = {
-      vx: this.getRandomNumber(this.speed),
-      vy: this.getRandomNumber(this.speed),
-      opacity: this.getRandomNumber(this.opacity),
-      freq: this.period,
-      type: ~~this.getRandomNumber([0, 3]),
-      cur_i: 0,
-      reverse: false
+      vx: this.getRandomNumber(this.speed),  // 水平方向加速度
+      vy: this.getRandomNumber(this.speed),  // 垂直方向加速度
+      opacity: this.getRandomNumber(this.opacity), // 透明度
+      freq: this.period,  // 颜色变化周期
+      type: ~~this.getRandomNumber([0, 3]),  // 小球类型[-1:鼠标, 0:实心球, 1:圆环, 2:双环]
+      cur_i: 0,  // 当前颜色step
+      reverse: false, // 是否反向颜色渐变
+      withMouse: 0  // 与鼠标位置的关系  [0:范围外, 1:范围内, 2:球中]
     }
 
     ball.r = (1 - ball.opacity) * (this.r_range[1] - this.r_range[0]) + this.r_range[0]
@@ -114,22 +127,16 @@ export default class Canvas {
     }
 
     ball.color = this.color[0]
-    ball.ColorList = this.getColorList(ball.freq)
+    ball.ColorList = this.getColorList(this.color, ball.freq)
 
-    //  随机一种模式[0:实心球, 1:圆环, 2:双环]
     switch(ball.type) {
       case 0: break;
-      case 1: ball.empty = {
-          r: this.getRandomNumber([ball.r / 2, ball.r / 4 * 3])
-        }
+      case 1: 
+        ball.emptyR = this.getRandomNumber([ball.r / 2, ball.r / 4 * 3])
         break;
-      case 2: ball.empty = {
-          r: this.getRandomNumber([ball.r / 2, ball.r / 4 * 3])
-        }
-        ball.son = {
-          r: this.getRandomNumber([ball.empty.r / 2, ball.empty.r / 4 * 3]),
-          color: [...ball.color]
-        }
+      case 2: 
+        ball.emptyR = this.getRandomNumber([ball.r / 2, ball.r / 4 * 3])
+        ball.sonR = this.getRandomNumber([ball.emptyR / 2, ball.emptyR / 4 * 3])
         break;
     }
 
@@ -145,6 +152,47 @@ export default class Canvas {
       return true
     })
   }
+  //  根据虚拟球生成四个镜像球
+  getBalls() {
+    var ball = null,
+        balls = []
+		
+    for (var i = 0, len = this.vballs.length; i < len; i++) {
+      ball = this.vballs[i]
+	  balls.push(ball)
+	  balls = balls.concat(this.addMirrorBalls(ball))
+    }
+
+    return balls
+  }
+  //  判断位置生成镜像球
+  addMirrorBalls(ball) {
+	let range = this.r_range[1] * 4
+	let balls = []
+	const newPos = {}
+	if (ball.x < range) {
+		newPos.x = ball.x + this.width
+	}
+	if (ball.x > this.width - range) {
+		newPos.x = ball.x - this.width
+	}
+	if (ball.y < range) {
+		newPos.y = ball.y + this.height
+	}
+	if (ball.y > this.height - range) {
+		newPos.y = ball.y - this.height
+	}
+	
+	for (var i in newPos) {
+		balls.push(this.addMirrorBall(ball, { [i]: newPos[i], parent: ball }))
+	}
+	
+	if (Object.keys(newPos).length === 2) {
+		balls.push(this.addMirrorBall(ball, { x: newPos.x, y: newPos.y, parent: ball }))
+	}
+
+	return balls
+  }
   //  添加一个镜像Ball
   addMirrorBall(ball, obj) {
     var newBall = {}
@@ -159,104 +207,122 @@ export default class Canvas {
 
     return newBall
   }
-  //  根据虚拟球生成四个镜像球
-  getBalls() {
-    var ball = null,
-        balls = []
-
-    // balls.push(this.mouse)
-    
-    for (var i = 0, len = this.vballs.length; i < len; i++) {
-      ball = this.vballs[i]
-      balls = balls.concat([
-        ball,
-        this.addMirrorBall(ball, { x: ball.x + this.width, parent: ball }),
-        this.addMirrorBall(ball, { x: ball.x - this.width, parent: ball }),
-        this.addMirrorBall(ball, { y: ball.y + this.height, parent: ball }),
-        this.addMirrorBall(ball, { y: ball.y - this.height, parent: ball }),
-        this.addMirrorBall(ball, { x: ball.x + this.width, y: ball.y + this.height, parent: ball }),
-        this.addMirrorBall(ball, { x: ball.x - this.width, y: ball.y - this.height, parent: ball }),
-        this.addMirrorBall(ball, { y: ball.y + this.height, x: ball.x - this.width, parent: ball }),
-        this.addMirrorBall(ball, { y: ball.y - this.height, x: ball.x + this.width, parent: ball })
-      ])
-    }
-
-    return balls
-  }
   //  渲染
   render(progress) {
     this.cxt.clearRect(0, 0, this.width, this.height)
 
     this.balls.length = 0
+    
     this.balls = this.getBalls()
 
-    Array.from(this.balls, (ball) => {
-      this.renderBall(ball)
+    this.balls.push(this.mouse)
+
+    this.mouse.noLine = this.mouse.catchBall
+    this.mouse.catchBall = false
+    Array.from(this.balls, (ball, i) => {
+      this.renderBall(ball, i)
     })
   }
   //  渲染单个球
-  renderBall (ball) {
+  renderBall (ball, i) {
     let x = ball.x,
-        y = ball.y
+        y = ball.y,
+        color = ball.color
 
     //  大球体
-    this.renderArc(x, y, ball.r, this.getRGBA(ball.color, ball.opacity))
+    this.renderArc(x, y, ball.r, this.getRGBA(color, ball.opacity))
 
     //  type:1|2 空心白色部分
     this.cxt.globalCompositeOperation = 'destination-out'
-    ball.type > 0 && this.renderArc(x, y, ball.empty.r, '#fff')
+    ball.type > 0 && this.renderArc(x, y, ball.emptyR, '#fff')
 
     //  type:2 球心部分
     this.cxt.globalCompositeOperation = 'source-over'
-    ball.type === 2 && this.renderArc(x, y, ball.son.r, this.getRGBA(ball.son.color, ball.opacity))
+    ball.type === 2 && this.renderArc(x, y, ball.sonR, this.getRGBA(color, ball.opacity))
 
     //  连线
-    Array.from(this.balls, (b) => {
-      if (ball === b) {
+    Array.from(this.balls, (b, index) => {
+      if (index <= i) {
         return false
       }
 
       let d = Math.sqrt(Math.pow(x - b.x, 2) + Math.pow(y - b.y, 2))
       if (d < this.line_range && d > (ball.r + b.r)) {
-        var g = this.cxt.createLinearGradient(x, y, b.x, b.y)
+        if (b.type === -1) {
+          ball.withMouse = 1
+          this.resetColorList(ball)
+          ball.ColorList = this.getColorList([color, this.mouse.color], 1)
+          
+          if (this.mouse.noLine) {
+            return false
+          }
+        }
+        let g = this.cxt.createLinearGradient(x, y, b.x, b.y)
+        let opacity = 1 - d / this.line_range
+        let ballColor = this.getRGBA(color, opacity)
+        let bColor = this.getRGBA(b.color, opacity)
         if (ball.type === 1) {
-          g.addColorStop(0, this.getRGBA(ball.color, d / this.line_range))
-          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, d / this.line_range))
-          g.addColorStop(ball.empty.r / d, 'transparent')
+          g.addColorStop(0, ballColor)
+          g.addColorStop(ball.emptyR / d, ballColor)
+          g.addColorStop(ball.emptyR / d, 'transparent')
         }
         else if (ball.type === 2) {
           g.addColorStop(0, 'transparent')
-          g.addColorStop(ball.son.r / d, 'transparent')
-          g.addColorStop(ball.son.r / d, this.getRGBA(ball.color, d / this.line_range))
-          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, d / this.line_range))
-          g.addColorStop(ball.empty.r / d, 'transparent')
+          g.addColorStop(ball.sonR / d, 'transparent')
+          g.addColorStop(ball.sonR / d, ballColor)
+          g.addColorStop(ball.emptyR / d, ballColor)
+          g.addColorStop(ball.emptyR / d, 'transparent')
         }
         else {
           g.addColorStop(0, 'transparent')
         }
         g.addColorStop(ball.r / d, 'transparent')
-        g.addColorStop(ball.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
-        g.addColorStop(1 - b.r / d, this.getRGBA(b.color, 1 - d / this.line_range))
+        g.addColorStop(ball.r / d, ballColor)
+        g.addColorStop(1 - b.r / d, bColor)
         g.addColorStop(1 - b.r / d, 'transparent')
         g.addColorStop(1, 'transparent')
         this.cxt.strokeStyle = g
         this.renderLine(x, y, b.x, b.y)
+
+        if (b.type === -1) {
+          ball.withMouse = 1
+          this.resetColorList(ball)
+          ball.ColorList = this.getColorList([color, this.mouse.color], 1)
+        }
       }
       else if (d < (ball.r + b.r) && !b.isCrash && !ball.isCrash) {
-        ball.isCrash = true
-        b.isCrash = true
-        this.crashHandle(ball, b)
-
-        if (ball.parent) {
-          ball.parent.isCrash = true
+        if (b.type === -1) {
+          ball.withMouse = 2
+          this.mouse.catchBall = true
+          this.resetColorList(ball)
+          ball.ColorList = this.getColorList([color, this.mouse.color], 0.2)
         }
+        else {
+          ball.isCrash = true
+          b.isCrash = true
+          this.crashHandle(ball, b)
 
-        if (b.parent) {
-          b.parent.isCrash = true
+          if (ball.parent) {
+            ball.parent.isCrash = true
+          }
+
+          if (b.parent) {
+            b.parent.isCrash = true
+          }
         }
+      }
+      else if (b.type === -1) {
+        ball.withMouse = 0
+        this.resetColorList(ball)
+        ball.ColorList = this.getColorList(this.color, 1)
       }
     })
   }
+  resetColorList(ball) {
+    ball.cur_i = 0
+    ball.reverse = false
+  }
+  //  处理两球碰撞
   crashHandle(b1, b2) {
     let deg = Math.atan2(b2.y - b1.y, b2.x - b1.x)
     let speed1 = Math.sqrt(b1.vx * b1.vx + b1.vy * b1.vy)
@@ -303,8 +369,25 @@ export default class Canvas {
         ball.vy = ball.fy
       }
 
-      ball.x += ball.vx
-      ball.y += ball.vy
+      if (ball.withMouse === 1) {
+        let g = Math.random() * 0.02;
+
+        if (ball.y > this.mouse.y) {
+          ball.vy = ball.vy * 0.99 + g;
+        } else {
+          ball.vy = ball.vy * 0.99 - g;
+        }
+
+        if (ball.x > this.mouse.x) {
+          ball.vx = ball.vx * 0.99 + g;
+        } else {
+          ball.vx = ball.vx * 0.99 - g;
+        }
+      }
+      if (ball.withMouse !== 2) {
+        ball.x += ball.vx
+        ball.y += ball.vy
+      }
 
       return ball
     })
@@ -319,10 +402,6 @@ export default class Canvas {
       }
       return ball.ColorList[ball.reverse ? ball.ColorList.length - ball.cur_i - 1 : ball.cur_i][i]
     })
-    
-    if (ball.type === 2) {
-      ball.son.color = [...ball.color]
-    }
   }
   getRGBA(color, opacity) {
     return color === 'transparent' ? color : `rgba(${~~color[0]}, ${~~color[1]}, ${~~color[2]}, ${opacity})`

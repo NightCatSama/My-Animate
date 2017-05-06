@@ -1,3 +1,3 @@
 import Canvas from './canvas.js'
 
-new Canvas()
+new Canvas('canvas')
