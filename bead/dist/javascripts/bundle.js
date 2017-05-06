@@ -156,17 +156,24 @@
 	      this.bounds = this.canvas.getBoundingClientRect();
 	
 	      this.ball_count = 20; // 总个数
-	      this.line_range = 150; // 连线范围
+	      this.line_range = 200; // 连线范围
 	      this.r_range = [10, 20]; // 半径范围
 	      this.color = [[0, 64, 121], [80, 5, 121]]; // 颜色[[r, g, b], ..]
 	      this.period = 10; // 颜色呼吸周期
 	      this.opacity = [0.3, 0.8]; // 透明度范围
-	      this.speed = [-2, 2]; // 速度范围
+	      this.speed = [-1, 1]; // 速度范围
+	      this.mouse = {
+	        x: 0,
+	        y: 0,
+	        r: 10,
+	        color: [0, 0, 0]
+	      };
 	
 	      this.vballs = [];
 	      this.balls = [];
 	
 	      this.clickHandle = this.clickHandle.bind(this);
+	      this.mouseHandle = this.mouseHandle.bind(this);
 	      this.bindEvent();
 	      this.start();
 	    }
@@ -177,11 +184,13 @@
 	      key: 'bindEvent',
 	      value: function bindEvent() {
 	        this.canvas.addEventListener('click', this.clickHandle, false);
+	        this.canvas.addEventListener('mousemove', this.mouseHandle, false);
 	      }
 	    }, {
 	      key: 'unbindEvent',
 	      value: function unbindEvent() {
 	        this.canvas.removeEventListener('click', this.clickHandle, false);
+	        this.canvas.removeEventListener('mousemove', this.mouseHandle, false);
 	      }
 	    }, {
 	      key: 'clickHandle',
@@ -191,9 +200,14 @@
 	        } else {
 	          this.start();
 	        }
+	      }
+	    }, {
+	      key: 'mouseHandle',
+	      value: function mouseHandle(e) {
 	        var mx = e.clientX - this.bounds.left;
 	        var my = e.clientY - this.bounds.top;
-	        // this.addWork({ x: mx, y: my })
+	        this.mouse.x = mx;
+	        this.mouse.y = my;
 	      }
 	    }, {
 	      key: 'start',
@@ -260,15 +274,17 @@
 	          cur_i: 0,
 	          reverse: false
 	        };
+	
 	        ball.r = (1 - ball.opacity) * (this.r_range[1] - this.r_range[0]) + this.r_range[0];
-	        ball.x = this.getRandomNumber([ball.r, this.width - ball.r]), ball.y = this.getRandomNumber([ball.r, this.height - ball.r]), ball.ColorList = this.getColorList(ball.freq);
+	        ball.x = this.getRandomNumber([ball.r, this.width - ball.r]);
+	        ball.y = this.getRandomNumber([ball.r, this.height - ball.r]);
 	
 	        if (this.isOverlap(ball)) {
 	          return this.addBall();
 	        }
 	
-	        var color = this.color[0];
-	        ball.color = [].concat(_toConsumableArray(color));
+	        ball.color = this.color[0];
+	        ball.ColorList = this.getColorList(ball.freq);
 	
 	        //  随机一种模式[0:实心球, 1:圆环, 2:双环]
 	        switch (ball.type) {
@@ -323,6 +339,8 @@
 	        var ball = null,
 	            balls = [];
 	
+	        // balls.push(this.mouse)
+	
 	        for (var i = 0, len = this.vballs.length; i < len; i++) {
 	          ball = this.vballs[i];
 	          balls = balls.concat([ball, this.addMirrorBall(ball, { x: ball.x + this.width, parent: ball }), this.addMirrorBall(ball, { x: ball.x - this.width, parent: ball }), this.addMirrorBall(ball, { y: ball.y + this.height, parent: ball }), this.addMirrorBall(ball, { y: ball.y - this.height, parent: ball }), this.addMirrorBall(ball, { x: ball.x + this.width, y: ball.y + this.height, parent: ball }), this.addMirrorBall(ball, { x: ball.x - this.width, y: ball.y - this.height, parent: ball }), this.addMirrorBall(ball, { y: ball.y + this.height, x: ball.x - this.width, parent: ball }), this.addMirrorBall(ball, { y: ball.y - this.height, x: ball.x + this.width, parent: ball })]);
@@ -352,10 +370,6 @@
 	        var x = ball.x,
 	            y = ball.y;
 	
-	        if (ball.isCrash) {
-	          ball.color = [0, 0, 0];
-	        }
-	
 	        //  大球体
 	        this.renderArc(x, y, ball.r, this.getRGBA(ball.color, ball.opacity));
 	
@@ -377,14 +391,14 @@
 	          if (d < _this4.line_range && d > ball.r + b.r) {
 	            var g = _this4.cxt.createLinearGradient(x, y, b.x, b.y);
 	            if (ball.type === 1) {
-	              g.addColorStop(0, _this4.getRGBA(ball.color, 1 - d / _this4.line_range));
-	              g.addColorStop(ball.empty.r / d, _this4.getRGBA(ball.color, 1 - d / _this4.line_range));
+	              g.addColorStop(0, _this4.getRGBA(ball.color, d / _this4.line_range));
+	              g.addColorStop(ball.empty.r / d, _this4.getRGBA(ball.color, d / _this4.line_range));
 	              g.addColorStop(ball.empty.r / d, 'transparent');
 	            } else if (ball.type === 2) {
 	              g.addColorStop(0, 'transparent');
 	              g.addColorStop(ball.son.r / d, 'transparent');
-	              g.addColorStop(ball.son.r / d, _this4.getRGBA(ball.color, 1 - d / _this4.line_range));
-	              g.addColorStop(ball.empty.r / d, _this4.getRGBA(ball.color, 1 - d / _this4.line_range));
+	              g.addColorStop(ball.son.r / d, _this4.getRGBA(ball.color, d / _this4.line_range));
+	              g.addColorStop(ball.empty.r / d, _this4.getRGBA(ball.color, d / _this4.line_range));
 	              g.addColorStop(ball.empty.r / d, 'transparent');
 	            } else {
 	              g.addColorStop(0, 'transparent');
@@ -484,7 +498,7 @@
 	    }, {
 	      key: 'getRGBA',
 	      value: function getRGBA(color, opacity) {
-	        return 'rgba(' + ~~color[0] + ', ' + ~~color[1] + ', ' + ~~color[2] + ', ' + opacity + ')';
+	        return color === 'transparent' ? color : 'rgba(' + ~~color[0] + ', ' + ~~color[1] + ', ' + ~~color[2] + ', ' + opacity + ')';
 	      }
 	    }, {
 	      key: 'getRandomNumber',

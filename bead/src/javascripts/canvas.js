@@ -7,29 +7,38 @@ export default class Canvas {
     this.bounds = this.canvas.getBoundingClientRect()
 
     this.ball_count = 20       // 总个数
-    this.line_range = 150     // 连线范围
+    this.line_range = 200     // 连线范围
     this.r_range = [10, 20]   // 半径范围
     this.color = [[0, 64, 121], [80, 5, 121]] // 颜色[[r, g, b], ..]
     this.period = 10  // 颜色呼吸周期
     this.opacity = [0.3, 0.8]   // 透明度范围
-    this.speed = [-2, 2]    // 速度范围
+    this.speed = [-1, 1]    // 速度范围
+    this.mouse = {
+      x: 0,
+      y: 0,
+      r: 10,
+      color: [0, 0, 0]
+    }
 
     this.vballs = []
     this.balls = []
 
     this.clickHandle = this.clickHandle.bind(this)
+    this.mouseHandle = this.mouseHandle.bind(this)
     this.bindEvent()
     this.start()
 	}
   //  绑定事件
   bindEvent() {
     this.canvas.addEventListener('click', this.clickHandle, false)
+    this.canvas.addEventListener('mousemove', this.mouseHandle, false)
   }
   //  移除事件
   unbindEvent() {
     this.canvas.removeEventListener('click', this.clickHandle, false)
+    this.canvas.removeEventListener('mousemove', this.mouseHandle, false)
   }
-  //  点击获取鼠标位置
+  //  点击控制动画
   clickHandle(e) {
     if (this.isAnimate) {
       return this.isAnimate = false
@@ -37,9 +46,13 @@ export default class Canvas {
     else {
       this.start()
     }
+  }
+  //  鼠标移动事件
+  mouseHandle(e) {
     let mx = e.clientX - this.bounds.left
     let my = e.clientY - this.bounds.top
-    // this.addWork({ x: mx, y: my })
+    this.mouse.x = mx
+    this.mouse.y = my
   }
   //  动画开始
   start() {
@@ -91,17 +104,17 @@ export default class Canvas {
       cur_i: 0,
       reverse: false
     }
-    ball.r = (1 - ball.opacity) * (this.r_range[1] - this.r_range[0]) + this.r_range[0]
-    ball.x = this.getRandomNumber([ball.r, this.width - ball.r]),
-    ball.y = this.getRandomNumber([ball.r, this.height - ball.r]),
-    ball.ColorList = this.getColorList(ball.freq)
 
+    ball.r = (1 - ball.opacity) * (this.r_range[1] - this.r_range[0]) + this.r_range[0]
+    ball.x = this.getRandomNumber([ball.r, this.width - ball.r])
+    ball.y = this.getRandomNumber([ball.r, this.height - ball.r])
+    
     if (this.isOverlap(ball)) {
       return this.addBall()
     }
 
-    let color = this.color[0]
-    ball.color = [...color]
+    ball.color = this.color[0]
+    ball.ColorList = this.getColorList(ball.freq)
 
     //  随机一种模式[0:实心球, 1:圆环, 2:双环]
     switch(ball.type) {
@@ -150,6 +163,8 @@ export default class Canvas {
   getBalls() {
     var ball = null,
         balls = []
+
+    // balls.push(this.mouse)
     
     for (var i = 0, len = this.vballs.length; i < len; i++) {
       ball = this.vballs[i]
@@ -184,10 +199,6 @@ export default class Canvas {
     let x = ball.x,
         y = ball.y
 
-    if (ball.isCrash) {
-      ball.color = [0 ,0, 0]
-    }
-
     //  大球体
     this.renderArc(x, y, ball.r, this.getRGBA(ball.color, ball.opacity))
 
@@ -209,15 +220,15 @@ export default class Canvas {
       if (d < this.line_range && d > (ball.r + b.r)) {
         var g = this.cxt.createLinearGradient(x, y, b.x, b.y)
         if (ball.type === 1) {
-          g.addColorStop(0, this.getRGBA(ball.color, 1 - d / this.line_range))
-          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
+          g.addColorStop(0, this.getRGBA(ball.color, d / this.line_range))
+          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, d / this.line_range))
           g.addColorStop(ball.empty.r / d, 'transparent')
         }
         else if (ball.type === 2) {
           g.addColorStop(0, 'transparent')
           g.addColorStop(ball.son.r / d, 'transparent')
-          g.addColorStop(ball.son.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
-          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, 1 - d / this.line_range))
+          g.addColorStop(ball.son.r / d, this.getRGBA(ball.color, d / this.line_range))
+          g.addColorStop(ball.empty.r / d, this.getRGBA(ball.color, d / this.line_range))
           g.addColorStop(ball.empty.r / d, 'transparent')
         }
         else {
@@ -314,7 +325,7 @@ export default class Canvas {
     }
   }
   getRGBA(color, opacity) {
-    return `rgba(${~~color[0]}, ${~~color[1]}, ${~~color[2]}, ${opacity})`
+    return color === 'transparent' ? color : `rgba(${~~color[0]}, ${~~color[1]}, ${~~color[2]}, ${opacity})`
   }
   //  根据范围得到一个随机数[[范围], 小数位]
   getRandomNumber([min, max], decimal) {
