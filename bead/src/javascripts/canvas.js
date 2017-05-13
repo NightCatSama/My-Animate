@@ -1,18 +1,19 @@
+const _default = {
+  ball_count: 30,       // 总个数
+  line_range: 200,      // 连线范围
+  r_range: [10, 20],    // 半径范围
+  color: [[56, 56, 56], [49, 105, 146], [153, 47, 37], [153, 105, 33], [70, 120, 33], [28, 110, 110], [75, 75, 120]], // 颜色[[r, g, b], ..]
+  period: 4000,  // 颜色呼吸周期
+  opacity: [0.3, 0.8],   // 透明度范围
+  speed: [-2, 2]    // 速度范围
+}
+
 export default class Canvas {
-	constructor(id) {
+	constructor(id, option) {
     this.canvas = document.getElementById(id)
     this.cxt = canvas.getContext('2d')
-    this.width = this.canvas.width = this.canvas.offsetWidth
-    this.height = this.canvas.height = this.canvas.offsetHeight
-    this.bounds = this.canvas.getBoundingClientRect()
 
-    this.ball_count = 30       // 总个数
-    this.line_range = 200     // 连线范围
-    this.r_range = [10, 20]   // 半径范围
-    this.color = [[0, 64, 121], [80, 5, 121]] // 颜色[[r, g, b], ..]
-    this.period = 10  // 颜色呼吸周期
-    this.opacity = [0.3, 0.8]   // 透明度范围
-    this.speed = [-2, 2]    // 速度范围
+    Object.assign(this, _default, option)
 
     this.mouse = {
       x: 0,
@@ -29,18 +30,28 @@ export default class Canvas {
 
     this.clickHandle = this.clickHandle.bind(this)
     this.mouseHandle = this.mouseHandle.bind(this)
+    this.init = this.init.bind(this)
     this.bindEvent()
+    this.init()
     this.start()
 	}
+  //  初始化canvas
+  init() {
+    this.width = this.canvas.width = this.canvas.offsetWidth
+    this.height = this.canvas.height = this.canvas.offsetHeight
+    this.bounds = this.canvas.getBoundingClientRect()
+  }
   //  绑定事件
   bindEvent() {
     this.canvas.addEventListener('click', this.clickHandle, false)
     this.canvas.addEventListener('mousemove', this.mouseHandle, false)
+    window.addEventListener('resize', this.init, false)
   }
   //  移除事件
   unbindEvent() {
     this.canvas.removeEventListener('click', this.clickHandle, false)
     this.canvas.removeEventListener('mousemove', this.mouseHandle, false)
+    window.removeEventListener('resize', this.init, false)
   }
   //  点击控制动画
   clickHandle(e) {
@@ -87,12 +98,12 @@ export default class Canvas {
     }
   }
   //  得到颜色渐变数组
-  getColorList(color, freq) {
+  getColorList(color) {
     //  颜色差值[r, g, b]
     let ColorDis = [color[1][0] - color[0][0], color[1][1] - color[0][1], color[1][2] - color[0][2]]
 
     //  颜色差最大的绝对值
-    let ColorLength = Math.max(Math.abs(ColorDis[0]), Math.abs(ColorDis[1]), Math.abs(ColorDis[2])) * freq
+    let ColorLength = Math.max(Math.abs(ColorDis[0]), Math.abs(ColorDis[1]), Math.abs(ColorDis[2]))
 
     //  颜色变化系数
     let ColorChange = ColorDis.map((c) => c / ColorLength)
@@ -111,7 +122,9 @@ export default class Canvas {
       vx: this.getRandomNumber(this.speed),  // 水平方向加速度
       vy: this.getRandomNumber(this.speed),  // 垂直方向加速度
       opacity: this.getRandomNumber(this.opacity), // 透明度
-      freq: this.period,  // 颜色变化周期
+      freq: this.period / 16.7,  // 颜色变化周期
+      cur_color: 0,      // 当前颜色组
+      is_infect: false,  // 是否被鼠标颜色感染
       type: ~~this.getRandomNumber([0, 3]),  // 小球类型[-1:鼠标, 0:实心球, 1:圆环, 2:双环]
       cur_i: 0,  // 当前颜色step
       reverse: false, // 是否反向颜色渐变
@@ -127,7 +140,7 @@ export default class Canvas {
     }
 
     ball.color = this.color[0]
-    ball.ColorList = this.getColorList(this.color, ball.freq)
+    ball.ColorList = this.getColorList([this.color[ball.cur_color], this.color[ball.cur_color + 1]])
 
     switch(ball.type) {
       case 0: break;
@@ -229,17 +242,6 @@ export default class Canvas {
         y = ball.y,
         color = ball.color
 
-    //  大球体
-    this.renderArc(x, y, ball.r, this.getRGBA(color, ball.opacity))
-
-    //  type:1|2 空心白色部分
-    this.cxt.globalCompositeOperation = 'destination-out'
-    ball.type > 0 && this.renderArc(x, y, ball.emptyR, '#fff')
-
-    //  type:2 球心部分
-    this.cxt.globalCompositeOperation = 'source-over'
-    ball.type === 2 && this.renderArc(x, y, ball.sonR, this.getRGBA(color, ball.opacity))
-
     //  连线
     Array.from(this.balls, (b, index) => {
       if (index <= i) {
@@ -250,17 +252,18 @@ export default class Canvas {
       if (d < this.line_range && d > (ball.r + b.r)) {
         if (b.type === -1) {
           ball.withMouse = 1
-          this.resetColorList(ball)
-          ball.ColorList = this.getColorList([color, this.mouse.color], 1)
+          ball.is_infect = true
           
           if (this.mouse.noLine) {
             return false
           }
         }
-        let g = this.cxt.createLinearGradient(x, y, b.x, b.y)
         let opacity = 1 - d / this.line_range
         let ballColor = this.getRGBA(color, opacity)
         let bColor = this.getRGBA(b.color, opacity)
+
+        let g = this.cxt.createLinearGradient(x, y, b.x, b.y)
+
         if (ball.type === 1) {
           g.addColorStop(0, ballColor)
           g.addColorStop(ball.emptyR / d, ballColor)
@@ -281,21 +284,15 @@ export default class Canvas {
         g.addColorStop(1 - b.r / d, bColor)
         g.addColorStop(1 - b.r / d, 'transparent')
         g.addColorStop(1, 'transparent')
+
         this.cxt.strokeStyle = g
         this.renderLine(x, y, b.x, b.y)
-
-        if (b.type === -1) {
-          ball.withMouse = 1
-          this.resetColorList(ball)
-          ball.ColorList = this.getColorList([color, this.mouse.color], 1)
-        }
       }
       else if (d < (ball.r + b.r) && !b.isCrash && !ball.isCrash) {
         if (b.type === -1) {
           ball.withMouse = 2
+          ball.is_infect = true
           this.mouse.catchBall = true
-          this.resetColorList(ball)
-          ball.ColorList = this.getColorList([color, this.mouse.color], 0.2)
         }
         else {
           ball.isCrash = true
@@ -313,10 +310,20 @@ export default class Canvas {
       }
       else if (b.type === -1) {
         ball.withMouse = 0
-        this.resetColorList(ball)
-        ball.ColorList = this.getColorList(this.color, 1)
+        ball.is_infect = false
       }
     })
+
+    //  大球体
+    if (ball.type === 0) {
+      this.renderTypeArc(x, y, ball.r, this.getRGBA(color, ball.opacity))
+    }
+    else if (ball.type === 1) {
+      this.renderTypeArc(x, y, ball.r, this.getRGBA(color, ball.opacity), ball.emptyR)
+    }
+    else if (ball.type === 2) {
+      this.renderTypeArc(x, y, ball.r, this.getRGBA(color, ball.opacity), ball.emptyR, ball.sonR)
+    }
   }
   resetColorList(ball) {
     ball.cur_i = 0
@@ -360,6 +367,7 @@ export default class Canvas {
       else if (ball.y > this.height + ball.r) {
         ball.y = ball.y - this.height
       }
+
       this.updateColor(ball)
 
       if (ball.isCrash) {
@@ -394,13 +402,24 @@ export default class Canvas {
   }
   //  更新小球颜色
   updateColor(ball) {
+    ball.cur_i += ball.ColorList.length / ball.freq
+    let index = ~~(ball.cur_i)
+    if (index === ball.cur_i) {
+      return false
+    }
     ball.color = ball.color.map((n, i) => {
-      ball.cur_i++
-      if (ball.cur_i === ball.ColorList.length) {
-        ball.cur_i = 0
-        ball.reverse = !ball.reverse
+      if (index === ball.ColorList.length) {
+        ball.cur_i = index = 0
+        ball.cur_color++
+        if (ball.cur_color === this.color.length - 1) {
+          ball.ColorList = this.getColorList([this.color[ball.cur_color], this.color[0]])
+          ball.cur_color = -1
+        }
+        else {
+          ball.ColorList = this.getColorList([this.color[ball.cur_color], this.color[ball.cur_color + 1]])
+        }
       }
-      return ball.ColorList[ball.reverse ? ball.ColorList.length - ball.cur_i - 1 : ball.cur_i][i]
+      return ball.ColorList[index][i]
     })
   }
   getRGBA(color, opacity) {
@@ -410,11 +429,45 @@ export default class Canvas {
   getRandomNumber([min, max], decimal) {
     return (Math.random() * (max - min)) + min
   }
-  //  画一个圆
+  renderTypeArc (x, y, r, color, n_r, s_r) {
+    this.cxt.fillStyle = color
+
+    this.cxt.beginPath()
+    this.cxt.arc(x, y, r, 0, Math.PI * 2, true)
+    n_r && this.cxt.arc(x, y, n_r, 0, Math.PI * 2, false)
+    s_r && this.cxt.arc(x, y, s_r, 0, Math.PI * 2, true)
+    this.cxt.closePath()
+
+    this.cxt.fill()
+  }
+  //  画一个实心圆
   renderArc(x, y, r, color) {
     this.cxt.fillStyle = color
 
     this.cxt.beginPath()
+    this.cxt.arc(x, y, r, 0, Math.PI * 2, true)
+    this.cxt.closePath()
+
+    this.cxt.fill()
+  }
+  //  画一个圆环
+  renderRing(x, y, r, color, n_r) {
+    this.cxt.fillStyle = color
+
+    this.cxt.beginPath()
+    this.cxt.arc(x, y, r, 0, Math.PI * 2, true)
+    this.cxt.arc(x, y, n_r, 0, Math.PI * 2, false)
+    this.cxt.closePath()
+
+    this.cxt.fill()
+  }
+  //  画一个双圆
+  renderRing(x, y, r, color, n_r, s_r) {
+    this.cxt.fillStyle = color
+
+    this.cxt.beginPath()
+    this.cxt.arc(x, y, r, 0, Math.PI * 2, true)
+    this.cxt.arc(x, y, n_r, 0, Math.PI * 2, false)
     this.cxt.arc(x, y, r, 0, Math.PI * 2, true)
     this.cxt.closePath()
 
