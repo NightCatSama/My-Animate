@@ -21,5 +21,7 @@
     };
   }
 
-  new _canvas2.default('canvas');
+  new _canvas2.default('canvas', {
+    clickPause: true
+  });
 });

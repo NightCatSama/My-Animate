@@ -148,14 +148,24 @@
 	    };
 	  }();
 	
+	  var _defaultColors = [[240, 91, 114, 3000], [49, 105, 146, 3000], [153, 47, 37, 3000], [120, 115, 201, 3000], [153, 105, 33, 3000], [70, 120, 33, 3000], [28, 110, 110, 3000], [75, 75, 120]];
+	
 	  var _default = {
+	    txt: 'NightCat', // 文本
+	    font: 'normal 100px sans-serif', // 文本样式
 	    ball_count: 30, // 总个数
 	    line_range: 200, // 连线范围
 	    r_range: [10, 20], // 半径范围
-	    color: [[56, 56, 56], [49, 105, 146], [153, 47, 37], [153, 105, 33], [70, 120, 33], [28, 110, 110], [75, 75, 120]], // 颜色[[r, g, b], ..]
-	    period: 4000, // 颜色呼吸周期
+	    color: _defaultColors, // 小球颜色组 [[r, g, b, time]...] *time: 在该颜色停留的时间
+	    bgColor: [[224, 224, 224, 20000], [22, 22, 22, 20000]], // 背景颜色组
+	    textColor: [[52, 52, 52, 20000], [224, 224, 224, 20000]], // 文本颜色组
+	    mouseColor: _defaultColors, // 鼠标颜色组
+	    period: 5000, // 颜色呼吸周期
+	    bgPeriod: 5000, // 背景颜色呼吸周期
+	    textPeriod: 5000, // 文本颜色呼吸周期
 	    opacity: [0.3, 0.8], // 透明度范围
-	    speed: [-2, 2] // 速度范围
+	    speed: [-1, 1], // 速度范围
+	    clickPause: false // 是否点击暂停
 	  };
 	
 	  var Canvas = function () {
@@ -163,7 +173,7 @@
 	      _classCallCheck(this, Canvas);
 	
 	      this.canvas = document.getElementById(id);
-	      this.cxt = canvas.getContext('2d');
+	      this.cxt = this.canvas.getContext('2d');
 	
 	      Object.assign(this, _default, option);
 	
@@ -172,13 +182,16 @@
 	        y: 0,
 	        r: 0,
 	        type: -1,
-	        color: [255, 3, 80],
 	        catchBall: false,
 	        onLine: false
 	      };
 	
+	      Object.assign(this.mouse, this.initGradientData(this.period, this.mouseColor));
+	
 	      this.vballs = [];
 	      this.balls = [];
+	      this.bg = this.initGradientData(this.bgPeriod, this.bgColor);
+	      this.text = this.initGradientData(this.textPeriod, this.textColor);
 	
 	      this.clickHandle = this.clickHandle.bind(this);
 	      this.mouseHandle = this.mouseHandle.bind(this);
@@ -214,14 +227,11 @@
 	    }, {
 	      key: 'clickHandle',
 	      value: function clickHandle(e) {
-	        this.toggleAnimateStatus();
+	        this.clickPause && this.toggleAnimateStatus();
 	      }
 	    }, {
 	      key: 'mouseHandle',
 	      value: function mouseHandle(e) {
-	        var t = e.timeStamp - this.mouse.timeStamp;
-	        this.mouse.timeStamp = e.timeStamp;
-	
 	        var mx = e.clientX - this.bounds.left;
 	        var my = e.clientY - this.bounds.top;
 	
@@ -245,7 +255,11 @@
 	
 	        var step = function step() {
 	          if (!_this.isAnimate) return false;
+	
+	          _this.cxt.clearRect(0, 0, _this.width, _this.height);
+	          _this.renderBackground();
 	          _this.render();
+	          _this.renderText();
 	          _this.update();
 	          requestAnimationFrame(step);
 	        };
@@ -255,7 +269,7 @@
 	      key: 'toggleAnimateStatus',
 	      value: function toggleAnimateStatus() {
 	        if (this.isAnimate) {
-	          return this.isAnimate = false;
+	          this.isAnimate = false;
 	        } else {
 	          this.start();
 	        }
@@ -264,7 +278,12 @@
 	      key: 'getColorList',
 	      value: function getColorList(color) {
 	        //  颜色差值[r, g, b]
-	        var ColorDis = [color[1][0] - color[0][0], color[1][1] - color[0][1], color[1][2] - color[0][2]];
+	        var startColor = color[0];
+	        var endColor = color[1];
+	
+	        var ColorDis = endColor.map(function (end, i) {
+	          return end - startColor[i];
+	        });
 	
 	        //  颜色差最大的绝对值
 	        var ColorLength = Math.max(Math.abs(ColorDis[0]), Math.abs(ColorDis[1]), Math.abs(ColorDis[2]));
@@ -295,11 +314,8 @@
 	          vx: this.getRandomNumber(this.speed), // 水平方向加速度
 	          vy: this.getRandomNumber(this.speed), // 垂直方向加速度
 	          opacity: this.getRandomNumber(this.opacity), // 透明度
-	          freq: this.period / 16.7, // 颜色变化周期
-	          cur_color: 0, // 当前颜色组
 	          is_infect: false, // 是否被鼠标颜色感染
 	          type: ~~this.getRandomNumber([0, 3]), // 小球类型[-1:鼠标, 0:实心球, 1:圆环, 2:双环]
-	          cur_i: 0, // 当前颜色step
 	          reverse: false, // 是否反向颜色渐变
 	          withMouse: 0 // 与鼠标位置的关系  [0:范围外, 1:范围内, 2:球中]
 	        };
@@ -312,8 +328,7 @@
 	          return this.addBall();
 	        }
 	
-	        ball.color = this.color[0];
-	        ball.ColorList = this.getColorList([this.color[ball.cur_color], this.color[ball.cur_color + 1]]);
+	        Object.assign(ball, this.initGradientData(this.period, this.color));
 	
 	        switch (ball.type) {
 	          case 0:
@@ -343,8 +358,8 @@
 	    }, {
 	      key: 'getBalls',
 	      value: function getBalls() {
-	        var ball = null,
-	            balls = [];
+	        var ball = null;
+	        var balls = [];
 	
 	        for (var i = 0, len = this.vballs.length; i < len; i++) {
 	          ball = this.vballs[i];
@@ -404,8 +419,6 @@
 	      value: function render(progress) {
 	        var _this2 = this;
 	
-	        this.cxt.clearRect(0, 0, this.width, this.height);
-	
 	        this.balls.length = 0;
 	
 	        this.balls = this.getBalls();
@@ -423,9 +436,9 @@
 	      value: function renderBall(ball, i) {
 	        var _this3 = this;
 	
-	        var x = ball.x,
-	            y = ball.y,
-	            color = ball.color;
+	        var x = ball.x;
+	        var y = ball.y;
+	        var color = ball.color;
 	
 	        //  连线
 	        Array.from(this.balls, function (b, index) {
@@ -446,6 +459,8 @@
 	            var opacity = 1 - d / _this3.line_range;
 	            var ballColor = _this3.getRGBA(color, opacity);
 	            var bColor = _this3.getRGBA(b.color, opacity);
+	
+	            _this3.cxt.save();
 	
 	            var g = _this3.cxt.createLinearGradient(x, y, b.x, b.y);
 	
@@ -470,6 +485,8 @@
 	
 	            _this3.cxt.strokeStyle = g;
 	            _this3.renderLine(x, y, b.x, b.y);
+	
+	            _this3.cxt.restore();
 	          } else if (d < ball.r + b.r && !b.isCrash && !ball.isCrash) {
 	            if (b.type === -1) {
 	              ball.withMouse = 2;
@@ -549,8 +566,6 @@
 	            ball.y = ball.y - _this4.height;
 	          }
 	
-	          _this4.updateColor(ball);
-	
 	          if (ball.isCrash) {
 	            ball.isCrash = false;
 	
@@ -578,28 +593,61 @@
 	            ball.y += ball.vy;
 	          }
 	
+	          _this4.updateGradientData(ball);
+	
 	          return ball;
 	        });
+	
+	        this.updateGradientData(this.mouse);
+	        this.updateGradientData(this.bg);
+	        this.updateGradientData(this.text);
 	      }
 	    }, {
-	      key: 'updateColor',
-	      value: function updateColor(ball) {
+	      key: 'initGradientData',
+	      value: function initGradientData(period, colors) {
+	        var ColorList = this.getColorList(colors);
+	        return {
+	          cur_i: 0, // 当前颜色step
+	          cur_color: 0, // 当前颜色组索引
+	          color: colors[0], // 当前颜色
+	          changeValue: ColorList.length / (period / 16.7), // 每次渲染变化量
+	          ColorList: ColorList, // 当前颜色范围
+	          ColorGroup: colors // 渐变颜色组
+	        };
+	      }
+	    }, {
+	      key: 'updateGradientData',
+	      value: function updateGradientData(ball) {
 	        var _this5 = this;
 	
-	        ball.cur_i += ball.ColorList.length / ball.freq;
-	        var index = ~~ball.cur_i;
+	        var index = void 0;
+	
+	        if (ball.ColorGroup[ball.cur_color][3]) {
+	          var v = ball.ColorGroup[ball.cur_color][3] / 16.7;
+	          if (ball.cur_i <= v) {
+	            ball.cur_i += 1;
+	            return false;
+	          } else {
+	            ball.cur_i += ball.changeValue;
+	            index = ~~(ball.cur_i - v);
+	          }
+	        } else {
+	          ball.cur_i += ball.changeValue;
+	          index = ~~ball.cur_i;
+	        }
+	
 	        if (index === ball.cur_i) {
 	          return false;
 	        }
 	        ball.color = ball.color.map(function (n, i) {
-	          if (index === ball.ColorList.length) {
+	          if (index >= ball.ColorList.length) {
 	            ball.cur_i = index = 0;
 	            ball.cur_color++;
-	            if (ball.cur_color === _this5.color.length - 1) {
-	              ball.ColorList = _this5.getColorList([_this5.color[ball.cur_color], _this5.color[0]]);
-	              ball.cur_color = -1;
+	            ball.cur_color = ball.cur_color % ball.ColorGroup.length;
+	            if (ball.cur_color === ball.ColorGroup.length - 1) {
+	              ball.ColorList = _this5.getColorList([ball.ColorGroup[ball.cur_color], ball.ColorGroup[0]]);
 	            } else {
-	              ball.ColorList = _this5.getColorList([_this5.color[ball.cur_color], _this5.color[ball.cur_color + 1]]);
+	              ball.ColorList = _this5.getColorList([ball.ColorGroup[ball.cur_color], ball.ColorGroup[ball.cur_color + 1]]);
 	            }
 	          }
 	          return ball.ColorList[index][i];
@@ -607,7 +655,9 @@
 	      }
 	    }, {
 	      key: 'getRGBA',
-	      value: function getRGBA(color, opacity) {
+	      value: function getRGBA(color) {
+	        var opacity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+	
 	        return color === 'transparent' ? color : 'rgba(' + ~~color[0] + ', ' + ~~color[1] + ', ' + ~~color[2] + ', ' + opacity + ')';
 	      }
 	    }, {
@@ -621,14 +671,13 @@
 	      }
 	    }, {
 	      key: 'renderTypeArc',
-	      value: function renderTypeArc(x, y, r, color, n_r, s_r) {
+	      value: function renderTypeArc(x, y, r, color, innerR, centerR) {
 	        this.cxt.fillStyle = color;
 	
 	        this.cxt.beginPath();
 	        this.cxt.arc(x, y, r, 0, Math.PI * 2, true);
-	        n_r && this.cxt.arc(x, y, n_r, 0, Math.PI * 2, false);
-	        s_r && this.cxt.arc(x, y, s_r, 0, Math.PI * 2, true);
-	        this.cxt.closePath();
+	        innerR && this.cxt.arc(x, y, innerR, 0, Math.PI * 2, false);
+	        centerR && this.cxt.arc(x, y, centerR, 0, Math.PI * 2, true);
 	
 	        this.cxt.fill();
 	      }
@@ -639,32 +688,29 @@
 	
 	        this.cxt.beginPath();
 	        this.cxt.arc(x, y, r, 0, Math.PI * 2, true);
-	        this.cxt.closePath();
 	
 	        this.cxt.fill();
 	      }
 	    }, {
 	      key: 'renderRing',
-	      value: function renderRing(x, y, r, color, n_r) {
+	      value: function renderRing(x, y, r, color, innerR) {
 	        this.cxt.fillStyle = color;
 	
 	        this.cxt.beginPath();
 	        this.cxt.arc(x, y, r, 0, Math.PI * 2, true);
-	        this.cxt.arc(x, y, n_r, 0, Math.PI * 2, false);
-	        this.cxt.closePath();
+	        this.cxt.arc(x, y, innerR, 0, Math.PI * 2, false);
 	
 	        this.cxt.fill();
 	      }
 	    }, {
-	      key: 'renderRing',
-	      value: function renderRing(x, y, r, color, n_r, s_r) {
+	      key: 'renderDoubleArc',
+	      value: function renderDoubleArc(x, y, r, color, innerR, centerR) {
 	        this.cxt.fillStyle = color;
 	
 	        this.cxt.beginPath();
 	        this.cxt.arc(x, y, r, 0, Math.PI * 2, true);
-	        this.cxt.arc(x, y, n_r, 0, Math.PI * 2, false);
+	        this.cxt.arc(x, y, innerR, 0, Math.PI * 2, false);
 	        this.cxt.arc(x, y, r, 0, Math.PI * 2, true);
-	        this.cxt.closePath();
 	
 	        this.cxt.fill();
 	      }
@@ -674,7 +720,6 @@
 	        this.cxt.beginPath();
 	        this.cxt.moveTo(x1, y1);
 	        this.cxt.lineTo(x2, y2);
-	        this.cxt.closePath();
 	
 	        this.cxt.stroke();
 	      }
@@ -689,6 +734,24 @@
 	        this.cxt.closePath();
 	
 	        this.cxt.stroke();
+	      }
+	    }, {
+	      key: 'renderBackground',
+	      value: function renderBackground() {
+	        this.cxt.fillStyle = this.getRGBA(this.bg.color, 1);
+	        this.cxt.fillRect(0, 0, this.width, this.height);
+	      }
+	    }, {
+	      key: 'renderText',
+	      value: function renderText() {
+	        this.cxt.save();
+	
+	        this.cxt.font = this.font;
+	        this.cxt.textAlign = 'center';
+	        this.cxt.fillStyle = this.getRGBA(this.text.color);
+	        this.cxt.fillText(this.txt, this.width / 2, this.height / 2);
+	
+	        this.cxt.restore();
 	      }
 	    }]);
 	
@@ -725,7 +788,9 @@
 	    };
 	  }
 	
-	  new _canvas2.default('canvas');
+	  new _canvas2.default('canvas', {
+	    clickPause: true
+	  });
 	});
 
 /***/ })

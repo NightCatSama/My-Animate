@@ -1,3 +1,5 @@
 import Canvas from './canvas.js'
 
-new Canvas('canvas')
+new Canvas('canvas', {
+  clickPause: true
+})
