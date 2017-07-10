@@ -1,12 +1,12 @@
 {
-  "name": "video",
+  "name": "bead",
   "version": "1.0.0",
-  "description": "video",
+  "description": "bead",
   "main": "index.js",
   "scripts": {
     "start": "gulp"
   },
-  "author": "miao",
+  "author": "NightCatSama",
   "license": "ISC",
   "dependencies": {
     "browser-sync": "latest",

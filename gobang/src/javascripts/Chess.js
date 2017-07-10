@@ -14,6 +14,7 @@ export default class Chess {
 		this.gap = this.size / 15
 
 		this.ignores = []
+
 		this.getMousePos = this.getMousePos.bind(this)
 		this.bindEvent()
 		this.init()
@@ -71,9 +72,9 @@ export default class Chess {
 	}
 	/*  点击事件  */
 	getMousePos(e) {
-		if (this.over) 
+		if (this.over)
 			return this.init()
-	    let mx = e.clientX - this.bounds.left
+	  let mx = e.clientX - this.bounds.left
 		let my = e.clientY - this.bounds.top
 		this.checked(~~(mx / this.gap), ~~(my / this.gap))
 	}
@@ -169,7 +170,7 @@ export default class Chess {
 
 		if (type && this.typeLine[type].indexOf(index) === -1)
 			return false
-		
+
 		this.ignores.push(index)
 		if (this[`pieces${this.player}`].indexOf(index) > -1)
 			return true
@@ -233,7 +234,7 @@ export default class Chess {
 			16: 'd',
 			14: 't'
 		}
-		return maps[Math.abs(index - p)]  //  's'竖, 'h'横, 't'上升线, 'd'下降线 
+		return maps[Math.abs(index - p)]  //  's'竖, 'h'横, 't'上升线, 'd'下降线
 	}
 	/*  根据索引获取坐标  */
 	getXY(index) {

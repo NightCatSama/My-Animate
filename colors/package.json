@@ -1,12 +1,12 @@
 {
-  "name": "video",
+  "name": "colors",
   "version": "1.0.0",
-  "description": "video",
+  "description": "colors",
   "main": "index.js",
   "scripts": {
     "start": "gulp"
   },
-  "author": "miao",
+  "author": "NightCatSama",
   "license": "ISC",
   "dependencies": {
     "browser-sync": "^2.18.2",
