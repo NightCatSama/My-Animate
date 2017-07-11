@@ -8,16 +8,22 @@ let gl = getWebGLContext(canvas, DEBUG)
 // 顶点着色器
 let VSHADER_SOURCE = `
   attribute vec4 a_Position;
+  attribute float a_PointSize;
+  attribute vec4 a_Color;
+  varying vec4 v_Color;
   void main () {
     gl_Position = a_Position;
-    gl_PointSize = 10.0;
+    gl_PointSize = a_PointSize;
+    v_Color = a_Color;
   }
 `
 
 // 片元着色器
 let FSHADER_SOURCE = `
+  precision mediump float;
+  varying vec4 v_Color;
   void main () {
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    gl_FragColor = v_Color;
   }
 `
 
@@ -26,41 +32,37 @@ initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)
 
 // 得到 a_Position
 let a_Position = gl.getAttribLocation(gl.program, 'a_Position')
-
-let points = []
-canvas.onclick = (e) => {
-  let bounds = canvas.getBoundingClientRect()
-  let mx = (e.clientX - bounds.left - canvas.width / 2) / (canvas.width / 2)
-  let my = (canvas.height / 2 - (e.clientY - bounds.top)) / (canvas.height / 2)
-  points.push({
-    x: mx,
-    y: my,
-    vx: 0.01,
-    vy: 0.01
-  })
-}
+let a_PointSize = gl.getAttribLocation(gl.program, 'a_PointSize')
+let a_Color = gl.getAttribLocation(gl.program, 'a_Color')
 
 function render () {
   // 绘制背景色
-  gl.clearColor(0.5, 0.5, 1.0, 1.0)
+  gl.clearColor(0.0, 0.0, 0.0, 1.0)
   gl.clear(gl.COLOR_BUFFER_BIT)
 
-  // 绘制点
-  Array.from(points, (point) => {
-    point.x += point.vx
-    point.y += point.vy
+  let vertex = new Float32Array([
+    0.0, 0.5, 10.0, 1.0, 0.0, 0.0,
+    0.5, -0.5, 20.0, 0.0, 1.0, 0.0,
+    -0.5, -0.5, 30.0, 0.0, 0.0, 1.0
+  ])
 
-    if (point.x > 1.0 || point.x < -1.0) {
-      point.vx = -point.vx
-    }
-    if (point.y > 1.0 || point.y < -1.0) {
-      point.vy = -point.vy
-    }
+  let n = 3
 
-    gl.vertexAttrib2f(a_Position, point.x, point.y)
-    gl.drawArrays(gl.POINTS, 0, 1)
-  })
-  requestAnimFrame(render)
+  let buffer = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+  gl.bufferData(gl.ARRAY_BUFFER, vertex, gl.STATIC_DRAW)
+
+  let FSIZE = vertex.BYTES_PER_ELEMENT
+
+  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, FSIZE * 6, 0)
+  gl.vertexAttribPointer(a_PointSize, 1, gl.FLOAT, false, FSIZE * 6, FSIZE * 2)
+  gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE * 6, FSIZE * 3)
+
+  gl.enableVertexAttribArray(a_Position)
+  gl.enableVertexAttribArray(a_PointSize)
+  gl.enableVertexAttribArray(a_Color)
+
+  gl.drawArrays(gl.TRIANGLES, 0, n)
 }
 
-requestAnimFrame(render)
+render()

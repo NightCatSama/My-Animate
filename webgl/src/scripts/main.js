@@ -1,14 +1,5 @@
 import '../styles/index.scss'
 
-// 画点点
-// import './points.js'
-
-// 画图形 （矩阵）
-// import './modules/webgl.js'
-
-// 动画
-import './modules/anim.js'
-
 import debug from 'debug'
 const log = debug('app:log')
 
@@ -26,3 +17,12 @@ if (ENV !== 'production') {
 } else {
   debug.disable()
 }
+
+// 画点点
+import './modules/points.js'
+
+// 画图形 （矩阵）
+// import './modules/webgl.js'
+
+// 动画
+// import './modules/anim.js'
