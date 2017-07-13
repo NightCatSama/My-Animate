@@ -1,11 +1,24 @@
 // Rollup plugins
-import babel from 'rollup-plugin-babel';
-import eslint from 'rollup-plugin-eslint';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import replace from 'rollup-plugin-replace';
-import uglify from 'rollup-plugin-uglify';
-import sass from 'rollup-plugin-sass';
+import babel from 'rollup-plugin-babel'
+import eslint from 'rollup-plugin-eslint'
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
+import replace from 'rollup-plugin-replace'
+import uglify from 'rollup-plugin-uglify'
+import sass from 'rollup-plugin-sass'
+
+import browserSync from 'browser-sync'
+
+let server = browserSync.create()
+let reload = browserSync.reload
+
+server.init({
+  files: './build/',
+  server: {
+    baseDir: './build/',
+  },
+  port: 12333
+})
 
 export default {
   entry: 'src/scripts/main.js',

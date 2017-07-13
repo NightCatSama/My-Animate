@@ -30,7 +30,7 @@ let FSHADER_SOURCE = `
 // 初始化着色器
 initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)
 
-// 得到 a_Position
+// 得到 变量 地址
 let a_Position = gl.getAttribLocation(gl.program, 'a_Position')
 let a_PointSize = gl.getAttribLocation(gl.program, 'a_PointSize')
 let a_Color = gl.getAttribLocation(gl.program, 'a_Color')
