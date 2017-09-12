@@ -8,12 +8,12 @@
 
 <hr>
 
-2017/02/25 --- [五子棋（离线）](http://nightcatsama.github.io/My-Animat/gobang/)<br>
+2017/02/25 --- [五子棋（离线）](http://nightcatsama.github.io/My-Animat/gobang)<br>
 推荐：★★★
 
 <hr>
 
-2016/12/26 --- [音频可视化](http://nightcatsama.github.io/My-Animat/rhythm/)<br>
+2016/12/26 --- [音频可视化](http://nightcatsama.github.io/My-Animat/rhythm)<br>
 推荐：★★
 
 <hr>
@@ -33,48 +33,43 @@
 
 <hr>
 
-2016/09/07 --- [粒子效果](https://github.com/NightCatSama/My-Animat/tree/master/particle)<br>
+2016/09/07 --- [粒子效果](https://github.com/NightCatSama/My-Animat/particle)<br>
 推荐：★★★★★
 
 <hr>
 
-2016/07/28 --- [箭头躲避](http://nightcatsama.github.io/My-Animat/arrow.html)<br>
+2016/07/28 --- [箭头躲避](http://nightcatsama.github.io/My-Animat/arrow)<br>
 推荐：★★
 
 <hr>
 
-2016/07/06 --- [猫](http://nightcatsama.github.io/My-Animat/cat.html)<br>
+2016/07/06 --- [猫](http://nightcatsama.github.io/My-Animat/cat)<br>
 推荐：★★★
 
 <hr>
 
-2016/05/22 --- [坦克大战（魔改）](https://github.com/NightCatSama/My-Animat/tree/master/tank)<br>
+2016/05/22 --- [坦克大战（魔改）](https://github.com/NightCatSama/My-Animat/tank)<br>
 推荐：★★★★
 
 <hr>
 
-2016/03/22 --- [无尽旋转](http://nightcatsama.github.io/My-Animat/endless-rotate.html)<br>
+2016/03/22 --- [无尽旋转](http://nightcatsama.github.io/My-Animat/endless-rotate)<br>
 推荐：★★
 
 <hr>
 
-2016/03/12 --- [害怕3D重置](http://nightcatsama.github.io/My-Animat/3d-fear.html)<br>
+2016/03/12 --- [害怕3D重置](http://nightcatsama.github.io/My-Animat/3d-fear)<br>
 推荐：★★★
-
-<hr>
-
-2016/03/05 --- [星空](http://nightcatsama.github.io/My-Animat/star.html)<br>
-推荐：★★
 
 <hr>
 
 2016/02/20 ---
-[视觉差 & 无重力 & 重力 & 跟随鼠标](http://nightcatsama.github.io/My-Animat/)<br>
+[视觉差 & 无重力 & 重力 & 跟随鼠标](http://nightcatsama.github.io/My-Animat)<br>
 推荐：★★★
 
 <hr>
 
-2016/01/15 --- [flappy-ball](http://nightcatsama.github.io/My-Animat/flappy-ball.html)<br>
+2016/01/15 --- [flappy-ball](http://nightcatsama.github.io/My-Animat/flappy-ball)<br>
 推荐：★★
 
 <hr>
