@@ -8,7 +8,7 @@
 
 <hr>
 
-2017/02/25 --- [五子棋（离线）](http://nightcatsama.github.io/My-Animat/gobang/) [（在线）](http://nightcat.win/online-games/gobang)<br>
+2017/02/25 --- [五子棋（离线）](http://nightcatsama.github.io/My-Animat/gobang/)<br>
 推荐：★★★
 
 <hr>
