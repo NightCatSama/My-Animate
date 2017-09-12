@@ -53,7 +53,7 @@ export default class Canvas {
 		this.stop()
 	}
 	getMousePos(e) {
-	    this.mx = e.clientX - this.bounds.left
+	  this.mx = e.clientX - this.bounds.left
 		this.my = e.clientY - this.bounds.top
 		this.update()
 	}

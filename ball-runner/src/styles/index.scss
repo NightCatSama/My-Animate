@@ -1,0 +1,17 @@
+@import './util';
+@import 'reset';
+
+body {
+	width: 100vw;
+	height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f3f3;
+}
+
+canvas {
+  border: 1px solid #ccc;
+}
+
+
