@@ -7,6 +7,7 @@
  */
 
 import Ball from './ball'
+import Scene from './scene'
 
 const _default = {
   width: 600,
@@ -16,7 +17,7 @@ const _default = {
 }
 
 const DPR = window.devicePixelRatio || 1
-const MAX_BALL_PER_DISTANCE = 10
+const MAX_BALL_PER_DISTANCE = 30 * DPR // 小球的最快移动速度
 
 export default class BallRunner {
   constructor (id, config) {
@@ -30,7 +31,17 @@ export default class BallRunner {
     this.ball = new Ball(this.ctx, {
       x: this.width / 2,
       y: this.height / 2,
-      r: 10 * DPR
+      r: 10 * DPR,
+      tail: 100 * DPR,
+      tailDist: 10 * DPR,
+      tailWidth: 2 * DPR,
+      DPR: DPR
+    })
+
+    // 生成场景
+    this.scene = new Scene(this.ctx, {
+      width: this.width,
+      height: this.height
     })
 
     // 绑定事件
@@ -85,7 +96,7 @@ export default class BallRunner {
     }
 
     e.preventDefault()
-    this.mx = e.clientX - this.bounds.left
+    this.mx = (e.clientX - this.bounds.left) * DPR
   }
 
   /**
@@ -121,9 +132,10 @@ export default class BallRunner {
     if (!this.mx) {
       return false
     }
-    // 【未完成】
-    this.ball.x += (Math.abs(this.mx - this.ball.x) < 3 ? 0 : this.mx > this.ball.x ? 1 : -1) * MAX_BALL_PER_DISTANCE * DPR
-    this.ballMoveFlag = 0
+
+    let diff = this.mx - this.ball.x
+    let direction = diff < 0 ? -1 : 1
+    this.ball.updateBallPos(this.ball.x + direction * ((Math.abs(diff) / this.width) * MAX_BALL_PER_DISTANCE))
   }
 
   /**
@@ -131,6 +143,7 @@ export default class BallRunner {
    */
   render () {
     this.renderBackground()
+    this.renderScene()
     this.renderBall()
   }
 
@@ -140,6 +153,13 @@ export default class BallRunner {
   renderBackground () {
     this.ctx.fillStyle = this.config.bgColor
     this.ctx.fillRect(0, 0, this.width, this.height)
+  }
+
+  /**
+   * 画个场景
+   */
+  renderScene () {
+    this.scene.render()
   }
 
   /**
