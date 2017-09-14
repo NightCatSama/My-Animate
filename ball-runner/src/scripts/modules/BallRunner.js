@@ -11,13 +11,10 @@ import Scene from './scene'
 
 const _default = {
   width: 600,
-  height: 500,
-  bgColor: '#31102e',
-  roadColor: '#ff186b'
+  height: 500
 }
 
-const DPR = window.devicePixelRatio || 1
-const MAX_BALL_PER_DISTANCE = 30 * DPR // 小球的最快移动速度
+import { DPR, MAX_BALL_PER_DISTANCE, BG_COLOR } from './configuration'
 
 export default class BallRunner {
   constructor (id, config) {
@@ -30,12 +27,7 @@ export default class BallRunner {
     // 生成球
     this.ball = new Ball(this.ctx, {
       x: this.width / 2,
-      y: this.height / 2,
-      r: 10 * DPR,
-      tail: 100 * DPR,
-      tailDist: 10 * DPR,
-      tailWidth: 2 * DPR,
-      DPR: DPR
+      y: this.height / 2
     })
 
     // 生成场景
@@ -122,7 +114,13 @@ export default class BallRunner {
    * 更新游戏
    */
   update () {
+    this.updateScene()
     this.updateBall()
+  }
+
+  isOver () {
+    this.scene.connectRoadPath()
+    console.log(this.ctx.isPointInPath(this.ball.x, this.ball.y))
   }
 
   /**
@@ -139,6 +137,13 @@ export default class BallRunner {
   }
 
   /**
+   * 更新场景
+   */
+  updateScene () {
+    this.scene.update()
+  }
+
+  /**
    * 渲染画布
    */
   render () {
@@ -151,7 +156,7 @@ export default class BallRunner {
    * 画个背景
    */
   renderBackground () {
-    this.ctx.fillStyle = this.config.bgColor
+    this.ctx.fillStyle = BG_COLOR
     this.ctx.fillRect(0, 0, this.width, this.height)
   }
 
