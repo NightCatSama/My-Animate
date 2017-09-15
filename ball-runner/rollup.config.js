@@ -10,17 +10,21 @@ import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
 
 import browserSync from 'browser-sync'
+import minimist from 'minimist'
 
-let server = browserSync.create()
-let reload = browserSync.reload
+let isBuild = minimist(process.argv.slice(2)).build
 
-server.init({
-  files: './build/',
-  server: {
-    baseDir: './build/',
-  },
-  port: 12333
-})
+if (!isBuild) {
+  let server = browserSync.create()
+
+  server.init({
+    files: './build/',
+    server: {
+      baseDir: './build/',
+    },
+    port: 12333
+  })
+}
 
 export default {
   entry: 'src/scripts/main.js',
@@ -53,5 +57,5 @@ export default {
       ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
     (process.env.NODE_ENV === 'production' && uglify()),
-  ],
+  ]
 };

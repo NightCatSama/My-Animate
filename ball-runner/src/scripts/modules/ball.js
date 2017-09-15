@@ -3,7 +3,7 @@ const _default = {
   y: 0
 }
 
-import { BALL_RADIUS, TAIL_LENGTH, TAIL_DIST, DPR, TAIL_WIDTH, GAME_SPEED } from './configuration'
+import { BALL_RADIUS, TAIL_LENGTH, TAIL_DIST, DPR, TAIL_WIDTH } from './configuration'
 
 export default class Ball {
   constructor (ctx, config) {
@@ -57,19 +57,18 @@ export default class Ball {
     this.renderBall()
     this.renderTail()
   }
+
   /**
-   * 画球主体
+   * 画个球
    */
   renderBall () {
     let { x, y } = this
-
     let grd = this.ctx.createLinearGradient(x, y - BALL_RADIUS, x, y + BALL_RADIUS)
     grd.addColorStop(0, '#fff')
     grd.addColorStop(0.5, '#fff')
     grd.addColorStop(0.5, '#c7baac')
     grd.addColorStop(1, '#c7baac')
     this.ctx.fillStyle = grd
-
     this.ctx.beginPath()
     this.ctx.arc(x, y, BALL_RADIUS, 0, Math.PI * 2, true)
     this.ctx.fill()
