@@ -14,7 +14,7 @@ const _default = {
   height: 500
 }
 
-import { DPR, MAX_BALL_PER_DISTANCE, BG_COLOR } from './configuration'
+import { DPR, MAX_BALL_PER_DISTANCE, BG_COLOR, BALL_RADIUS } from './configuration'
 
 export default class BallRunner {
   constructor (id, config) {
@@ -22,26 +22,11 @@ export default class BallRunner {
 
     // 初始化
     this.init(id)
-    this.startSign = false
-
-    // 生成球
-    this.ball = new Ball(this.ctx, {
-      x: this.width / 2,
-      y: this.height / 2
-    })
-
-    // 生成场景
-    this.scene = new Scene(this.ctx, {
-      width: this.width,
-      height: this.height
-    })
+    this.initGame()
 
     // 绑定事件
     this.moveBall = this.moveBall.bind(this)
     this.bindEvent()
-
-    // 开始渲染
-    this.render()
   }
 
   /**
@@ -62,6 +47,33 @@ export default class BallRunner {
     this.canvas.style.width = `${this.width / DPR}px`
     this.canvas.style.height = `${this.height / DPR}px`
     this.bounds = this.canvas.getBoundingClientRect()
+  }
+
+  /**
+   * 初始化游戏
+   */
+  initGame () {
+    this.startSign = false
+    this.mx = 0
+
+    // 生成球
+    this.ball = new Ball(this.ctx, {
+      x: this.width / 2,
+      y: this.height / 2
+    })
+
+    // 生成场景
+    this.scene = new Scene(this.ctx, {
+      width: this.width,
+      height: this.height
+    })
+
+    while (!this.inRoad()) {
+      this.scene.init()
+    }
+
+    // 开始渲染
+    this.render()
   }
 
   /**
@@ -95,15 +107,21 @@ export default class BallRunner {
    * 游戏开始
    */
   start () {
-    this.startSign = true
+    if (this.startSign) {
+      return false
+    }
 
+    this.startSign = true
     const step = () => {
       if (!this.startSign) {
         return false
       }
-
       this.update()
       this.render()
+      if (!this.inRoad()) {
+        console.log('You Lose!')
+        this.startSign = false
+      }
       requestAnimationFrame(step)
     }
 
@@ -118,9 +136,9 @@ export default class BallRunner {
     this.updateBall()
   }
 
-  isOver () {
+  inRoad () {
     this.scene.connectRoadPath()
-    console.log(this.ctx.isPointInPath(this.ball.x, this.ball.y))
+    return this.ctx.isPointInPath(this.ball.x, this.ball.y + BALL_RADIUS)
   }
 
   /**
