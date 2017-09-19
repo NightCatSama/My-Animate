@@ -70,10 +70,6 @@ export default class BallRunner {
       height: this.height
     })
 
-    while (!this.inRoad()) {
-      this.scene.init()
-    }
-
     // 开始渲染
     this.render()
   }
@@ -147,7 +143,10 @@ export default class BallRunner {
     this.updateScene()
     this.updateBall()
   }
-
+  
+  /**
+   * 判断小球是否在路径中
+   */
   inRoad () {
     this.scene.connectRoadPath()
     return this.ctx.isPointInPath(this.ball.x, this.ball.y + BALL_RADIUS)
