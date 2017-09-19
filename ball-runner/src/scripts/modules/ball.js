@@ -10,7 +10,6 @@ export default class Ball {
     this.ctx = ctx
     Object.assign(this, _default, config)
     this.tails = this.initTail()
-    this.f = 1
   }
   /**
    * 初始化尾巴数组
@@ -55,7 +54,7 @@ export default class Ball {
   render () {
     this.renderShadow()
     this.renderBall()
-    this.renderTail()
+    // this.renderTail()
   }
 
   /**

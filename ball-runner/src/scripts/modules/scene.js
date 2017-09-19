@@ -3,7 +3,7 @@ const _default = {
   height: 500
 }
 
-import { MAX_ROAD_WIDTH, MIN_ROAT_WIDTH, MAX_LENGTH, MIN_LENGTH, GAME_WIDTH, GAME_SPEED, ROAD_COLOR, WALL_COLOR } from './configuration'
+import { MAX_ROAD_WIDTH, MIN_ROAT_WIDTH, MAX_LENGTH, MIN_LENGTH, GAME_WIDTH, GAME_SPEED, ROAD_COLOR, WALL_COLOR, BAN_MID_RANGE } from './configuration'
 
 export default class Scene {
   constructor (ctx, config) {
@@ -29,13 +29,19 @@ export default class Scene {
    * 更新场景
    */
   update () {
-    this.leftLines = this.sceneRollDown(this.leftLines)
-    this.rightLines = this.sceneRollDown(this.rightLines)
+    this.sceneRollDown(this.leftLines)
+    this.sceneRollDown(this.rightLines)
 
     // 添加新的路
     if (this.leftLines[0][0].y > -this.height * 2) {
       this.leftLines.unshift(this.getLeftLine(this.leftLines[0][0], true))
       this.rightLines.unshift(this.getRightLine(this.leftLines[0], this.rightLines[0][0], true))
+      // console.log(this.leftLines[0][1].y - this.leftLines[0][0].y)
+    }
+
+    if (this.leftLines.length >= 30) {
+      this.leftLines = this.filterUnusableRoad(this.leftLines)
+      this.rightLines = this.rightLines.slice(0, this.leftLines.length)
     }
   }
 
@@ -45,12 +51,19 @@ export default class Scene {
    * @return {Array}     线数组
    */
   sceneRollDown (arr) {
-    return arr.filter((obj) => {
+    return arr.map((obj) => {
       obj[0].y += GAME_SPEED
-      obj[1].y += GAME_SPEED
-
-      return obj[0].y < this.height * 2
+      // obj[1].y += GAME_SPEED
     })
+  }
+
+  /**
+   * 过滤掉不可用的路线（超出底部范围
+   * @param  {Array} arr 未过滤数组
+   * @return {Array}     过滤后数组
+   */
+  filterUnusableRoad (arr) {
+    return arr.filter((obj) => obj[0].y < this.height * 2)
   }
 
   /**
@@ -58,9 +71,9 @@ export default class Scene {
    * @return {Array} 线数组
    */
   initLeftLines () {
-    let arr = [this.getLeftLine()]
-    while (arr[arr.length - 1][1].y < this.height) {
-      arr.push(this.getLeftLine(arr[arr.length - 1][1]))
+    let arr = [[{ x: 0, y: 0 }, { x: 0, y: this.height }]]
+    while (arr[0][0].y < -this.height * 2) {
+      arr.unshift(this.getLeftLine(arr[0][0], true))
     }
     return arr
   }
@@ -71,9 +84,9 @@ export default class Scene {
    * @return {Array} 线数组
    */
   initRightLines () {
-    let arr = []
-    for (let i = 0; i < this.leftLines.length; i++) {
-      arr.push(this.getRightLine(this.leftLines[i], i > 0 && arr[i - 1][1]))
+    let arr = [[{ x: this.width, y: 0 }, { x: this.width, y: this.height }]]
+    for (let i = this.leftLines.length - 2; i > 0; i--) {
+      arr.unshift(this.getRightLine(this.leftLines[i], arr[i - 1][1], true))
     }
     return arr
   }
@@ -91,13 +104,6 @@ export default class Scene {
       dot = this.getLeftOtherDot(endDot, isReverse)
     }
     else if (dot) {
-      endDot = this.getLeftOtherDot(dot)
-    }
-    else {
-      dot = {
-        x: this.getRandom(this.spacer, this.width - MAX_ROAD_WIDTH - this.spacer),
-        y: -this.height * 2
-      }
       endDot = this.getLeftOtherDot(dot)
     }
     return [dot, endDot]
@@ -197,7 +203,7 @@ export default class Scene {
    */
   getLeftOtherDot (dot, isReverse) {
     return {
-      x: dot.x > this.width / 2 ? this.getRandom(this.spacer, this.width / 2) : this.getRandom(this.width / 2, this.width - MAX_ROAD_WIDTH - this.spacer),
+      x: dot.x > this.width / 2 ? this.getRandom(this.spacer, this.width / 2 - BAN_MID_RANGE / 2) : this.getRandom(this.width / 2 + BAN_MID_RANGE / 2, this.width - MAX_ROAD_WIDTH - this.spacer),
       y: dot.y + (this.getRandom(MIN_LENGTH, MAX_LENGTH) * (isReverse ? -1 : 1))
     }
   }

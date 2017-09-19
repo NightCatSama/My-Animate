@@ -11,7 +11,8 @@ import Scene from './scene'
 
 const _default = {
   width: 600,
-  height: 500
+  height: 500,
+  gameOver: null
 }
 
 import { DPR, MAX_BALL_PER_DISTANCE, BG_COLOR, BALL_RADIUS } from './configuration'
@@ -55,6 +56,7 @@ export default class BallRunner {
   initGame () {
     this.startSign = false
     this.mx = 0
+    this.point = 0
 
     // 生成球
     this.ball = new Ball(this.ctx, {
@@ -81,6 +83,7 @@ export default class BallRunner {
    */
   bindEvent () {
     this.canvas.addEventListener('mousemove', this.moveBall)
+    this.canvas.addEventListener('touchmove', this.moveBall)
   }
 
   /**
@@ -88,11 +91,11 @@ export default class BallRunner {
    */
   unbindEvent () {
     this.canvas.removeEventListener('mousemove', this.moveBall)
+    this.canvas.removeEventListener('touchmove', this.moveBall)
   }
 
   /**
    * 控制小球左右移动
-   * @return {[type]} [description]
    */
   moveBall (e) {
     if (!this.startSign) {
@@ -100,6 +103,7 @@ export default class BallRunner {
     }
 
     e.preventDefault()
+    if (e.targetTouches && e.targetTouches[0]) e = e.targetTouches[0]
     this.mx = (e.clientX - this.bounds.left) * DPR
   }
 
@@ -116,16 +120,24 @@ export default class BallRunner {
       if (!this.startSign) {
         return false
       }
+      this.point++
       this.update()
       this.render()
       if (!this.inRoad()) {
-        console.log('You Lose!')
-        this.startSign = false
+        this.config.gameOver && this.config.gameOver(this.point)
+        this.initGame()
       }
       requestAnimationFrame(step)
     }
 
     requestAnimationFrame(step)
+  }
+
+  /**
+   * 游戏暂停
+   */
+  pause () {
+    this.startSign = false
   }
 
   /**
@@ -168,6 +180,7 @@ export default class BallRunner {
     this.renderBackground()
     this.renderScene()
     this.renderBall()
+    this.renderPoint()
   }
 
   /**
@@ -190,5 +203,19 @@ export default class BallRunner {
    */
   renderBall () {
     this.ball.render()
+  }
+
+  /**
+   * 画个分数
+   */
+  renderPoint () {
+    this.ctx.save()
+
+    this.ctx.font = 'normal 50px DINAlternate-Bold'
+    this.ctx.textAlign = 'right'
+    this.ctx.fillStyle = '#fff'
+    this.ctx.fillText(this.point, this.width - 10, 50)
+
+    this.ctx.restore()
   }
 }
