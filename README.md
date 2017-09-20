@@ -38,7 +38,7 @@
 
 <hr>
 
-2016/09/07 --- [粒子效果](https://github.com/NightCatSama/My-Animat/particle)<br>
+2016/09/07 --- [粒子效果](https://github.com/NightCatSama/My-Animat/tree/master/particle)<br>
 推荐：★★★★★
 
 <hr>
@@ -48,7 +48,7 @@
 
 <hr>
 
-2016/07/06 --- [猫](http://nightcatsama.github.io/My-Animat/cat)<br>
+2016/07/06 --- [猫](http://nightcatsama.github.io/My-Animat/cat/cat.html)<br>
 推荐：★★★
 
 <hr>
