@@ -24,7 +24,7 @@ mouseRange: 60,  //影响范围
 ### javascript
 ```js
     import Particle from './src/javascript/index.js'
-    var demo = new Particle({
+    var demo = new Particle('canvas-id', {
       src: './demo.png'
     })
 ```
