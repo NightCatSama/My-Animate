@@ -1,0 +1,106 @@
+@import './util';
+@import 'reset';
+
+body {
+	width: 100vw;
+	height: 100vh;
+	@include flex-center;
+}
+
+$f-width: 300px;
+$f-height: $f-width;
+$width: $f-width;
+$height: 2 * $f-height;
+$z-height: 259px; // Math.sqrt(Math.pow($f-height, 2) - Math.pow($f-width / 2, 2))
+#diamond {
+  position: relative;
+  width: $width;
+  height: $height;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  animation: rotate 30s infinite;
+
+  .surface {
+    position: absolute;
+    transform-style: preserve-3d;
+    overflow: hidden;
+    @include flex-center;
+
+    $offset: $f-width / 4;
+    $deg: 30deg;
+
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        width: $f-width;
+        height: $f-height;
+        clip-path: polygon(
+          50% 0%,
+          100% 100%,
+          0% 100%
+        );
+        transform: rotateY(if($i > 2, 90deg, 0)) translateZ($offset * if($i % 2 > 0, 1, -1)) rotateX($deg * if($i % 2 > 0, 1, -1));
+      }
+    }
+
+    $deg: 150deg;
+    @for $i from 5 through 8 {
+      &:nth-child(#{$i}) {
+        width: $f-width;
+        height: $f-height;
+        clip-path: polygon(
+          50% 0%,
+          100% 100%,
+          0% 100%
+        );
+        transform: translateY($z-height) rotateY(if($i > 6, 90deg, 0)) translateZ($offset * if($i % 2 > 0, 1, -1)) rotateX($deg * if($i % 2 > 0, 1, -1));
+      }
+    }
+
+    .cut {
+      mix-blend-mode: color-dodge;
+      position: absolute;
+
+      @for $i from 1 through 20 {
+        &:nth-child(#{$i}) {
+          width: random(500) + 400px;
+          height: random(500) + 600px;
+          clip-path: polygon(
+            random(100) + 0% random(100) + 0%,
+            random(100) + 0% random(100) + 0%,
+            random(100) + 0% random(100) + 0%
+          );
+          animation: sapphireBlue random(4000) + 2000ms random(10000) * -1ms ease-in-out infinite alternate;
+          background: linear-gradient(
+            random(360) + 0deg,
+            rgba(random(255), random(255), random(255), 0.1) 0%,
+            rgba(random(255), random(255), random(255), 0.2) 8%,
+            rgba(random(255), random(255), random(255), 0.4) 16%,
+            rgba(random(255), random(255), random(255), 0.7) 25%,
+            rgba(random(255), random(255), random(255), 0.4) 34%,
+            rgba(random(255), random(255), random(255), 0.2) 42%,
+            rgba(random(255), random(255), random(255), 0.1) 50%
+          );
+          background-size: 100% 200%;
+        }
+      }
+    }
+  }
+}
+
+@keyframes sapphireBlue {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
