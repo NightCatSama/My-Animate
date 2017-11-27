@@ -9,19 +9,6 @@ import sass from 'rollup-plugin-sass'
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
 
-import browserSync from 'browser-sync'
-
-let server = browserSync.create()
-let reload = browserSync.reload
-
-server.init({
-  files: './build/',
-  server: {
-    baseDir: './build/',
-  },
-  port: 12333
-})
-
 export default {
   entry: 'src/scripts/main.js',
   dest: 'build/js/main.min.js',

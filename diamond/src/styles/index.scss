@@ -18,13 +18,14 @@ $z-height: 259px; // Math.sqrt(Math.pow($f-height, 2) - Math.pow($f-width / 2, 2
   height: $height;
   perspective: 1000px;
   transform-style: preserve-3d;
-  animation: rotate 30s infinite;
+  animation: rotate 60s linear infinite;
 
   .surface {
     position: absolute;
     transform-style: preserve-3d;
     overflow: hidden;
     @include flex-center;
+    border: 1px solid transparent;
 
     $offset: $f-width / 4;
     $deg: 30deg;

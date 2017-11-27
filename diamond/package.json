@@ -5,7 +5,7 @@
   "main": "build/js/main.min.js",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c --watch"
+    "dev": "rollup -c rollup.config.dev.js"
   },
   "author": "NightCat <nightcat@hzfe.org>",
   "devDependencies": {

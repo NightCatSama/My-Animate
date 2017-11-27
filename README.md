@@ -3,6 +3,10 @@
 
 <hr>
 
+2017/09/19 --- [Diamond](http://nightcatsama.github.io/My-Animat/diamond/build/)<br>
+推荐：★★★
+<hr>
+
 2017/09/19 --- [Ball-Runner](http://nightcatsama.github.io/My-Animat/ball-runner/build/)<br>
 推荐：★★★
 
