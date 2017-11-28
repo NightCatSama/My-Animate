@@ -18,7 +18,7 @@ $z-height: 259px; // Math.sqrt(Math.pow($f-height, 2) - Math.pow($f-width / 2, 2
   height: $height;
   perspective: 1000px;
   transform-style: preserve-3d;
-  animation: rotate 60s linear infinite;
+  animation: rotate 10s linear infinite;
 
   .surface {
     position: absolute;

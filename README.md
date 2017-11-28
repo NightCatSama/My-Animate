@@ -3,7 +3,7 @@
 
 <hr>
 
-2017/09/19 --- [Diamond](http://nightcatsama.github.io/My-Animat/diamond/build/)<br>
+2017/11/27 --- [Diamond](http://nightcatsama.github.io/My-Animat/diamond/build/)<br>
 推荐：★★★
 <hr>
 
