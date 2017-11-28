@@ -9,6 +9,23 @@ import sass from 'rollup-plugin-sass'
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
 
+import browserSync from 'browser-sync'
+import minimist from 'minimist'
+
+let isBuild = minimist(process.argv.slice(2)).build
+
+if (!isBuild) {
+  let server = browserSync.create()
+
+  server.init({
+    files: './build/',
+    server: {
+      baseDir: './build/',
+    },
+    port: 12333
+  })
+}
+
 export default {
   entry: 'src/scripts/main.js',
   dest: 'build/js/main.min.js',
