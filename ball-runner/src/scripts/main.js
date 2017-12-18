@@ -13,7 +13,7 @@ let game = new BallRunner('ball-runner', {
   }
 })
 
-document.querySelector('.game-wrap').onclick = () => {
+wrap.onclick = () => {
   if (game.startSign) {
     cover.style.display = 'flex'
     cover.innerHTML = 'Click to continue'
