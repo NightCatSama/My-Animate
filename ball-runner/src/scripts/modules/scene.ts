@@ -1,3 +1,8 @@
+/**
+ * scene.js
+ * 场景
+ */
+
 const _default = {
   width: 600,
   height: 500
@@ -5,8 +10,25 @@ const _default = {
 
 import { MAX_ROAD_WIDTH, MIN_ROAT_WIDTH, MAX_LENGTH, MIN_LENGTH, GAME_WIDTH, GAME_SPEED, ROAD_COLOR, WALL_COLOR, BAN_MID_RANGE } from './configuration'
 
+interface IDot {
+  x: number,
+  y: number
+}
+
+interface ILine extends Array<IDot> {
+}
+
+interface ILines extends Array<ILine> {
+}
+
 export default class Scene {
-  constructor (ctx, config) {
+  ctx: CanvasRenderingContext2D;
+  width: number;
+  height: number;
+  spacer: number;
+  leftLines: ILines;
+  rightLines: ILines;
+  constructor (ctx: CanvasRenderingContext2D, config: any) {
     this.ctx = ctx
     Object.assign(this, _default, config)
 
@@ -36,7 +58,6 @@ export default class Scene {
     if (this.leftLines[0][0].y > -this.height * 2) {
       this.leftLines.unshift(this.getLeftLine(this.leftLines[0][0], true))
       this.rightLines.unshift(this.getRightLine(this.leftLines[0], this.rightLines[0][0], true))
-      // console.log(this.leftLines[0][1].y - this.leftLines[0][0].y)
     }
 
     if (this.leftLines.length >= 30) {
@@ -50,10 +71,9 @@ export default class Scene {
    * @param  {Array} arr 线数组
    * @return {Array}     线数组
    */
-  sceneRollDown (arr) {
+  sceneRollDown (arr: ILines) {
     return arr.map((obj) => {
       obj[0].y += GAME_SPEED
-      // obj[1].y += GAME_SPEED
     })
   }
 
@@ -62,16 +82,16 @@ export default class Scene {
    * @param  {Array} arr 未过滤数组
    * @return {Array}     过滤后数组
    */
-  filterUnusableRoad (arr) {
-    return arr.filter((obj) => obj[0].y < this.height * 2)
+  filterUnusableRoad (arr: ILines): ILines {
+    return arr.filter((obj: ILine) => obj[0].y < this.height * 2)
   }
 
   /**
    * 初始化道路左侧的线
    * @return {Array} 线数组
    */
-  initLeftLines () {
-    let arr = [[{ x: 0, y: 0 }, { x: 0, y: this.height }]]
+  initLeftLines (): ILines {
+    let arr: ILines = [[{ x: 0, y: 0 }, { x: 0, y: this.height }]]
     while (arr[0][0].y < -this.height * 2) {
       arr.unshift(this.getLeftLine(arr[0][0], true))
     }
@@ -83,8 +103,8 @@ export default class Scene {
    * 初始化道路右侧的线
    * @return {Array} 线数组
    */
-  initRightLines () {
-    let arr = [[{ x: this.width, y: 0 }, { x: this.width, y: this.height }]]
+  initRightLines (): ILines {
+    let arr: ILines = [[{ x: this.width, y: 0 }, { x: this.width, y: this.height }]]
     for (let i = this.leftLines.length - 2; i > 0; i--) {
       arr.unshift(this.getRightLine(this.leftLines[i], arr[i - 1][1], true))
     }
@@ -97,10 +117,9 @@ export default class Scene {
    * @param  {Boolean} isReverse 是否为反方向获得线
    * @return {Array}             一个包含起点坐标和结束坐标的线数组 eg: [startDot, endDot]
    */
-  getLeftLine (dot, isReverse) {
-    let endDot
+  getLeftLine (dot: IDot, isReverse?: Boolean): ILine {
+    let endDot: IDot = dot
     if (isReverse) {
-      endDot = dot
       dot = this.getLeftOtherDot(endDot, isReverse)
     }
     else if (dot) {
@@ -116,7 +135,7 @@ export default class Scene {
    * @param  {Boolean} isReverse 是否为反方向获得线
    * @return {Array}            一个包含起点坐标和结束坐标的线数组 eg: [startDot, endDot]
    */
-  getRightLine (line, dot, isReverse) {
+  getRightLine (line: ILine, dot: IDot, isReverse?: Boolean): ILine {
     return isReverse ? [this.getRightDot(line[0]), dot] : [dot || this.getRightDot(line[0]), this.getRightDot(line[1])]
   }
 
@@ -146,7 +165,7 @@ export default class Scene {
 
     this.ctx.beginPath()
     this.connectLine(this.leftLines[0][0], this.leftLines[0][1])
-    Array.from(this.leftLines, (obj) => {
+    Array.from(this.leftLines, (obj: ILine) => {
       this.connectLine(obj[0], obj[1])
     })
     this.connectLine(this.leftLines[this.leftLines.length - 1][1], this.rightLines[this.rightLines.length - 1][1])
@@ -164,7 +183,7 @@ export default class Scene {
    * @param  {Object} dot1  起始点
    * @param  {Object} dot2  终止点
    */
-  connectLine (dot1, dot2) {
+  connectLine (dot1: IDot, dot2: IDot) {
     this.ctx.lineTo(dot1.x, dot1.y)
     this.ctx.lineTo(dot2.x, dot2.y)
   }
@@ -201,7 +220,7 @@ export default class Scene {
    * @param  {Boolean} isReverse 是否反方向获取线
    * @return {[type]}            [description]
    */
-  getLeftOtherDot (dot, isReverse) {
+  getLeftOtherDot (dot: IDot, isReverse?: Boolean): IDot {
     return {
       x: dot.x > this.width / 2 ? this.getRandom(this.spacer, this.width / 2 - BAN_MID_RANGE / 2) : this.getRandom(this.width / 2 + BAN_MID_RANGE / 2, this.width - MAX_ROAD_WIDTH - this.spacer),
       y: dot.y + (this.getRandom(MIN_LENGTH, MAX_LENGTH) * (isReverse ? -1 : 1))
@@ -213,7 +232,7 @@ export default class Scene {
    * @param  {Object} dot 一个左侧的坐标点
    * @return {Object}     一个右侧的坐标点
    */
-  getRightDot (dot) {
+  getRightDot (dot: IDot): IDot {
     return {
       x: this.getRandom(dot.x + MIN_ROAT_WIDTH, dot.x + MAX_ROAD_WIDTH),
       y: dot.y
@@ -226,7 +245,7 @@ export default class Scene {
    * @param  {Number} max 范围最大值
    * @return {Number}     随机数
    */
-  getRandom (min, max) {
+  getRandom (min: number, max: number): number {
     return ~~(Math.random() * (max - min)) + min
   }
 }

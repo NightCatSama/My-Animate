@@ -5,6 +5,7 @@ import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
 import uglify from 'rollup-plugin-uglify'
+import typescript from 'rollup-plugin-typescript'
 import sass from 'rollup-plugin-sass'
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
@@ -27,11 +28,19 @@ if (!isBuild) {
 }
 
 export default {
-  entry: 'src/scripts/main.js',
+  entry: 'src/scripts/main.ts',
   dest: 'build/js/main.min.js',
   format: 'umd',
   sourceMap: 'inline',
   plugins: [
+    eslint({
+      exclude: [
+        'src/styles/**',
+      ]
+    }),
+    typescript({
+      typescript: require('typescript')
+    }),
     sass({
       processor: css => postcss([ autoprefixer({ browsers: [] }) ])
         .process(css)
@@ -44,11 +53,6 @@ export default {
       browser: true,
     }),
     commonjs(),
-    eslint({
-      exclude: [
-        'src/styles/**',
-      ]
-    }),
     babel({
       exclude: 'node_modules/**',
     }),

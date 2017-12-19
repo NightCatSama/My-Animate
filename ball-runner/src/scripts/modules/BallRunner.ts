@@ -1,13 +1,11 @@
 /**
  * BallRunner.js
  * 一个小球滚动的 Canvas 游戏
- *
- * author: NightCat
- * create_at: 2017/09/12
  */
 
 import Ball from './ball'
 import Scene from './scene'
+import { DPR, MAX_BALL_PER_DISTANCE, BG_COLOR, BALL_RADIUS } from './configuration'
 
 const _default = {
   width: 600,
@@ -15,10 +13,27 @@ const _default = {
   gameOver: null
 }
 
-import { DPR, MAX_BALL_PER_DISTANCE, BG_COLOR, BALL_RADIUS } from './configuration'
-
 export default class BallRunner {
-  constructor (id, config) {
+  config: {
+    width: number,
+    height: number,
+    gameOver?: Function | null
+  };
+  canvas: HTMLCanvasElement | null;
+  ctx: CanvasRenderingContext2D;
+  width: number;
+  height: number;
+  bounds: {
+    left: number,
+    top: number
+  };
+  startSign: Boolean;
+  point: number = 0;
+  private _mx: number = 0;
+  ball: Ball;
+  scene: Scene;
+
+  constructor (id: string, config?: object) {
     this.config = Object.assign({}, _default, config)
 
     // 初始化
@@ -33,14 +48,18 @@ export default class BallRunner {
   /**
    * 初始化 Canvas
    */
-  init (id) {
+  init (id: string): void {
     if (!id) {
-      console.error('[BallRunner.js] param id is the required.')
-      return false
+      return console.error('[BallRunner.js] param id is the required.')
     }
 
-    this.canvas = document.getElementById(id)
-    this.ctx = this.canvas.getContext('2d')
+    this.canvas = <HTMLCanvasElement> document.getElementById(id)
+
+    if (!this.canvas) {
+      return console.error('[BallRunner.js] Could not find the canvas element.')
+    }
+
+    this.ctx = <CanvasRenderingContext2D> this.canvas.getContext('2d')
 
     // 乘以DPR是为了在高倍分辨率下保持高清
     this.canvas.width = this.width = (this.config.width || this.canvas.offsetWidth) * DPR
@@ -54,8 +73,12 @@ export default class BallRunner {
    * 初始化游戏
    */
   initGame () {
+    if (!this.ctx) {
+      return console.error('[BallRunner.js] Could not find the canvas element.')
+    }
+
     this.startSign = false
-    this.mx = 0
+    this._mx = 0
     this.point = 0
 
     // 生成球
@@ -78,6 +101,9 @@ export default class BallRunner {
    * 绑定事件
    */
   bindEvent () {
+    if (!this.canvas) {
+      return console.error('[BallRunner.js] Could not find the canvas element.')
+    }
     this.canvas.addEventListener('mousemove', this.moveBall)
     this.canvas.addEventListener('touchmove', this.moveBall)
   }
@@ -86,6 +112,9 @@ export default class BallRunner {
    * 解除绑定事件
    */
   unbindEvent () {
+    if (!this.canvas) {
+      return console.error('[BallRunner.js] Could not find the canvas element.')
+    }
     this.canvas.removeEventListener('mousemove', this.moveBall)
     this.canvas.removeEventListener('touchmove', this.moveBall)
   }
@@ -93,14 +122,14 @@ export default class BallRunner {
   /**
    * 控制小球左右移动
    */
-  moveBall (e) {
+  moveBall (e: any) {
     if (!this.startSign) {
-      return false
+      return
     }
 
     e.preventDefault()
     if (e.targetTouches && e.targetTouches[0]) e = e.targetTouches[0]
-    this.mx = (e.clientX - this.bounds.left) * DPR
+    this._mx = (e.clientX - this.bounds.left) * DPR
   }
 
   /**
@@ -143,11 +172,11 @@ export default class BallRunner {
     this.updateScene()
     this.updateBall()
   }
-  
+
   /**
    * 判断小球是否在路径中
    */
-  inRoad () {
+  inRoad (): Boolean {
     this.scene.connectRoadPath()
     return this.ctx.isPointInPath(this.ball.x, this.ball.y + BALL_RADIUS)
   }
@@ -156,11 +185,11 @@ export default class BallRunner {
    * 更新个球
    */
   updateBall () {
-    if (!this.mx) {
+    if (!this._mx) {
       return false
     }
 
-    let diff = this.mx - this.ball.x
+    let diff = this._mx - this.ball.x
     let direction = diff < 0 ? -1 : 1
     this.ball.updateBallPos(this.ball.x + direction * ((Math.abs(diff) / this.width) * MAX_BALL_PER_DISTANCE))
   }
@@ -213,7 +242,7 @@ export default class BallRunner {
     this.ctx.font = 'normal 50px DINAlternate-Bold'
     this.ctx.textAlign = 'right'
     this.ctx.fillStyle = '#fff'
-    this.ctx.fillText(this.point, this.width - 10, 50)
+    this.ctx.fillText(`${this.point}`, this.width - 10, 50)
 
     this.ctx.restore()
   }

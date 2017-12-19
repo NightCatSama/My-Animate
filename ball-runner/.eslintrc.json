@@ -1,4 +1,8 @@
 {
+  "parser": "typescript-eslint-parser",
+  "plugins": [
+    "typescript"
+  ],
   "env": {
     "browser": true,
     "es6": true
@@ -6,32 +10,30 @@
   "globals": {
     "ENV": true
   },
-  "extends": "eslint:recommended",
   "parserOptions": {
+    "ecmaVersion": 6,
     "sourceType": "module"
   },
   "rules": {
-    "indent": [
-      "error",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "no-undef": [
-      "off"
-    ],
-    "no-console": [
-      "off"
-    ],
-    "semi": [
-      "error",
-      "never"
-    ]
+    "keyword-spacing": ["error", {
+      "before": true,
+      "after": true
+    }],
+    "no-undef": ["off"],
+    "semi": ["error", "never"],
+    "space-before-function-paren": ["error", {
+        "anonymous": "always",
+        "named": "always",
+        "asyncArrow": "always"
+    }],
+    "no-multiple-empty-lines": ["error", {
+      "max": 2,
+      "maxEOF": 1
+    }],
+    "no-var": ["error"],
+    "no-unused-vars": ["error", {
+      "vars": "all",
+      "args": "none"
+    }]
   }
 }

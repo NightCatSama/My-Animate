@@ -1,3 +1,8 @@
+/**
+ * ball.js
+ * 一个小球
+ */
+
 const _default = {
   x: 0,
   y: 0
@@ -5,8 +10,17 @@ const _default = {
 
 import { BALL_RADIUS, TAIL_LENGTH, TAIL_DIST, DPR, TAIL_WIDTH } from './configuration'
 
+export interface IBall {
+  x: number,
+  y: number
+}
+
 export default class Ball {
-  constructor (ctx, config) {
+  ctx: CanvasRenderingContext2D;
+  tails: IBall[];
+  x: number;
+  y: number;
+  constructor (ctx: CanvasRenderingContext2D, config: any) {
     this.ctx = ctx
     Object.assign(this, _default, config)
     this.tails = this.initTail()
@@ -15,7 +29,7 @@ export default class Ball {
    * 初始化尾巴数组
    * @return {Array} 尾巴数组
    */
-  initTail () {
+  initTail (): IBall[] {
     let { x, y } = this
     let tails = []
     let startPos = [x, y + BALL_RADIUS + TAIL_DIST]
@@ -33,7 +47,7 @@ export default class Ball {
   /**
    * 更新球的位置，并且修改尾巴坐标数组
    */
-  updateBallPos (pos) {
+  updateBallPos (pos: number) {
     let a = this.tails[0].x
     for (let i = 1; i < this.tails.length; i++) {
       let b = this.tails[i].x
