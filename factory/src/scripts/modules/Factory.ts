@@ -79,7 +79,7 @@ export default class Factory {
     Object.assign(this, options)
     this.elem = el
     if (!this.elem) {
-      console.log('[Factory]: param el is the required.')
+      console.error('[Factory]: param el is the required.')
       return
     }
 
@@ -220,8 +220,6 @@ export default class Factory {
   }
   /*  得到关卡数据  */
   getMissions () {
-    console.log(this.mission)
-    
     let status = this.Missions.missions[this.mission]
     if (!status) {
       alert('你已全部通关（撒花 ☆:✿.٩(๑❛ᴗ❛๑)۶°*✿')
@@ -232,7 +230,6 @@ export default class Factory {
   /*  设置关卡  */
   initMission () {
     this.curMission.intro && this.elem.setAttribute('data-intro', this.curMission.intro)
-    this.elem.offsetWidth
     if (!this.curMission.missionCreater) {
       console.error(`[Factory]: 第 ${this.mission} 关卡生成出错`)
       return
@@ -323,6 +320,8 @@ export default class Factory {
           this.nextMissionBtn = this.createBtn('Go', this.nextMission, this.btnGroup)
         }
       } else {
+        this._data = []
+        this.initMission()
         this.createDetector()
         this.test_active++
         this.active = 0
