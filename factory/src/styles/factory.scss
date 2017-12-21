@@ -1,9 +1,9 @@
+@import './color';
 @import './util';
 
 $diaplay_width: 10%;
 $diaplay_minWidth: 64px;
 $detector-width: 380px;
-$code-color: #ffcd80;
 
 .factory {
   position: relative;
@@ -44,9 +44,10 @@ $code-color: #ffcd80;
 
     .factory-port {
       position: absolute;
+      font-size: 18px;
 
       .iconfont {
-        font-size: 13px;
+        font-size: 16px;
       }
 
       &.entry {
@@ -59,20 +60,20 @@ $code-color: #ffcd80;
 
       &.entry.factory-pos-top {
         left: 10px;
-        top: -25px;
+        top: -30px;
       }
       &.export.factory-pos-top {
         right: 10px;
-        top: -25px;
+        top: -30px;
       }
 
       &.entry.factory-pos-bottom {
         left: 10px;
-        bottom: -25px;
+        bottom: -30px;
       }
       &.export.factory-pos-bottom {
         right: 10px;
-        bottom: -25px;
+        bottom: -30px;
       }
 
       &.entry.factory-pos-left {
@@ -117,18 +118,28 @@ $code-color: #ffcd80;
       z-index: 1;
     }
 
-    .code {
+    .code, .code-input {
       position: absolute;
       height: 100%;
       width: 100%;
       resize: none;
+      white-space: pre-wrap;
       background-color: $tr;
-      color: $code-color;
-      font-size: 12px;
+      font-size: 14px;
       border-right: 1px solid $white;
       padding: 5px;
-        font-family: 'Montserrat', 'Segoe UI', 'Microsoft Yahei', Helvetica, Arial;
+      font-family: 'consolas', 'Microsoft Yahei', Helvetica, Arial;
       z-index: 2;
+    }
+
+    .code {
+      color: $white;
+    }
+    
+    .code-input {
+      color: $tr;
+      caret-color: $white;
+      z-index: 3;
     }
 
     .display-area {
@@ -164,7 +175,7 @@ $code-color: #ffcd80;
       .item-title {
         // background-color: rgba(255, 255, 255, .16);
         color: $white;
-        border-bottom: 1px solid $gray;
+        border-bottom: 1px solid $grey;
       }
     }
 
@@ -176,9 +187,9 @@ $code-color: #ffcd80;
       width: 100%;
       height: 100%;
       padding: 20px;
-      background-color: $red;
-      opacity: 0.9;
-      font-size: 40px;
+      color: $white;
+      background-color: rgba($red, .95);
+      font-size: 44px;
       @include flex-center;
       z-index: 5;
     }
@@ -191,9 +202,9 @@ $code-color: #ffcd80;
       width: 100%;
       height: 100%;
       padding: 20px;
-      background-color: $red;
-      opacity: .85;
-      font-size: 18px;
+      color: $white;
+      background-color: rgba($red, .95);
+      font-size: 14px;
       z-index: 5;
     }
   }
@@ -324,6 +335,7 @@ $code-color: #ffcd80;
 
   .factory-speed {
     flex: 1;
+    color: $blue_l3;
     text-align: center;
   }
 

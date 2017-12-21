@@ -8,7 +8,7 @@ const missionCreater = () => {
   }
 }
 
-export default {
+export const Mission3 = {
   missionCreater,
   intro: 'Mission 2：分类',
   err: [],

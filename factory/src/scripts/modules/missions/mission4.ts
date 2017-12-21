@@ -1,6 +1,10 @@
 let NextA = 0
 let NextB = 0
-const missionCreater = () => {
+const missionCreater = (index?: number) => {
+  if (index === 0) {
+    NextA = 0
+    NextB = 0
+  }
   const createMandom = () => ~~(Math.random() * 10)
   let input = createMandom()
   NextA += input
@@ -14,7 +18,7 @@ const missionCreater = () => {
   }
 }
 
-export default {
+export const Mission4 = {
   missionCreater,
   intro: 'Mission 3：累加 and 差值的绝对值',
   err: [],

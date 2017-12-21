@@ -3,6 +3,10 @@
 
 <hr>
 
+2017/12/22 --- [Factory](http://nightcatsama.github.io/My-Animat/factory/build/)<br>
+推荐：★★★★
+<hr>
+
 2017/11/27 --- [Diamond](http://nightcatsama.github.io/My-Animat/diamond/build/)<br>
 推荐：★★★
 <hr>

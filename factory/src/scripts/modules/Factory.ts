@@ -48,7 +48,7 @@ export default class Factory {
   // 是否运行中
   inService: boolean = false;
   // 关卡对象
-  Missions: IMission[];
+  Missions: { initialState: IMission, missions: Array<IMission> };
   // 当前关卡
   mission: number = 0;
   // 当前关卡对象
@@ -62,9 +62,7 @@ export default class Factory {
   // 已通过测试数
   test_active: number = 0;
   // 测试总数
-  test_count: number = 2;
-  // 是否多组数据
-  isMultigroup: boolean;
+  test_count: number = 5;
   // 检测器对象
   detector: Detector;
   // 测试数据数组
@@ -121,7 +119,6 @@ export default class Factory {
     this.active = 0
     this.test_active = 0
     this.inService = false
-    this.detector = null
 
     while (this._events.length) {
       ((<Function> this._events.shift()))()
@@ -137,7 +134,7 @@ export default class Factory {
     this.detector && this.detector.destroy()
     this.detector = new Detector({
       wrap: this.console,
-      isMultigroup: this.isMultigroup || false,
+      isMultigroup: this.curMission.isMultigroup || false,
       factory: this,
       data: this._data
     })
@@ -199,7 +196,7 @@ export default class Factory {
     this.speed === 1 && this.slowBtn.classList.add('disabled')
   }
   /*  生成控制按钮  */
-  createBtn (name: string, fn: Function, wrap: HTMLElement): HTMLElement {
+  createBtn (name: string, fn: any, wrap: HTMLElement): HTMLElement {
     let btn = document.createElement('BUTTON')
     btn.className = 'factory-panel-btn'
     btn.textContent = name
@@ -223,11 +220,12 @@ export default class Factory {
   }
   /*  得到关卡数据  */
   getMissions () {
+    console.log(this.mission)
+    
     let status = this.Missions.missions[this.mission]
     if (!status) {
       alert('你已全部通关（撒花 ☆:✿.٩(๑❛ᴗ❛๑)۶°*✿')
     } else {
-      this.isMultigroup = false
       this.curMission = Object.assign({}, this.Missions.initialState, status)
     }
   }
@@ -235,8 +233,12 @@ export default class Factory {
   initMission () {
     this.curMission.intro && this.elem.setAttribute('data-intro', this.curMission.intro)
     this.elem.offsetWidth
+    if (!this.curMission.missionCreater) {
+      console.error(`[Factory]: 第 ${this.mission} 关卡生成出错`)
+      return
+    }
     for (let i = 0; i < this.data_count; i++) {
-      let d = this.curMission.missionCreater && this.curMission.missionCreater()
+      let d = this.curMission.missionCreater(i)
       this._data.push({
         input: d.input,
         output: null,
@@ -279,7 +281,7 @@ export default class Factory {
   unableCodeInput (bool?: boolean): void {
     /*  分别执行  */
     Array.from(this._processors, (processor) => {
-      bool ? processor.code.setAttribute('disabled', true) : processor.code.removeAttribute('disabled')
+      bool ? processor.code.setAttribute('disabled', 'true') : processor.code.removeAttribute('disabled')
     })
   }
   /*  游戏开始  */
@@ -314,7 +316,7 @@ export default class Factory {
   /*  关卡结束  */
   end () {
     if (this.detector.success_count === this._data.length) {
-      if (this.test_active === this.test_count) {
+      if (this.test_active === this.test_count - 1) {
         this.pause()
         this.msgGroup.textContent = '你通关了, 点GO进入下一关:)'
         if (!this.nextMissionBtn) {
@@ -325,7 +327,7 @@ export default class Factory {
         this.test_active++
         this.active = 0
         this.detector.success_count = 0
-        this.msgGroup.textContent = `Running Mode：已通过测试（${this.test_active}/${this.test_count + 1}）`
+        this.msgGroup.textContent = `Running Mode：已通过测试（${this.test_active}/${this.test_count}）`
         Array.from(this._processors, (processor) => processor.setCom(null))
       }
     } else {
@@ -373,7 +375,7 @@ export default class Factory {
       }
       this.active++
     } else {
-      this.detector.setInputActive()
+      this.detector.setInputActive(null)
     }
 
     /*  全部重置值  */
@@ -394,7 +396,7 @@ export default class Factory {
   /*  入口得到Next值  */
   getNext () {
     for (let key in this.curMission.entry) {
-      this._data[this.active] && this._processors[key].setNext(this._data[this.active].input)
+      this._data[this.active] && this._processors[+key].setNext(this._data[this.active].input)
     }
   }
 }

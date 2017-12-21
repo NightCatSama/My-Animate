@@ -1,3 +1,4 @@
+import hljs from 'highlight.js'
 import Factory from './Factory'
 
 export type TypePort = 'entry' | 'export'
@@ -5,8 +6,13 @@ export type TypeProcess = 'leftProcessor' | 'rightProcessor' | 'topProcessor' | 
 export type TypePos = 'left' | 'right' | 'top' | 'bottom'
 
 interface IPort {
-  name: string,
-  type?: TypePort
+  name?: string,
+  type: TypePort
+}
+
+interface IPos {
+  name?: string,
+  pos: TypePos
 }
 
 /*  Factory处理器对象  */
@@ -21,9 +27,10 @@ export default class Processor {
   cur_size: number = 0;          // 当前大小
   size: number;              // 限制大小
   defaultText?: string;      // 初始化时默认文本
-  status: 'idle' | 'error' | 'unavail'; // 处理器状态 ['unavail', 'idle', 'error']
+  status: 'run' | 'idle' | 'error' | 'unavail'; // 处理器状态 ['unavail', 'idle', 'error']
   elem: HTMLElement;
   code: HTMLTextAreaElement;
+  displayCode: HTMLElement;
   wrap: HTMLElement;
   ports: HTMLElement[];
   processWrap: HTMLElement;
@@ -41,6 +48,7 @@ export default class Processor {
   constructor (options?: Object) {
     Object.assign(this, options)
     this.asyncSize = this.asyncSize.bind(this)
+    this.asyncDisplayCode = this.asyncDisplayCode.bind(this)
     this.closeError = this.closeError.bind(this)
     this.init()
   }
@@ -78,7 +86,7 @@ export default class Processor {
     this.elem = document.createElement('DIV')
     this.elem.className = 'factory-process'
     this.status === 'error' && this.setError()
-    this.code = this.createCode()
+    this.createCode()
     this.displayArea = this.createDisplayArea()
     this.processWrap.appendChild(this.elem)
     this.wrap.appendChild(this.processWrap)
@@ -106,16 +114,19 @@ export default class Processor {
     elem.className = 'code-group'
     elem.innerHTML = `<div class="code-index">Processor ${this.index + 1}</div>`
 
-    let textarea = <HTMLTextAreaElement> document.createElement('TEXTAREA')
-    textarea.className = 'code'
+    this.code = <HTMLTextAreaElement> document.createElement('TEXTAREA')
+    this.displayCode = <HTMLElement> document.createElement('DIV')
+    this.code.className = 'code-input'
+    this.displayCode.className = 'code javascript'
+    this.displayCode.setAttribute('spellcheck', 'false')
+    this.code.setAttribute('spellcheck', 'false')
     if (this.defaultText) {
-      textarea.value = this.defaultText || ''
-      this.asyncSize(this.defaultText, textarea)
+      this.code.value = this.defaultText || ''
+      this.asyncSize(this.defaultText, this.code)
     }
-    textarea.removeAttribute('spellcheck')
-    elem.appendChild(textarea)
+    elem.appendChild(this.displayCode)
+    elem.appendChild(this.code)
     this.elem.appendChild(elem)
-    return textarea
   }
   /*  创建展示台  */
   createDisplayArea () {
@@ -161,8 +172,15 @@ export default class Processor {
       el = el || this.code
       el.value = str
     }
-    if (typeof e === 'object')
+    if (typeof e === 'object') {
       this.displaySize.innerHTML = `${this.cur_size}/${this.size}`
+    }
+    this.asyncDisplayCode()
+  }
+  /*  同步高亮代码展示  */
+  asyncDisplayCode () {
+    this.displayCode.textContent = this.code.value
+    this.highlightCode(this.displayCode)
   }
   /*  得到代码长度  */
   getByteLen (str: string): number {
@@ -196,6 +214,8 @@ export default class Processor {
   /*  设置Status  */
   setStatus (val: any) {
     this.status = val
+    
+    this.code.setAttribute('contenteditable', (this.status !== 'run').toString())
     this.displayStatus.innerHTML = this.status
   }
   /*  设置Next值  */
@@ -259,15 +279,15 @@ export default class Processor {
     }, (err: any) => this.setCodeError(err))
   }
   /*  设置进出口  */
-  setPort (obj: { name: string, pos: TypePos }, type: TypePort) {
-    this[<TypeProcess> `${obj.pos}Processor`] = {
+  setPort (obj: IPos, type: TypePort) {
+    this[(<TypeProcess> `${obj.pos}Processor`)] = {
       type,
       name: obj.name
     }
     this.ports.push(this.createPortElem(obj, type))
   }
   /*  生产端口元素  */
-  createPortElem (obj: { name: string, pos: TypePos }, type: TypePort): HTMLElement {
+  createPortElem (obj: IPos, type: TypePort): HTMLElement {
     let elem = document.createElement('DIV')
     elem.className = `factory-port ${type} factory-pos-${obj.pos}`
     elem.innerHTML = `${type === 'entry' ? 'IN' : 'OUT'} ${obj.name || ''} <i class="iconfont icon-${type === 'entry' ? this.reversePos(obj.pos) : obj.pos}-arrow"></i>`
@@ -286,12 +306,16 @@ export default class Processor {
   }
   /*  格式化输出值  */
   formatVal (val: any): string {
-    if (!val) {
+    if (val === null || val === void 0) {
       return ''
     } else if (typeof val === 'object') {
       return JSON.stringify(val)
     } else {
       return '' + val
     }
+  }
+  /*  高亮代码  */
+  highlightCode (block: HTMLElement) {
+    hljs.highlightBlock(block)
   }
 }

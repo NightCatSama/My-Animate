@@ -1,0 +1,71 @@
+/*
+ * 基础色
+ */
+
+ $black: #000;
+ 
+ $grey:  #383838;
+ $grey1: #808080;
+ $grey2: #a6a6a6;
+ $grey3: #ccc;
+ $grey4: #e5e5e5;
+ $grey5: #f5f5f5;
+ 
+ $white: #fff;
+ 
+ $tr: transparent;
+ 
+ $blue: #3da8f5;
+ $blue_d1: mix($blue, $black, 90%);
+ $blue_d2: mix($blue, $black, 70%);
+ $blue_d3: mix($blue, $black, 60%);
+ $blue_l1: mix($blue, $white, 90%);
+ $blue_l2: mix($blue, $white, 70%);
+ $blue_l3: mix($blue, $white, 60%);
+ 
+ $red: #d71345;
+ $red_d1: mix($red, $black, 90%);
+ $red_d2: mix($red, $black, 70%);
+ $red_d3: mix($red, $black, 60%);
+ $red_l1: mix($red, $white, 90%);
+ $red_l2: mix($red, $white, 70%);
+ $red_l3: mix($red, $white, 60%);
+ 
+ $yellow: #ffaf38;
+ $yellow_d1: mix($yellow, $black, 90%);
+ $yellow_d2: mix($yellow, $black, 70%);
+ $yellow_d3: mix($yellow, $black, 60%);
+ $yellow_l1: mix($yellow, $white, 90%);
+ $yellow_l2: mix($yellow, $white, 70%);
+ $yellow_l3: mix($yellow, $white, 60%);
+ 
+ $green: #00B281;
+ $green_d1: mix($green, $black, 90%);
+ $green_d2: mix($green, $black, 70%);
+ $green_d3: mix($green, $black, 60%);
+ $green_l1: mix($green, $white, 90%);
+ $green_l2: mix($green, $white, 70%);
+ $green_l3: mix($green, $white, 60%);
+ 
+ $cyan: #2fbdb3;
+ $cyan_d1: mix($cyan, $black, 90%);
+ $cyan_d2: mix($cyan, $black, 70%);
+ $cyan_d3: mix($cyan, $black, 60%);
+ $cyan_l1: mix($cyan, $white, 90%);
+ $cyan_l2: mix($cyan, $white, 70%);
+ $cyan_l3: mix($cyan, $white, 60%);
+ 
+ $purple: #7973c9;
+ $purple_d1: mix($purple, $black, 90%);
+ $purple_d2: mix($purple, $black, 70%);
+ $purple_d3: mix($purple, $black, 60%);
+ $purple_l1: mix($purple, $white, 90%);
+ $purple_l2: mix($purple, $white, 70%);
+ $purple_l3: mix($purple, $white, 60%);
+ 
+ $pink: #f7acbc;
+ $brown: #7b5d5f;
+ $orange: #f47920;
+ $roseate: #f05b72;
+ $white: #fff;
+ $tr: transparent;

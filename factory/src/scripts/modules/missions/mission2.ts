@@ -7,7 +7,7 @@ const missionCreater = () => {
   }
 }
 
-export default {
+export const Mission2 = {
   missionCreater,
   intro: 'Mission 1：简单的乘法',
   err: [3, 4],

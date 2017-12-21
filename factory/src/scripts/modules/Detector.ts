@@ -137,11 +137,11 @@ export default class Detector {
     })
   }
   /*  设置input的位置  */
-  setInputActive (index?: number) {
+  setInputActive (index: number | null) {
     this.setActive(index, this.input_group)
   }
   /*  设置当前位置  */
-  setActive (index?: number | null, wrap: HTMLElement) {
+  setActive (index: number | null, wrap: HTMLElement) {
     let active = wrap.querySelector('.active')
     active && active.classList.remove('active')
     if (typeof index === 'number') {
@@ -150,9 +150,9 @@ export default class Detector {
     }
   }
   /*  输出值  */
-  output (val: string, key: string) {
-    let index = this.isMultigroup ? this.last_output[key] : this.last_output
-    if (this.isMultigroup) {
+  output (val: string, key?: string) {
+    let index = (this.isMultigroup && key) ? this.last_output[key] : this.last_output
+    if (this.isMultigroup && key) {
       let obj = this.output_group[key]
       if (index < this.data.length) {
         let exp = obj.exports[index]

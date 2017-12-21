@@ -1,5 +1,8 @@
 let total = 0
-const missionCreater = () => {
+const missionCreater = (index?: number) => {
+  if (index === 0) {
+    total = 0
+  }
   const createMandom = () => ~~(Math.random() * 10)
   let input = createMandom()
   let output = input * 2
@@ -13,7 +16,7 @@ const missionCreater = () => {
   }
 }
 
-export default {
+export const Mission1 = {
   missionCreater,
   intro: 'Mission 0：教程关',
   err: [],
@@ -41,15 +44,15 @@ export default {
 `// 由 IN 传入值
 
 // NEXT 为下一个值
-// console.log(NEXT)
+NEXT
 
 // ACC 为当前值
-// console.log(ACC)
+ACC
 
 // 将 ACC 传给右方 Processor
 R(ACC)`,
     '1':
-`// Next 从左方 Processor 传入
+`// NEXT 从左方 Processor 传入
 // console.log(NEXT)
 
 // 将ACC 乘以 2
@@ -75,16 +78,14 @@ B(ACC)
 // 参数缺省时，传递原始ACC值
 B()
 
-// 点击 右方 Next 或 Auto
+// 点击 右方 NEXT 或 Auto
 // 就可以顺利的运行啦
 // ヽ(≧Д≦)ノ
 `,
     '3':
-`
-/*
-*********** 介绍 *************
+`/* *********** 介绍 *************
 
-* 内置变量：ACC Next COM
+* 内置变量：ACC NEXT COM
 
 - NEXT  下一个值
 - ACC   当前值
@@ -93,25 +94,26 @@ B()
 * 内置方法：T B L R C
 
 - T B L R 四个方向的传输方法
+- T [top]    向上传输值
+- B [bottom] 向下传输值
+- L [left]   向左传输值
+- R [right]  向右传输值
 - C 设置 COM 存储值
 
-*****************************
-*/
+***************************** */
 `,
     '4':
-`/*
-*********** 规则 *************
+`/* *********** 规则 *************
 
 * ACC 有值时 Processor 才会执行
 
-* 每次执行 Next 覆盖 ACC
+* 每次执行 NEXT 覆盖 ACC
 
 * COM 只能通过方法C()存储
 
 * 所有 OUT 均等于 期望值则通关
 
-*****************************
-*/
+***************************** */
 `,
   }
 }
