@@ -1,0 +1,338 @@
+@import './util';
+
+$diaplay_width: 10%;
+$diaplay_minWidth: 64px;
+$detector-width: 380px;
+$code-color: #ffcd80;
+
+.factory {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-self: stretch;
+  padding: 10px;
+  background-color: $black;
+
+  &::after {
+    content: attr(data-intro);
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    color: $green;
+    transform: translateX(-50%);
+  }
+}
+
+.factory-container {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 10px;
+
+  .factory-process-wrap {
+    display: flex;
+  }
+
+  .factory-process {
+    position: relative;
+    display: flex;
+    flex: 1;
+    border: 1px solid $white;
+
+    .factory-port {
+      position: absolute;
+
+      .iconfont {
+        font-size: 13px;
+      }
+
+      &.entry {
+        color: $blue;
+      }
+
+      &.export {
+        color: $yellow;
+      }
+
+      &.entry.factory-pos-top {
+        left: 10px;
+        top: -25px;
+      }
+      &.export.factory-pos-top {
+        right: 10px;
+        top: -25px;
+      }
+
+      &.entry.factory-pos-bottom {
+        left: 10px;
+        bottom: -25px;
+      }
+      &.export.factory-pos-bottom {
+        right: 10px;
+        bottom: -25px;
+      }
+
+      &.entry.factory-pos-left {
+        top: 0;
+        left: -25px;
+        width: 0;
+        word-break: break-all;
+      }
+      &.export.factory-pos-left {
+        bottom: 0;
+        left: -25px;
+        width: 0;
+        word-break: break-all;
+      }
+
+      &.entry.factory-pos-right {
+        top: 0;
+        right: -10px;
+        width: 0;
+        word-break: break-all;
+      }
+      &.export.factory-pos-right {
+        bottom: 0;
+        right: -10px;
+        width: 0;
+        word-break: break-all;
+      }
+    }
+
+    .code-group {
+      position: relative;
+      height: 100%;
+      flex: 1;
+    }
+
+    .code-index {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      @include flex-center;
+      z-index: 1;
+    }
+
+    .code {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      resize: none;
+      background-color: $tr;
+      color: $code-color;
+      font-size: 12px;
+      border-right: 1px solid $white;
+      padding: 5px;
+        font-family: 'Montserrat', 'Segoe UI', 'Microsoft Yahei', Helvetica, Arial;
+      z-index: 2;
+    }
+
+    .display-area {
+      display: flex;
+      flex-direction: column;
+      top: 0;
+      right: 0;
+      width: $diaplay_width;
+      font-size: 12px;
+      min-width: $diaplay_minWidth;
+      height: 100%;
+      z-index: 2;
+
+      .display-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        margin: 2px 2px 0 2px;
+        text-align: center;
+        border: 1px solid $white;
+        color: $pink;
+
+        &:last-child {
+          margin-bottom: 2px;
+        }
+
+        >div {
+          flex: 1;
+          @include flex-center;
+        }
+      }
+
+      .item-title {
+        // background-color: rgba(255, 255, 255, .16);
+        color: $white;
+        border-bottom: 1px solid $gray;
+      }
+    }
+
+    &.factory-error::after {
+      content: attr(data-error);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      background-color: $red;
+      opacity: 0.9;
+      font-size: 40px;
+      @include flex-center;
+      z-index: 5;
+    }
+
+    &.factory-code-error::after {
+      content: attr(data-error);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      background-color: $red;
+      opacity: .85;
+      font-size: 18px;
+      z-index: 5;
+    }
+  }
+}
+
+.factory-console {
+  display: flex;
+  flex-direction: column;
+}
+
+.factory-detector {
+  display: flex;
+  flex: 1;
+  width: $detector-width;
+  margin-top: 40px;
+
+  .factory-group {
+    min-width: 40px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $white;
+    margin: 0 10px;
+    color: $white;
+    text-align: center;
+
+    .factory-group-child-wrap {
+      display: flex;
+      flex: 1;
+    }
+
+    .factory-group-child {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 40px;
+      border: 1px solid $white;
+      margin: 1px;
+    }
+
+    .factory-expect-group-wrap {
+      color: #999;
+    }
+
+    .factory-output-group-wrap {
+      color: $white;
+    }
+
+    .factory-item {
+      max-height: 25px;
+      flex: 1;
+      padding: 2px 5px;
+      font-size: 14px;
+
+      >div {
+        flex: 1;
+        white-space: nowrap;
+        letter-spacing: -0.8px;
+
+        span:last-child {
+          opacity: .6;
+        }
+      }
+    }
+
+    .error {
+      color: $red;
+    }
+
+    .success {
+      color: $green;
+    }
+
+    .active {
+      background-color: $white;
+      color: $black;
+    }
+
+    .group-title {
+      font-size: 12px;
+      padding: 5px 10px;
+      text-align: center;
+      white-space: nowrap;
+      border: 1px solid $white;
+      margin: 1px;
+      color: $white;
+    }
+  }
+}
+
+.factory-panel {
+  margin: 10px 0 0 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+
+  .factory-btn-group, .factory-speed-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: space-between;
+  }
+
+  .factory-panel-btn {
+    border: none;
+    font-size: 16px;
+    color: $white;
+    background-color: $tr;
+    border: 1px solid $white;
+    padding: 8px 0;
+    width: 20%;
+    flex: 1;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+
+    &:not(.disabled):hover, &.active {
+      background-color: $white;
+      color: $black;
+    }
+
+    &.disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+  }
+
+  .factory-speed {
+    flex: 1;
+    text-align: center;
+  }
+
+  .factory-msg-group {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    background-color: $white;
+    color: $black;
+    padding: 5px 10px;
+  }
+}

@@ -11,6 +11,10 @@ body {
   overflow: hidden;
 }
 
+#app {
+  flex: 1;
+}
+
 .game-wrap {
   position: relative;
   overflow: hidden;
