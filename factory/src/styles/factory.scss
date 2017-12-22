@@ -113,7 +113,9 @@ $detector-width: 380px;
       position: absolute;
       width: 100%;
       height: 100%;
-      opacity: 0.1;
+      opacity: 0.15;
+      color: $white;
+      font-size: 30px;
       @include flex-center;
       z-index: 1;
     }
@@ -135,7 +137,7 @@ $detector-width: 380px;
     .code {
       color: $white;
     }
-    
+
     .code-input {
       color: $tr;
       caret-color: $white;

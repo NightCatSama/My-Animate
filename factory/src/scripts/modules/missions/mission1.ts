@@ -51,10 +51,7 @@ ACC
 
 // 将 ACC 传给右方 Processor
 R(ACC)`,
-    '1':
-`// NEXT 从左方 Processor 传入
-// console.log(NEXT)
-
+    '1':`
 // 将ACC 乘以 2
 ACC = ACC * 2
 
@@ -107,9 +104,13 @@ B()
 
 * ACC 有值时 Processor 才会执行
 
-* 每次执行 NEXT 覆盖 ACC
+* NEXT 由以下两种方法提供
+    - IN 入口
+    - 其他 Processor 通过传递方法
 
-* COM 只能通过方法C()存储
+* 每次运行 NEXT 覆盖 ACC
+
+* COM 只能通过方法 C 存储
 
 * 所有 OUT 均等于 期望值则通关
 
