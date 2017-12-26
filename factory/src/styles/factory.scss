@@ -130,8 +130,14 @@ $detector-width: 380px;
       font-size: 14px;
       border-right: 1px solid $white;
       padding: 5px;
+      overflow-x: hidden;
+      word-break: break-all;
       font-family: 'consolas', 'Microsoft Yahei', Helvetica, Arial;
       z-index: 2;
+      
+      &.hide {
+        display: none;
+      }
     }
 
     .code {

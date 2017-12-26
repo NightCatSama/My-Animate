@@ -49,17 +49,20 @@ export default class Processor {
     Object.assign(this, options)
     this.asyncSize = this.asyncSize.bind(this)
     this.asyncDisplayCode = this.asyncDisplayCode.bind(this)
+    this.asyncScroll = this.asyncScroll.bind(this)
     this.closeError = this.closeError.bind(this)
     this.init()
   }
   /*  绑定事件  */
   bindEvent () {
     this.code.addEventListener('keyup', this.asyncSize)
+    this.code.addEventListener('scroll', this.asyncScroll)
     this.elem.addEventListener('click', this.closeError)
   }
   /*  注销事件  */
   unbindEvent () {
     this.code.removeEventListener('keyup', this.asyncSize)
+    this.code.removeEventListener('scroll', this.asyncScroll)
     this.elem.removeEventListener('click', this.closeError)
   }
   /*  初始化  */
@@ -181,6 +184,11 @@ export default class Processor {
   asyncDisplayCode () {
     this.displayCode.textContent = this.code.value
     this.highlightCode(this.displayCode)
+  }
+  /*  同步滚动  */
+  asyncScroll () {
+    this.displayCode.scrollTop = this.code.scrollTop 
+    this.displayCode.scrollLeft = this.code.scrollLeft
   }
   /*  得到代码长度  */
   getByteLen (str: string): number {
