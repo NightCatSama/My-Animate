@@ -77,7 +77,7 @@
 <hr>
 
 2016/02/20 ---
-[视觉差 & 无重力 & 重力 & 跟随鼠标](http://nightcatsama.github.io/My-Animat/index/)<br>
+[视觉差 & 无重力 & 重力 & 跟随鼠标](http://nightcatsama.github.io/My-Animat/balls/)<br>
 推荐：★★★
 
 <hr>
