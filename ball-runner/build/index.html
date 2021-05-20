@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?c7cd0fd77ac518cc6ef46461cdc9524b";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
@@ -13,13 +22,54 @@
   <meta name="full-screen" content="yes">
   <meta name="x5-fullscreen" content="true">
   <title>Ball Runner</title>
+  <style>
+    .container-footer {
+      position: fixed;
+      bottom: calc(env(safe-area-inset-bottom) + 30px);
+      left: 0;
+      text-align: center;
+      right: 0;
+      color: #999;
+    }
+    .container-footer .copyright {
+      font-weight: lighter;
+      font-size: 10px;
+    }
+    .container-footer .links a:not(:last-child):after {
+      position: relative;
+      content: "·";
+      left: 3px;
+      margin-right: 5px;
+    }
+    .container-footer .links {
+      margin-left: 1ex;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    .container-footer .links a {
+      text-decoration: none;
+      color: #b78775;
+      font-weight: 400;
+    }
+  </style>
 </head>
 <body>
   <div class="game-wrap">
     <canvas id="ball-runner"></canvas>
     <div class="game-cover">
-      Click to start
+      点击开始游戏
     </div>
+  </div>
+  <div class="container-footer">
+    <p class="copyright">
+      <span class="no-select">© 2016 - 2021</span>
+      hzfe.org
+      <span class="links">
+        <a href="https://mp.weixin.qq.com/s/fmNA4isEAQUyscWbf3BPJQ">关于我们</a>
+      </span>
+    </p>
   </div>
   <script src="js/main.min.js"></script>
 </body>

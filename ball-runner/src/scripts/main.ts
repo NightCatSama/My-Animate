@@ -10,7 +10,7 @@ const initGame = () => {
     width: 'ontouchmove' in window ? document.body.offsetWidth : 600,
     height: 'ontouchmove' in window ? document.body.offsetHeight : 500,
     gameOver (point: number): void {
-      cover.innerHTML = `<small>Your Point: ${point}</small><br /> Click to restart`
+      cover.innerHTML = `<small>你的分数: <strong>${point}</strong></small><br /> 点击重新开始`
       cover.style.display = 'flex'
     }
   })
@@ -18,7 +18,7 @@ const initGame = () => {
   wrap.onclick = () => {
     if (game.startSign) {
       cover.style.display = 'flex'
-      cover.innerHTML = 'Click to continue'
+      cover.innerHTML = '点击继续'
       game.pause()
     }
     else {
