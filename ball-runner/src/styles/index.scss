@@ -4,6 +4,8 @@
 body {
 	width: 100vw;
 	height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: #f3f3f3;
   overflow: hidden;
 }
@@ -13,11 +15,10 @@ body {
 }
 
 .game-wrap {
-  position: fixed;
+  flex: 1;
+  position: relative;
   overflow: hidden;
   display: flex;
-  left: 0;
-  top: 0;
 }
 
 .game-cover {
