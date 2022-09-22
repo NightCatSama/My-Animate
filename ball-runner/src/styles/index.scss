@@ -4,9 +4,6 @@
 body {
 	width: 100vw;
 	height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: #f3f3f3;
   overflow: hidden;
 }
@@ -16,9 +13,11 @@ body {
 }
 
 .game-wrap {
-  position: relative;
+  position: fixed;
   overflow: hidden;
   display: flex;
+  left: 0;
+  top: 0;
 }
 
 .game-cover {
