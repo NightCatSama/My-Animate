@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "browser-sync": "^2.18.12",
-    "debug": "^2.6.0"
+    "debug": "^2.6.9"
   }
 }
